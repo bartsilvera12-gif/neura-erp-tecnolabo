@@ -128,6 +128,8 @@ const MENU_STRUCTURE: MenuItem[] = [
     { label: "Productos", href: "/inventario" },
     { label: "Movimientos", href: "/inventario/movimientos" },
     { label: "Categorías", href: "/inventario/categorias" },
+    { label: "Notas de salida", href: "/notas-salida" },
+    { label: "Alertas de stock", href: "/inventario/alertas" },
     // Depósitos / Ubicaciones oculto en esta instancia (no aplica).
     // { label: "Depósitos / Ubicaciones", href: "/inventario/ubicaciones" },
   ]},
@@ -142,8 +144,10 @@ const MENU_STRUCTURE: MenuItem[] = [
     children: [
       { label: "Órdenes", href: "/compras" },
       { label: "Proveedores", href: "/proveedores" },
+      { label: "Cuentas por pagar", href: "/compras/cuentas-por-pagar" },
     ],
   },
+  { key: "cobranzas", slug: "pagos", label: "Cobranzas", href: "/cobranzas", icon: Banknote },
   { key: "pagos", slug: "pagos", label: "Pagos", href: "/pagos", icon: Banknote },
   { key: "gastos", slug: "gastos", label: "Gastos", href: "/gastos", icon: Receipt },
   // Otros ingresos: ingresos manuales que NO son ventas de productos (cartones,
@@ -175,6 +179,8 @@ const MENU_STRUCTURE: MenuItem[] = [
     children: [
       // Facturación oculta: facturación electrónica desactivada en esta instancia.
       // { label: "Facturación", href: "/configuracion/facturacion" },
+      { label: "Roles y permisos", href: "/configuracion/roles" },
+      { label: "Facturación electrónica", href: "/configuracion/proveedor-fiscal" },
       { label: "Equipos y supervisión", href: "/configuracion/omnicanal-equipos" },
     ],
   },
@@ -207,7 +213,7 @@ const MENU_STRUCTURE: MenuItem[] = [
 const MENU_FAMILIES: { id: string; titulo: string; keys: string[] }[] = [
   { id: "inicio", titulo: "Inicio", keys: ["dashboard"] },
   { id: "comercial", titulo: "Comercial", keys: ["clientes", "crm", "gestion-clientes", "ventas", "presupuestos", "comisiones", "planes"] },
-  { id: "finanzas", titulo: "Finanzas", keys: ["pagos", "gastos", "otros_ingresos", "entidades_bancarias", "notas_credito", "reportes"] },
+  { id: "finanzas", titulo: "Finanzas", keys: ["pagos", "cobranzas", "gastos", "otros_ingresos", "entidades_bancarias", "notas_credito", "reportes"] },
   { id: "operaciones", titulo: "Operaciones", keys: ["inventario", "compras", "recetas", "proyectos"] },
   { id: "omnicanal", titulo: "Omnicanal", keys: ["conversaciones", "conversaciones-finalizadas", "historial-omnicanal", "monitoreo", "campanas"] },
   { id: "marketing", titulo: "Marketing y Automatización", keys: ["marketing", "marketing_ops", "sorteos"] },
