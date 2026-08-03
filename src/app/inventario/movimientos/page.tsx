@@ -14,11 +14,31 @@ import {
   ArrowUpFromLine,
   Pencil,
   Calendar,
+  Download,
+  AlertTriangle,
 } from "lucide-react";
 import {
   getMovimientosPaginated,
   type MovimientosPaginadosResult,
 } from "@/lib/inventario/storage";
+import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
+
+const EXPORT_COLS: Array<{ key: string; label: string }> = [
+  { key: "fecha", label: "Fecha" },
+  { key: "producto_nombre", label: "Producto" },
+  { key: "producto_sku", label: "SKU" },
+  { key: "tipo", label: "Tipo" },
+  { key: "cantidad", label: "Cantidad" },
+  { key: "costo_unitario", label: "Costo unit." },
+  { key: "origen", label: "Origen" },
+  { key: "referencia", label: "Documento" },
+  { key: "documento_tipo", label: "Tipo doc." },
+  { key: "observacion", label: "Observación" },
+  { key: "usuario_nombre", label: "Usuario" },
+];
+const DEFAULT_EXPORT_COLS = ["fecha", "producto_nombre", "tipo", "cantidad", "origen", "referencia"];
+const VISTA_CLAVE = "inventario_movimientos_export";
+type VistaGuardada = { id: string; nombre: string; config: { columns?: string[] }; es_predeterminada: boolean };
 import type {
   MovimientoInventario,
   TipoMovimiento,
@@ -43,6 +63,13 @@ const origenLabel: Record<OrigenMovimiento, string> = {
   ajuste_manual: "Ajuste manual",
   inventario_inicial: "Inventario inicial",
   devolucion_venta: "Devolución venta",
+  produccion: "Producción",
+  recepcion: "Recepción",
+  remision: "Remisión",
+  nota_salida: "Nota de salida",
+  ajuste: "Ajuste",
+  transferencia: "Transferencia",
+  anulacion: "Anulación",
 };
 const origenBadge: Record<OrigenMovimiento, string> = {
   compra: "bg-sky-50 text-sky-700 border border-sky-200",
@@ -50,6 +77,13 @@ const origenBadge: Record<OrigenMovimiento, string> = {
   ajuste_manual: "bg-slate-100 text-slate-600 border border-slate-200",
   inventario_inicial: "bg-orange-50 text-orange-700 border border-orange-200",
   devolucion_venta: "bg-amber-50 text-amber-800 border border-amber-200",
+  produccion: "bg-teal-50 text-teal-700 border border-teal-200",
+  recepcion: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+  remision: "bg-indigo-50 text-indigo-700 border border-indigo-200",
+  nota_salida: "bg-rose-50 text-rose-700 border border-rose-200",
+  ajuste: "bg-slate-100 text-slate-600 border border-slate-200",
+  transferencia: "bg-cyan-50 text-cyan-700 border border-cyan-200",
+  anulacion: "bg-red-50 text-red-700 border border-red-200",
 };
 
 function formatGs(valor: number) {
@@ -142,6 +176,64 @@ export default function MovimientosPage() {
     setFechaHasta("");
   }
 
+  // ── Exportación PDF + vistas configurables por usuario ──────────────────────
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exportCols, setExportCols] = useState<string[]>(DEFAULT_EXPORT_COLS);
+  const [vistas, setVistas] = useState<VistaGuardada[]>([]);
+
+  function buildFilterQS() {
+    const p = new URLSearchParams();
+    if (busquedaDebounced) p.set("q", busquedaDebounced);
+    if (filtroTipo) p.set("tipo", filtroTipo);
+    if (filtroOrigen) p.set("origen", filtroOrigen);
+    if (fechaDesde) p.set("fecha_desde", fechaDesde);
+    if (fechaHasta) p.set("fecha_hasta", fechaHasta);
+    return p;
+  }
+  const cargarVistas = async () => {
+    try {
+      const res = await fetchWithSupabaseSession(`/api/usuario-vistas?clave=${VISTA_CLAVE}`, { cache: "no-store" });
+      const b = await res.json();
+      const list = (b?.data?.vistas ?? []) as VistaGuardada[];
+      setVistas(list);
+      const pred = list.find((v) => v.es_predeterminada);
+      if (pred?.config?.columns?.length) setExportCols(pred.config.columns);
+    } catch {
+      /* noop */
+    }
+  };
+  useEffect(() => {
+    if (exportOpen) void cargarVistas();
+  }, [exportOpen]);
+
+  function toggleExportCol(k: string) {
+    setExportCols((prev) => (prev.includes(k) ? prev.filter((x) => x !== k) : [...prev, k]));
+  }
+  function exportarPDF() {
+    const p = buildFilterQS();
+    p.set("columns", exportCols.join(","));
+    p.set("auto", "1");
+    window.open(`/api/inventario/movimientos/pdf?${p.toString()}`, "_blank", "noopener");
+  }
+  async function guardarVista() {
+    const nombre = prompt("Nombre de la vista (columnas para exportar):");
+    if (!nombre?.trim()) return;
+    await fetchWithSupabaseSession("/api/usuario-vistas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clave: VISTA_CLAVE, nombre: nombre.trim(), config: { columns: exportCols }, es_predeterminada: true }),
+    });
+    await cargarVistas();
+  }
+  function aplicarVista(id: string) {
+    const v = vistas.find((x) => x.id === id);
+    if (v?.config?.columns?.length) setExportCols(v.config.columns);
+  }
+  async function eliminarVista(id: string) {
+    await fetchWithSupabaseSession(`/api/usuario-vistas?id=${id}`, { method: "DELETE" });
+    await cargarVistas();
+  }
+
   // Estilo unico para los inputs/selects de filtro
   const inputClass =
     "h-10 rounded-lg border-2 border-slate-200 bg-white px-3 text-sm outline-none transition-all hover:border-slate-300 focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20";
@@ -164,6 +256,19 @@ export default function MovimientosPage() {
         </div>
         <div className="flex items-center gap-2">
           <Link
+            href="/inventario/alertas"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2.5 text-sm font-semibold text-amber-700 hover:bg-amber-100"
+          >
+            <AlertTriangle className="h-4 w-4" /> Alertas
+          </Link>
+          <button
+            type="button"
+            onClick={() => setExportOpen((o) => !o)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:border-[#4FAEB2] hover:bg-[#4FAEB2]/5"
+          >
+            <Download className="h-4 w-4" /> Exportar
+          </button>
+          <Link
             href="/inventario/movimientos/nuevo"
             className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] text-white text-sm font-bold px-3.5 py-2.5 transition-colors shadow-sm shadow-[#4FAEB2]/30"
           >
@@ -179,6 +284,55 @@ export default function MovimientosPage() {
           </Link>
         </div>
       </header>
+
+      {/* Panel de exportación con columnas + vistas personales */}
+      {exportOpen && (
+        <div className="mb-6 rounded-2xl border-2 border-[#4FAEB2]/25 bg-white p-5 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <h2 className="text-sm font-bold text-slate-700">Exportar movimientos (PDF)</h2>
+            <div className="flex items-center gap-2">
+              {vistas.length > 0 && (
+                <select
+                  onChange={(e) => e.target.value && aplicarVista(e.target.value)}
+                  defaultValue=""
+                  className="h-9 rounded-lg border border-slate-200 bg-white px-2 text-sm"
+                >
+                  <option value="">Aplicar vista guardada…</option>
+                  {vistas.map((v) => (
+                    <option key={v.id} value={v.id}>{v.nombre}{v.es_predeterminada ? " ★" : ""}</option>
+                  ))}
+                </select>
+              )}
+              <button type="button" onClick={() => setExportCols(DEFAULT_EXPORT_COLS)} className="text-xs font-semibold text-slate-500 hover:underline">Restaurar</button>
+              <button type="button" onClick={guardarVista} className="text-xs font-semibold text-[#3F8E91] hover:underline">Guardar vista</button>
+            </div>
+          </div>
+          <p className="text-xs text-slate-500 mb-2">Elegí las columnas. Se respetan los filtros activos.</p>
+          <div className="flex flex-wrap gap-2 mb-3">
+            {EXPORT_COLS.map((c) => (
+              <label key={c.key} className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium cursor-pointer ${exportCols.includes(c.key) ? "border-[#4FAEB2] bg-[#4FAEB2]/8 text-[#3F8E91]" : "border-slate-200 text-slate-600"}`}>
+                <input type="checkbox" checked={exportCols.includes(c.key)} onChange={() => toggleExportCol(c.key)} className="accent-[#4FAEB2]" />
+                {c.label}
+              </label>
+            ))}
+          </div>
+          {vistas.length > 0 && (
+            <div className="mb-3 flex flex-wrap gap-2">
+              {vistas.map((v) => (
+                <span key={v.id} className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+                  {v.nombre}
+                  <button type="button" onClick={() => eliminarVista(v.id)} className="text-red-500 hover:text-red-700" aria-label="Eliminar vista"><X className="h-3 w-3" /></button>
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="flex justify-end">
+            <button type="button" onClick={exportarPDF} disabled={exportCols.length === 0} className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] px-4 py-2 text-sm font-bold text-white hover:bg-[#3F8E91] disabled:opacity-50">
+              <Download className="h-4 w-4" /> Exportar PDF
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Card principal */}
       <section className="bg-white rounded-2xl border-2 border-[#4FAEB2]/20 shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)] overflow-hidden">

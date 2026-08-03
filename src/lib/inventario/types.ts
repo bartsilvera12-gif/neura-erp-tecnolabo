@@ -1,6 +1,18 @@
 export type MetodoValuacion = "CPP" | "FIFO" | "LIFO";
 export type TipoMovimiento = "ENTRADA" | "SALIDA" | "AJUSTE";
-export type OrigenMovimiento = "compra" | "venta" | "ajuste_manual" | "inventario_inicial" | "devolucion_venta";
+export type OrigenMovimiento =
+  | "compra"
+  | "venta"
+  | "ajuste_manual"
+  | "inventario_inicial"
+  | "devolucion_venta"
+  | "produccion"
+  | "recepcion"
+  | "remision"
+  | "nota_salida"
+  | "ajuste"
+  | "transferencia"
+  | "anulacion";
 
 export interface Producto {
   id: string;

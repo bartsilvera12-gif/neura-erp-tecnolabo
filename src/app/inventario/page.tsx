@@ -253,7 +253,13 @@ export default function InventarioPage() {
                 </p>
               </div>
             </div>
-            <div className="ml-auto">
+            <div className="ml-auto flex items-center gap-2">
+              <Link
+                href="/inventario/alertas"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-700 transition-all hover:bg-amber-100 active:scale-95"
+              >
+                Alertas de stock
+              </Link>
               <Link
                 href="/inventario/nuevo"
                 className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] px-3.5 py-2 text-xs font-semibold text-white shadow-sm shadow-[#4FAEB2]/30 transition-all hover:bg-[#3F8E91] active:scale-95"

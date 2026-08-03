@@ -35,6 +35,9 @@ export async function GET(request: NextRequest) {
     const q = (url.searchParams.get("q") ?? "").trim();
     const tipo = (url.searchParams.get("tipo") ?? "").trim();
     const origen = (url.searchParams.get("origen") ?? "").trim();
+    const depositoId = (url.searchParams.get("deposito_id") ?? "").trim();
+    const documentoTipo = (url.searchParams.get("documento_tipo") ?? "").trim();
+    const productoId = (url.searchParams.get("producto_id") ?? "").trim();
     const fechaDesde = (url.searchParams.get("fecha_desde") ?? "").trim();
     const fechaHasta = (url.searchParams.get("fecha_hasta") ?? "").trim();
     const limit = Math.max(1, Math.min(200, Number(url.searchParams.get("limit") ?? 25) || 25));
@@ -43,13 +46,16 @@ export async function GET(request: NextRequest) {
     let query = ctx.supabase
       .from("movimientos_inventario")
       .select(
-        "id, empresa_id, producto_id, producto_nombre, producto_sku, tipo, cantidad, costo_unitario, origen, referencia, fecha, created_at, updated_at, created_by, usuario_nombre",
+        "id, empresa_id, producto_id, producto_nombre, producto_sku, tipo, cantidad, costo_unitario, origen, referencia, documento_tipo, documento_id, deposito_id, observacion, fecha, created_at, updated_at, created_by, usuario_nombre",
         { count: "planned" }
       )
       .eq("empresa_id", empresaId);
 
     if (tipo) query = query.eq("tipo", tipo);
     if (origen) query = query.eq("origen", origen);
+    if (depositoId) query = query.eq("deposito_id", depositoId);
+    if (documentoTipo) query = query.eq("documento_tipo", documentoTipo);
+    if (productoId) query = query.eq("producto_id", productoId);
 
     if (q.length > 0) {
       // Búsqueda por tokens (cada palabra en cualquier orden) sobre nombre y SKU.
