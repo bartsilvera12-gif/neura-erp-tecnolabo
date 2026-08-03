@@ -19,6 +19,10 @@ export interface EmpresaConfig {
   permitir_stock_negativo: boolean;
   permitir_excedente_recepcion: boolean;
   compra_ingresa_por_recepcion: boolean;
+  proveedor_fiscal: string;
+  pais_fiscal: string | null;
+  fiscal_habilitado: boolean;
+  max_usuarios: number | null;
   extra: Record<string, unknown>;
 }
 
@@ -27,6 +31,10 @@ const DEFAULTS: Omit<EmpresaConfig, "empresa_id"> = {
   permitir_stock_negativo: false,
   permitir_excedente_recepcion: false,
   compra_ingresa_por_recepcion: false,
+  proveedor_fiscal: "none",
+  pais_fiscal: null,
+  fiscal_habilitado: false,
+  max_usuarios: null,
   extra: {},
 };
 
@@ -38,6 +46,10 @@ function mapRow(empresaId: string, row: Record<string, unknown> | undefined): Em
     permitir_stock_negativo: row.permitir_stock_negativo === true,
     permitir_excedente_recepcion: row.permitir_excedente_recepcion === true,
     compra_ingresa_por_recepcion: row.compra_ingresa_por_recepcion === true,
+    proveedor_fiscal: (row.proveedor_fiscal as string) ?? "none",
+    pais_fiscal: (row.pais_fiscal as string) ?? null,
+    fiscal_habilitado: row.fiscal_habilitado === true,
+    max_usuarios: row.max_usuarios != null ? Number(row.max_usuarios) : null,
     extra: (row.extra as Record<string, unknown>) ?? {},
   };
 }
@@ -102,6 +114,10 @@ export async function setEmpresaConfig(
       push("permitir_excedente_recepcion", flags.permitir_excedente_recepcion);
     if (flags.compra_ingresa_por_recepcion !== undefined)
       push("compra_ingresa_por_recepcion", flags.compra_ingresa_por_recepcion);
+    if (flags.proveedor_fiscal !== undefined) push("proveedor_fiscal", flags.proveedor_fiscal);
+    if (flags.pais_fiscal !== undefined) push("pais_fiscal", flags.pais_fiscal);
+    if (flags.fiscal_habilitado !== undefined) push("fiscal_habilitado", flags.fiscal_habilitado);
+    if (flags.max_usuarios !== undefined) push("max_usuarios", flags.max_usuarios);
     if (flags.extra !== undefined) push("extra", JSON.stringify(flags.extra), "::jsonb");
 
     if (sets.length > 0) {
