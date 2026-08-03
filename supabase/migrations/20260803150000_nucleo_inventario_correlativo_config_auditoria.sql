@@ -24,6 +24,7 @@ SET LOCAL check_function_bodies = off;
 DO $mig$
 DECLARE
   sch text;
+  origen_vals text;
 BEGIN
   FOR sch IN
     SELECT n.nspname
@@ -64,19 +65,28 @@ BEGIN
         'CREATE INDEX IF NOT EXISTS idx_mov_inv_producto_fecha ON %I.movimientos_inventario (empresa_id, producto_id, fecha)',
         sch);
 
-      -- ── 2) Ampliar CHECK de origen (conservando valores previos) ───────────
+      -- ── 2) Ampliar CHECK de origen: UNIÓN de los valores ya presentes en los
+      --        datos + los nuevos orígenes operativos. Data-safe: nunca viola
+      --        filas existentes (aunque el schema tenga orígenes propios).
       EXECUTE format(
-        'ALTER TABLE %I.movimientos_inventario DROP CONSTRAINT IF EXISTS movimientos_inventario_origen_check',
-        sch);
-      EXECUTE format(
-        'ALTER TABLE %I.movimientos_inventario ADD CONSTRAINT movimientos_inventario_origen_check
-           CHECK (origen = ANY (ARRAY[
-             ''compra''::text, ''venta''::text, ''ajuste_manual''::text,
-             ''inventario_inicial''::text, ''produccion''::text, ''devolucion_venta''::text,
-             ''recepcion''::text, ''remision''::text, ''nota_salida''::text,
-             ''ajuste''::text, ''transferencia''::text, ''anulacion''::text
-           ]))',
-        sch);
+        'SELECT string_agg(DISTINCT quote_literal(o), '','') FROM (
+           SELECT origen AS o FROM %I.movimientos_inventario WHERE origen IS NOT NULL
+           UNION
+           SELECT unnest($1::text[]) AS o
+         ) s',
+        sch)
+      INTO origen_vals
+      USING ARRAY[
+        'compra','venta','ajuste_manual','inventario_inicial','produccion','devolucion_venta',
+        'recepcion','remision','nota_salida','ajuste','transferencia','anulacion'
+      ];
+
+      IF origen_vals IS NOT NULL THEN
+        EXECUTE format('ALTER TABLE %I.movimientos_inventario DROP CONSTRAINT IF EXISTS movimientos_inventario_origen_check', sch);
+        EXECUTE format(
+          'ALTER TABLE %I.movimientos_inventario ADD CONSTRAINT movimientos_inventario_origen_check CHECK (origen = ANY (ARRAY[%s]::text[]))',
+          sch, origen_vals);
+      END IF;
     END IF;
 
     -- ── 3) Correlativos genéricos server-side ────────────────────────────────
