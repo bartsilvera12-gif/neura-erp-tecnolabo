@@ -30,6 +30,8 @@ BEGIN
     WHERE c.relname = 'presupuestos'
       AND c.relkind = 'r'
       AND n.nspname NOT IN ('public', 'pg_catalog', 'information_schema')
+      AND (nullif(current_setting('neura.solo_schema', true), '') IS NULL
+           OR n.nspname = current_setting('neura.solo_schema', true))
     ORDER BY 1
   LOOP
     -- ── 1) presupuestos ──────────────────────────────────────────────────────

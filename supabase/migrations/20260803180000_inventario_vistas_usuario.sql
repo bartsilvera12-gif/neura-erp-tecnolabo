@@ -21,6 +21,8 @@ BEGIN
     WHERE c.relname = 'productos'
       AND c.relkind = 'r'
       AND n.nspname NOT IN ('public', 'pg_catalog', 'information_schema')
+      AND (nullif(current_setting('neura.solo_schema', true), '') IS NULL
+           OR n.nspname = current_setting('neura.solo_schema', true))
     ORDER BY 1
   LOOP
     EXECUTE format($ddl$

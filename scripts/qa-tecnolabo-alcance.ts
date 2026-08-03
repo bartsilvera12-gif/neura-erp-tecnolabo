@@ -33,16 +33,27 @@ async function main() {
   const client = new pg.Client({ connectionString: url, ssl: url.includes("supabase") ? { rejectUnauthorized: false } : undefined });
   await client.connect();
   try {
-    // Resolver schema de negocio (con tabla 'productos', excluyendo public).
+    // Schema a verificar: arg CLI, o QA_SCHEMA/NEURA_CLIENT_SCHEMA env, o
+    // 'tecnolabo' si existe, o el primero disponible. Necesario cuando coexisten
+    // varios schemas de negocio (p. ej. abhuevos y tecnolabo).
     const sres = await client.query(
       `SELECT n.nspname FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
         WHERE c.relname='productos' AND c.relkind='r' AND n.nspname NOT IN ('public','pg_catalog','information_schema')
-        ORDER BY 1 LIMIT 1`,
+        ORDER BY 1`,
     );
-    const schema = sres.rows[0]?.nspname as string | undefined;
+    const candidatos = sres.rows.map((r) => r.nspname as string);
+    const pedido = (process.argv[2] || process.env.QA_SCHEMA || process.env.NEURA_CLIENT_SCHEMA || "").trim();
+    const schema = pedido && candidatos.includes(pedido)
+      ? pedido
+      : candidatos.includes("tecnolabo")
+      ? "tecnolabo"
+      : candidatos[0];
     if (!schema) {
       console.error("No se encontró un schema de negocio (con tabla productos) fuera de public.");
       process.exit(1);
+    }
+    if (candidatos.length > 1) {
+      console.log(`Schemas de negocio detectados: ${candidatos.join(", ")}. Verificando: ${schema}\n(usá 'npm run qa:tecnolabo -- <schema>' para elegir otro)\n`);
     }
     console.log(`Schema de negocio: ${schema}\n`);
 

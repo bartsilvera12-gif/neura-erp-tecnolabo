@@ -24,6 +24,8 @@ BEGIN
     WHERE c.relname = 'facturas'
       AND c.relkind = 'r'
       AND n.nspname NOT IN ('public', 'pg_catalog', 'information_schema')
+      AND (nullif(current_setting('neura.solo_schema', true), '') IS NULL
+           OR n.nspname = current_setting('neura.solo_schema', true))
     ORDER BY 1
   LOOP
     EXECUTE format($q$ALTER TABLE %I.facturas ADD COLUMN IF NOT EXISTS estado_entrega text NOT NULL DEFAULT 'pendiente'$q$, sch);
