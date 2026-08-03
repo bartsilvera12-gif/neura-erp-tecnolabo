@@ -1,14 +1,9 @@
 -- =============================================================================
 -- INSTALADOR de las 9 fases del alcance, ACOTADO al schema 'tecnolabo'.
--- Requiere haber corrido antes el baseline:
---   20260803120000_provision_schema_tecnolabo.sql
---   20260803123000_seed_empresa_tecnolabo.sql
---   20260803140000_admin_inicial_tecnolabo.sql
--- El SET de abajo hace que TODAS las fases apliquen SOLO a 'tecnolabo'.
--- Idempotente: se puede re-ejecutar. NO toca otros schemas (p.ej. abhuevos).
+-- Compatible con PgBouncer (6432): usa SET LOCAL dentro de cada transacción.
+-- Requiere el baseline previo: 20260803120000/123000/140000_*tecnolabo*.sql
+-- Idempotente. NO toca otros schemas (p.ej. abhuevos).
 -- =============================================================================
-
-SET neura.solo_schema = 'tecnolabo';
 
 -- ===================== 20260803150000_nucleo_inventario_correlativo_config_auditoria =====================
 -- =============================================================================
@@ -32,6 +27,7 @@ SET neura.solo_schema = 'tecnolabo';
 -- =============================================================================
 
 BEGIN;
+SET LOCAL neura.solo_schema = 'tecnolabo';
 SET LOCAL check_function_bodies = off;
 
 DO $mig$
@@ -205,6 +201,7 @@ COMMIT;
 -- =============================================================================
 
 BEGIN;
+SET LOCAL neura.solo_schema = 'tecnolabo';
 SET LOCAL check_function_bodies = off;
 
 DO $mig$
@@ -325,6 +322,7 @@ COMMIT;
 -- =============================================================================
 
 BEGIN;
+SET LOCAL neura.solo_schema = 'tecnolabo';
 SET LOCAL check_function_bodies = off;
 
 DO $mig$
@@ -502,6 +500,7 @@ COMMIT;
 -- =============================================================================
 
 BEGIN;
+SET LOCAL neura.solo_schema = 'tecnolabo';
 SET LOCAL check_function_bodies = off;
 
 DO $mig$
@@ -560,6 +559,7 @@ COMMIT;
 -- =============================================================================
 
 BEGIN;
+SET LOCAL neura.solo_schema = 'tecnolabo';
 SET LOCAL check_function_bodies = off;
 
 DO $mig$
@@ -655,6 +655,7 @@ COMMIT;
 -- =============================================================================
 
 BEGIN;
+SET LOCAL neura.solo_schema = 'tecnolabo';
 SET LOCAL check_function_bodies = off;
 
 DO $mig$
@@ -763,6 +764,7 @@ COMMIT;
 -- =============================================================================
 
 BEGIN;
+SET LOCAL neura.solo_schema = 'tecnolabo';
 SET LOCAL check_function_bodies = off;
 
 DO $mig$
@@ -882,6 +884,7 @@ COMMIT;
 -- =============================================================================
 
 BEGIN;
+SET LOCAL neura.solo_schema = 'tecnolabo';
 SET LOCAL check_function_bodies = off;
 
 DO $mig$
@@ -983,6 +986,7 @@ COMMIT;
 -- =============================================================================
 
 BEGIN;
+SET LOCAL neura.solo_schema = 'tecnolabo';
 SET LOCAL check_function_bodies = off;
 
 DO $mig$
