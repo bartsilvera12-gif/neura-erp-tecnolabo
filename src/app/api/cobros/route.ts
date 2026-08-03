@@ -4,6 +4,7 @@ import { fetchDataSchemaForEmpresaId } from "@/lib/supabase/empresa-data-schema"
 import { successResponse, errorResponse } from "@/lib/api/response";
 import { API_ERRORS } from "@/lib/api/errors";
 import { registrarCobroPg, CobroError } from "@/lib/cobros/server/cobros-tx-pg";
+import { assertPermiso, PermisoError } from "@/lib/auth/permisos";
 
 /**
  * POST /api/cobros — registra un cobro contra una cuenta por cobrar.
@@ -17,6 +18,7 @@ export async function POST(request: NextRequest) {
     const usuarioNombre = ctx.auth.nombre ?? ctx.auth.user?.email ?? null;
     const usuarioId = ctx.auth.usuarioCatalogId ?? null;
     const schema = await fetchDataSchemaForEmpresaId(ctx.auth.empresa_id);
+    await assertPermiso(schema, ctx.auth.empresa_id, ctx.auth.user?.email, "cobrar", ctx.auth.rol);
 
     let body: Record<string, unknown>;
     try {
@@ -46,6 +48,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(successResponse(result));
   } catch (err) {
+    if (err instanceof PermisoError) return NextResponse.json(errorResponse(err.message), { status: 403 });
     if (err instanceof CobroError) {
       return NextResponse.json(errorResponse(err.message), { status: err.status });
     }

@@ -4,6 +4,7 @@ import { fetchDataSchemaForEmpresaId } from "@/lib/supabase/empresa-data-schema"
 import { successResponse, errorResponse } from "@/lib/api/response";
 import { API_ERRORS } from "@/lib/api/errors";
 import { registrarPagoProveedor, listPagosDeCuenta, PagoProveedorError } from "@/lib/compras/server/pagos-proveedor-pg";
+import { assertPermiso, PermisoError } from "@/lib/auth/permisos";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -25,6 +26,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const ctx = await getTenantSupabaseFromAuth(request);
     if (!ctx) return NextResponse.json(errorResponse(API_ERRORS.UNAUTHORIZED), { status: 401 });
     const schema = await fetchDataSchemaForEmpresaId(ctx.auth.empresa_id);
+    await assertPermiso(schema, ctx.auth.empresa_id, ctx.auth.user?.email, "pagar");
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
     const idempotencyKey = (typeof body.idempotency_key === "string" && body.idempotency_key) || request.headers.get("Idempotency-Key") || null;
     const out = await registrarPagoProveedor(schema, ctx.auth.empresa_id, {
@@ -41,6 +43,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     });
     return NextResponse.json(successResponse(out));
   } catch (err) {
+    if (err instanceof PermisoError) return NextResponse.json(errorResponse(err.message), { status: 403 });
     if (err instanceof PagoProveedorError) return NextResponse.json(errorResponse(err.message), { status: err.status });
     console.error("[/api/cuentas-por-pagar/[id]/pagos POST]", err instanceof Error ? err.message : err);
     return NextResponse.json(errorResponse("No se pudo registrar el pago."), { status: 500 });
