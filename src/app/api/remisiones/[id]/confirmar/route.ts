@@ -1,0 +1,27 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getTenantSupabaseFromAuth } from "@/lib/supabase/tenant-api";
+import { fetchDataSchemaForEmpresaId } from "@/lib/supabase/empresa-data-schema";
+import { successResponse, errorResponse } from "@/lib/api/response";
+import { API_ERRORS } from "@/lib/api/errors";
+import { confirmarRemision, RemisionExcedenteError, StockInsuficienteMovimientoError } from "@/lib/ventas/server/remisiones-pg";
+
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await params;
+    const ctx = await getTenantSupabaseFromAuth(request);
+    if (!ctx) return NextResponse.json(errorResponse(API_ERRORS.UNAUTHORIZED), { status: 401 });
+    const schema = await fetchDataSchemaForEmpresaId(ctx.auth.empresa_id);
+    await confirmarRemision(schema, ctx.auth.empresa_id, id, {
+      id: ctx.auth.usuarioCatalogId ?? null,
+      nombre: ctx.auth.nombre ?? null,
+      email: ctx.auth.user?.email ?? null,
+    });
+    return NextResponse.json(successResponse({ ok: true }));
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "No se pudo confirmar la remisión.";
+    const status =
+      err instanceof RemisionExcedenteError || err instanceof StockInsuficienteMovimientoError ? 409 : /no encontrad|no está/i.test(msg) ? 400 : 500;
+    console.error("[/api/remisiones/[id]/confirmar]", msg);
+    return NextResponse.json(errorResponse(msg), { status });
+  }
+}

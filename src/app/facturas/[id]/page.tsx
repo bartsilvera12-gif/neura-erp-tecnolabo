@@ -20,7 +20,11 @@ type FacturaApiRow = {
   cliente_id: string;
   cliente_display?: string;
   presupuesto_id?: string | null;
+  estado_entrega?: string | null;
 };
+
+const ENTREGA_LABEL: Record<string, string> = { pendiente: "Entrega pendiente", parcialmente_entregada: "Entrega parcial", entregada: "Entregada" };
+const ENTREGA_BADGE: Record<string, string> = { pendiente: "bg-slate-100 text-slate-600", parcialmente_entregada: "bg-amber-100 text-amber-700", entregada: "bg-emerald-100 text-emerald-700" };
 
 type SifenResumen = {
   sifen_config_exists: boolean;
@@ -186,7 +190,18 @@ function FacturaDetalleInner() {
             </p>
           )}
         </div>
-        <div className="flex gap-2 print:hidden">
+        <div className="flex items-center gap-2 print:hidden">
+          {factura.estado_entrega && (
+            <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${ENTREGA_BADGE[factura.estado_entrega] ?? "bg-slate-100 text-slate-600"}`}>
+              {ENTREGA_LABEL[factura.estado_entrega] ?? factura.estado_entrega}
+            </span>
+          )}
+          <Link
+            href={`/facturas/${factura.id}/remisiones`}
+            className="text-xs font-semibold px-3 py-2 rounded-lg bg-[#4FAEB2] text-white hover:bg-[#3F8E91]"
+          >
+            Remisiones / entregas
+          </Link>
           <button
             type="button"
             onClick={() => window.print()}
