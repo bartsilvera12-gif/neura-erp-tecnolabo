@@ -24,11 +24,10 @@ export const CLIENTE_ERP_NOMBRE = `${CLIENTE_NOMBRE} ERP`;
 /**
  * Logo del cliente servido desde /public.
  *
- * PENDIENTE: no hay recurso de marca aprobado para Tecnolabo. Mientras sea `null`
- * los documentos e interfaces muestran el nombre en texto en lugar de un logo.
- * No se reutiliza el logo de ningún otro cliente.
+ * Logo oficial de TECNO/LABO (de Pastor Ramírez). Se muestra en el Header y en
+ * el membrete de los documentos (presupuestos, remisiones, recepciones, etc.).
  */
-export const CLIENTE_LOGO_URL: string | null = null;
+export const CLIENTE_LOGO_URL: string | null = "/tecnolabo-logo.jpeg";
 
 /**
  * Datos comerciales y fiscales del cliente.

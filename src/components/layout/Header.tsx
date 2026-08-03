@@ -123,7 +123,7 @@ export default function Header() {
                   width={120}
                   height={120}
                   sizes="36px"
-                  className="h-full w-full object-cover scale-150"
+                  className="h-full w-full object-contain p-0.5"
                   priority
                 />
               ) : (
