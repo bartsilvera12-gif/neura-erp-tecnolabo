@@ -40,7 +40,8 @@ export function parseProductosRows(rows: Record<string, string>[]): ProductoPars
   return rows.map((r, idx) => {
     const errors: string[] = [];
     const warnings: string[] = [];
-    const nombre = normalizeUpperText(pick(r, "NOMBRE"));
+    // Acepta encabezados alternativos frecuentes (p. ej. planilla "Articulo/Stock").
+    const nombre = normalizeUpperText(pick(r, "NOMBRE", "ARTICULO", "ARTICULOS", "PRODUCTO", "DESCRIPCION"));
     if (!nombre) errors.push("NOMBRE obligatorio.");
     const sku = normalizeUpperText(pick(r, "SKU"));
     const codigo_barras_raw = normalizeUpperText(pick(r, "CODIGO_BARRAS", "CODIGOBARRAS"));
@@ -60,7 +61,7 @@ export function parseProductosRows(rows: Record<string, string>[]): ProductoPars
       unidad_medida: normalizeUpperText(pick(r, "UNIDAD_MEDIDA", "UNIDADMEDIDA")) || "UNIDAD",
       costo_promedio: pickNumber(r, "COSTO_PROMEDIO"),
       precio_venta: pickNumber(r, "PRECIO_VENTA"),
-      stock_actual: pickNumber(r, "STOCK_ACTUAL"),
+      stock_actual: pickNumber(r, "STOCK_ACTUAL", "STOCK", "EXISTENCIA", "CANTIDAD"),
       stock_minimo: pickNumber(r, "STOCK_MINIMO"),
       metodo_valuacion,
       activo: pickBool(r, "ACTIVO"),
