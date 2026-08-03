@@ -18,6 +18,7 @@ export interface EmpresaConfig {
   stock_salida_por_remision: boolean;
   permitir_stock_negativo: boolean;
   permitir_excedente_recepcion: boolean;
+  compra_ingresa_por_recepcion: boolean;
   extra: Record<string, unknown>;
 }
 
@@ -25,6 +26,7 @@ const DEFAULTS: Omit<EmpresaConfig, "empresa_id"> = {
   stock_salida_por_remision: false,
   permitir_stock_negativo: false,
   permitir_excedente_recepcion: false,
+  compra_ingresa_por_recepcion: false,
   extra: {},
 };
 
@@ -35,6 +37,7 @@ function mapRow(empresaId: string, row: Record<string, unknown> | undefined): Em
     stock_salida_por_remision: row.stock_salida_por_remision === true,
     permitir_stock_negativo: row.permitir_stock_negativo === true,
     permitir_excedente_recepcion: row.permitir_excedente_recepcion === true,
+    compra_ingresa_por_recepcion: row.compra_ingresa_por_recepcion === true,
     extra: (row.extra as Record<string, unknown>) ?? {},
   };
 }
@@ -97,6 +100,8 @@ export async function setEmpresaConfig(
       push("permitir_stock_negativo", flags.permitir_stock_negativo);
     if (flags.permitir_excedente_recepcion !== undefined)
       push("permitir_excedente_recepcion", flags.permitir_excedente_recepcion);
+    if (flags.compra_ingresa_por_recepcion !== undefined)
+      push("compra_ingresa_por_recepcion", flags.compra_ingresa_por_recepcion);
     if (flags.extra !== undefined) push("extra", JSON.stringify(flags.extra), "::jsonb");
 
     if (sets.length > 0) {

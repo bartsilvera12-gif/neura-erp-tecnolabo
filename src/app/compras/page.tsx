@@ -170,6 +170,12 @@ export default function ComprasPage() {
         >
           Órdenes de compra
         </Link>
+        <Link
+          href="/compras/cuentas-por-pagar"
+          className="border-b-2 border-transparent px-4 py-2 text-sm font-medium text-slate-500 transition-colors hover:text-[#3F8E91]"
+        >
+          Cuentas por pagar
+        </Link>
       </div>
 
       {/* Órdenes de compra por confirmar (revisar + recibir) */}
@@ -359,6 +365,13 @@ export default function ComprasPage() {
                             <span className="text-xs italic text-slate-400 no-underline">Sin acciones</span>
                           ) : (
                             <div className="inline-flex items-center gap-3">
+                              <Link
+                                href={`/compras/${encodeURIComponent(g.numero_control)}/recepciones`}
+                                className="text-xs font-semibold text-[#3F8E91] hover:underline"
+                                title="Registrar y ver recepciones de mercadería"
+                              >
+                                Recepciones
+                              </Link>
                               <button
                                 type="button"
                                 onClick={() => {

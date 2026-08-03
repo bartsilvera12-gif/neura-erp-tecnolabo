@@ -9,6 +9,7 @@
  */
 import { getChatPostgresPool, quoteSchemaTable } from "@/lib/supabase/chat-pg-pool";
 import { assertAllowedChatDataSchema } from "@/lib/supabase/chat-data-schema";
+import { crearCuentaPorPagarDesdeCompraTx } from "@/lib/compras/server/cuentas-por-pagar-pg";
 
 function pool() {
   const p = getChatPostgresPool();
@@ -226,12 +227,25 @@ export interface ComprasMultiResult {
  * necesita lockear filas de ordenes_compra + insertar la compra + actualizar
  * la OC como una sola operación atómica). NO abre ni cierra transacción.
  */
+export interface InsertComprasOpts {
+  /**
+   * Si true, la compra se registra SIN mover inventario ni tocar stock
+   * (Tecnolabo: el stock entra al confirmar la recepción). Default false =
+   * comportamiento legado (ENTRADA + stock inmediatos). El motor de recepción
+   * de OC llama sin este flag y conserva su comportamiento.
+   */
+  sinImpactoStock?: boolean;
+  /** Si true y tipo_pago='credito', genera la cuenta por pagar (idempotente). */
+  generarCuentaPorPagar?: boolean;
+}
+
 export async function insertComprasConImpactoTx(
   client: import("pg").PoolClient,
   schema: string,
   empresaId: string,
   header: CompraHeaderInput,
-  items: CompraItemInput[]
+  items: CompraItemInput[],
+  opts: InsertComprasOpts = {}
 ): Promise<ComprasMultiResult> {
   if (!Array.isArray(items) || items.length === 0) {
     throw new Error("La compra no tiene productos.");
@@ -285,42 +299,57 @@ export async function insertComprasConImpactoTx(
     );
     insertedRows.push(compraRows[0]);
 
-    // Movimiento ENTRADA por línea (best-effort).
-    try {
-      await client.query(
-        `INSERT INTO ${tM} (
-           empresa_id, producto_id, producto_nombre, producto_sku,
-           tipo, cantidad, costo_unitario, origen, referencia, fecha,
-           created_by, usuario_nombre
-         )
-         SELECT $1::uuid, $2::uuid, $3, COALESCE(p.sku, ''),
-                'ENTRADA', $4::numeric, $5::numeric, 'compra', $6, now(),
-                $7::uuid, $8
-         FROM ${tP} p WHERE p.id = $2::uuid`,
-        [empresaId, it.producto_id, it.producto_nombre, it.cantidad,
-         it.costo_unitario, numero, header.created_by, header.usuario_nombre]
-      );
-    } catch (movErr) {
-      const msg = movErr instanceof Error ? movErr.message : String(movErr);
-      console.error("[compras-pg] movimiento ENTRADA fallo (multi)", {
-        schema, empresaId, numero, producto: it.producto_id, message: msg,
-      });
-      warnings.push(it.producto_nombre);
-    }
+    // Impacto en inventario: SOLO si no se difiere a la recepción.
+    // Con sinImpactoStock=true (Tecnolabo) la compra no mueve stock; el ENTRADA
+    // se generará al confirmar la nota de recepción.
+    if (!opts.sinImpactoStock) {
+      // Movimiento ENTRADA por línea (best-effort).
+      try {
+        await client.query(
+          `INSERT INTO ${tM} (
+             empresa_id, producto_id, producto_nombre, producto_sku,
+             tipo, cantidad, costo_unitario, origen, referencia, fecha,
+             created_by, usuario_nombre
+           )
+           SELECT $1::uuid, $2::uuid, $3, COALESCE(p.sku, ''),
+                  'ENTRADA', $4::numeric, $5::numeric, 'compra', $6, now(),
+                  $7::uuid, $8
+           FROM ${tP} p WHERE p.id = $2::uuid`,
+          [empresaId, it.producto_id, it.producto_nombre, it.cantidad,
+           it.costo_unitario, numero, header.created_by, header.usuario_nombre]
+        );
+      } catch (movErr) {
+        const msg = movErr instanceof Error ? movErr.message : String(movErr);
+        console.error("[compras-pg] movimiento ENTRADA fallo (multi)", {
+          schema, empresaId, numero, producto: it.producto_id, message: msg,
+        });
+        warnings.push(it.producto_nombre);
+      }
 
-    // Actualizar producto: stock + costo_promedio siempre.
-    // precio_venta SOLO se actualiza si la compra trae un precio > 0 (productos
-    // vendibles). Para materia prima / insumos sin precio (0 o vacío) mantenemos
-    // el precio actual: nunca lo pisamos con 0 ni con un valor inventado.
-    await client.query(
-      `UPDATE ${tP}
-          SET stock_actual = stock_actual + $1::numeric,
-              costo_promedio = $2::numeric,
-              precio_venta = CASE WHEN $3::numeric > 0 THEN $3::numeric ELSE precio_venta END,
-              updated_at = now()
-        WHERE id = $4::uuid AND empresa_id = $5::uuid`,
-      [it.cantidad, it.costo_unitario, it.precio_venta, it.producto_id, empresaId]
-    );
+      // Actualizar producto: stock + costo_promedio siempre.
+      // precio_venta SOLO se actualiza si la compra trae un precio > 0 (productos
+      // vendibles). Para materia prima / insumos sin precio (0 o vacío) mantenemos
+      // el precio actual: nunca lo pisamos con 0 ni con un valor inventado.
+      await client.query(
+        `UPDATE ${tP}
+            SET stock_actual = stock_actual + $1::numeric,
+                costo_promedio = $2::numeric,
+                precio_venta = CASE WHEN $3::numeric > 0 THEN $3::numeric ELSE precio_venta END,
+                updated_at = now()
+          WHERE id = $4::uuid AND empresa_id = $5::uuid`,
+        [it.cantidad, it.costo_unitario, it.precio_venta, it.producto_id, empresaId]
+      );
+    } else {
+      // Aun sin mover stock, mantenemos costo_promedio y precio_venta al día.
+      await client.query(
+        `UPDATE ${tP}
+            SET costo_promedio = $1::numeric,
+                precio_venta = CASE WHEN $2::numeric > 0 THEN $2::numeric ELSE precio_venta END,
+                updated_at = now()
+          WHERE id = $3::uuid AND empresa_id = $4::uuid`,
+        [it.costo_unitario, it.precio_venta, it.producto_id, empresaId]
+      );
+    }
 
     // Mantener relación producto↔proveedor (costo_habitual). No pisa marca.
     await upsertProveedorProducto(
@@ -353,6 +382,21 @@ export async function insertComprasConImpactoTx(
     );
   }
 
+  // Cuenta por pagar para compras a crédito (obligación financiera; no toca stock).
+  if (opts.generarCuentaPorPagar && header.tipo_pago === "credito") {
+    const totalCompra = insertedRows.reduce((s, r) => s + (Number(r.total) || 0), 0);
+    await crearCuentaPorPagarDesdeCompraTx(client, schema, empresaId, {
+      proveedorId: header.proveedor_id,
+      proveedorNombre: header.proveedor_nombre,
+      numeroControl: numero,
+      moneda: header.moneda,
+      tipoCambio: header.tipo_cambio,
+      total: totalCompra,
+      plazoDias: header.plazo_dias ?? null,
+      observacion: `Compra ${numero}`,
+    });
+  }
+
   return {
     numero_control: numero,
     compras: insertedRows,
@@ -374,13 +418,14 @@ export async function insertComprasConImpacto(
   schemaRaw: string,
   empresaId: string,
   header: CompraHeaderInput,
-  items: CompraItemInput[]
+  items: CompraItemInput[],
+  opts: InsertComprasOpts = {}
 ): Promise<ComprasMultiResult> {
   const schema = assertAllowedChatDataSchema(schemaRaw);
   const client = await pool().connect();
   try {
     await client.query("BEGIN");
-    const out = await insertComprasConImpactoTx(client, schema, empresaId, header, items);
+    const out = await insertComprasConImpactoTx(client, schema, empresaId, header, items, opts);
     await client.query("COMMIT");
     return out;
   } catch (err) {

@@ -9,6 +9,7 @@ import {
   type CompraHeaderInput,
   type CompraItemInput,
 } from "@/lib/compras/server/compras-pg";
+import { getEmpresaConfig } from "@/lib/config/server/empresa-config-pg";
 
 /**
  * GET /api/compras — lista via PG directo.
@@ -108,7 +109,12 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      const out = await insertComprasConImpacto(schema, empresaId, header, items);
+      // Flag per-empresa: si la compra ingresa por recepción, no mueve stock aquí.
+      const cfg = await getEmpresaConfig(schema, empresaId);
+      const out = await insertComprasConImpacto(schema, empresaId, header, items, {
+        sinImpactoStock: cfg.compra_ingresa_por_recepcion,
+        generarCuentaPorPagar: true, // credito → CxP (idempotente); contado no genera CxP
+      });
 
       return NextResponse.json(successResponse({
         numero_control: out.numero_control,
