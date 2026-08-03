@@ -11,6 +11,13 @@ export interface PresupuestoItemInput {
   precio_unitario: number;
   iva_tipo: IvaTipoPresupuesto;
   descuento: number;
+  /** Presentación comercial del ítem (Fase 1). */
+  imagen_url?: string | null;
+  imagen_path?: string | null;
+  descripcion_comercial?: string | null;
+  especificaciones_tecnicas?: string | null;
+  /** Lista de características técnicas [{ label, valor }]. */
+  caracteristicas?: Array<{ label?: string; valor?: string }> | null;
 }
 
 export interface CrearPresupuestoInput {
@@ -20,9 +27,11 @@ export interface CrearPresupuestoInput {
   cliente_telefono: string | null;
   cliente_direccion: string | null;
   moneda: string;
+  tipo_cambio?: number | null;
   validez_dias: number | null;
   forma_pago: string | null;
   plazo_entrega: string | null;
+  condiciones_comerciales?: string | null;
   observaciones: string | null;
   items: PresupuestoItemInput[];
 }
@@ -122,6 +131,8 @@ export async function crearPresupuesto(
       numero_control: numero,
       estado: "creado",
       moneda: input.moneda || "PYG",
+      tipo_cambio: input.tipo_cambio && input.tipo_cambio > 0 ? input.tipo_cambio : 1,
+      condiciones_comerciales: input.condiciones_comerciales?.trim() || null,
       subtotal: round2(subtotal),
       monto_iva: round2(montoIva),
       descuento_total: round2(descuentoTotal),
@@ -152,6 +163,11 @@ export async function crearPresupuesto(
     monto_iva: calc.monto_iva,
     descuento: calc.descuento,
     total: calc.total,
+    imagen_url: raw.imagen_url ?? null,
+    imagen_path: raw.imagen_path ?? null,
+    descripcion_comercial: raw.descripcion_comercial?.trim() || null,
+    especificaciones_tecnicas: raw.especificaciones_tecnicas?.trim() || null,
+    caracteristicas: Array.isArray(raw.caracteristicas) ? raw.caracteristicas : [],
   }));
   const insItems = await sb.from("presupuesto_items").insert(itemsRows);
   if (insItems.error) {

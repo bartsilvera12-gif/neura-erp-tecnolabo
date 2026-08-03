@@ -68,7 +68,9 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
 
   const itq = await ctx.supabase
     .from("presupuesto_items")
-    .select("producto_nombre, sku, cantidad, unidad_medida, precio_unitario, iva_tipo, descuento, total")
+    .select(
+      "producto_nombre, sku, cantidad, unidad_medida, precio_unitario, iva_tipo, descuento, total, imagen_url, descripcion_comercial, especificaciones_tecnicas, caracteristicas",
+    )
     .eq("empresa_id", ctx.auth.empresa_id)
     .eq("presupuesto_id", id)
     .order("created_at", { ascending: true });
@@ -93,10 +95,30 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
     .map((it) => {
       const cant = Number(it.cantidad) || 0;
       const unidad = it.unidad_medida ? ` ${esc(it.unidad_medida)}` : "";
+      // Imagen + descripción comercial + especificaciones técnicas (Fase 1).
+      // Estas SÍ se muestran en el presupuesto; en la factura NO se copian.
+      const img = it.imagen_url
+        ? `<img class="itemimg" src="${esc(it.imagen_url)}" alt="" />`
+        : "";
+      const descCom = it.descripcion_comercial ? `<div class="desc">${esc(it.descripcion_comercial)}</div>` : "";
+      const espec = it.especificaciones_tecnicas
+        ? `<div class="espec"><b>Especificaciones:</b> ${esc(it.especificaciones_tecnicas)}</div>`
+        : "";
+      const caracArr = Array.isArray(it.caracteristicas)
+        ? (it.caracteristicas as Array<{ label?: string; valor?: string }>)
+        : [];
+      const carac = caracArr.length
+        ? `<ul class="carac">${caracArr
+            .map((c) => `<li>${esc(c.label ?? "")}${c.label && c.valor ? ": " : ""}${esc(c.valor ?? "")}</li>`)
+            .join("")}</ul>`
+        : "";
+      const detalle = descCom || espec || carac || img
+        ? `<div class="itemdetalle">${img}<div class="itemtxt">${descCom}${espec}${carac}</div></div>`
+        : "";
       return `
       <tr>
         <td class="c">${cant.toLocaleString("es-PY", { maximumFractionDigits: 3 })}${unidad}</td>
-        <td>${esc(it.producto_nombre)}${it.sku ? `<span class="sku"> · ${esc(it.sku)}</span>` : ""}</td>
+        <td>${esc(it.producto_nombre)}${it.sku ? `<span class="sku"> · ${esc(it.sku)}</span>` : ""}${detalle}</td>
         <td class="r">${fmtMoneda(it.precio_unitario, moneda)}</td>
         <td class="c">${esc(IVA_LABEL[String(it.iva_tipo)] ?? it.iva_tipo)}</td>
         <td class="r">${Number(it.descuento) > 0 ? fmtMoneda(it.descuento, moneda) : "—"}</td>
@@ -109,6 +131,8 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   if (p.validez_dias) condiciones.push(`Validez: ${esc(p.validez_dias)} día(s)${p.fecha_vencimiento ? ` (vence ${fmtFecha(p.fecha_vencimiento)})` : ""}`);
   if (p.forma_pago) condiciones.push(`Forma de pago: ${esc(p.forma_pago)}`);
   if (p.plazo_entrega) condiciones.push(`Plazo de entrega: ${esc(p.plazo_entrega)}`);
+  if (Number(p.tipo_cambio) > 1) condiciones.push(`Tipo de cambio: ${esc(p.tipo_cambio)}`);
+  if (p.condiciones_comerciales) condiciones.push(esc(p.condiciones_comerciales));
 
   const html = `<!doctype html>
 <html lang="es">
@@ -138,6 +162,13 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   tbody td.c { text-align: center; }
   tbody td.r { text-align: right; }
   .sku { color: #9ca3af; font-size: 11px; }
+  .itemdetalle { display: flex; gap: 8px; margin-top: 6px; align-items: flex-start; }
+  .itemimg { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; }
+  .itemtxt { flex: 1; }
+  .desc { color: #374151; font-size: 11px; margin-bottom: 2px; }
+  .espec { color: #4b5563; font-size: 10.5px; }
+  .carac { margin: 2px 0 0 14px; padding: 0; color: #4b5563; font-size: 10.5px; }
+  .carac li { margin: 0; }
   .totales { margin-top: 14px; margin-left: auto; width: 56%; font-size: 14px; }
   .totales tr td { padding: 5px 10px; border: none; }
   .totales tr td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
