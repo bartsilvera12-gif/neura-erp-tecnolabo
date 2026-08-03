@@ -27,6 +27,7 @@ type Presu = {
   plazo_entrega: string | null;
   observaciones: string | null;
   convertido_pedido_id: string | null;
+  convertido_factura_id: string | null;
 };
 type ItemRow = {
   id: string;
@@ -151,6 +152,33 @@ export default function PresupuestoDetallePage() {
     }
   }
 
+  async function convertirFactura() {
+    if (busy) return;
+    if (!confirm("¿Convertir este presupuesto en factura? La operación es idempotente: si ya existe, se abre la misma factura.")) return;
+    setBusy(true);
+    setError(null);
+    setOk(null);
+    try {
+      const res = await fetchWithSupabaseSession(`/api/presupuestos/${id}/convertir-factura`, { method: "POST" });
+      const body = await res.json();
+      if (!res.ok || body?.success === false) {
+        setError(body?.error ?? "No se pudo convertir a factura.");
+        return;
+      }
+      const facturaId = body.data?.factura_id as string | undefined;
+      setOk(body.data?.ya_existia ? "El presupuesto ya estaba convertido; abriendo la factura." : "Factura generada correctamente.");
+      if (facturaId) {
+        router.push(`/facturas/${facturaId}`);
+        return;
+      }
+      await cargar();
+    } catch {
+      setError("Error de red al convertir a factura.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function abrirPdf() {
     window.open(`/api/presupuestos/${id}/pdf?auto=1`, "_blank", "noopener");
   }
@@ -196,10 +224,20 @@ export default function PresupuestoDetallePage() {
               <Pencil className="h-4 w-4" /> Editar
             </Link>
           )}
+          {presu.estado === "aprobado" && !presu.convertido_factura_id && (
+            <button
+              onClick={convertirFactura}
+              disabled={busy}
+              className="inline-flex items-center gap-1.5 rounded-md bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50"
+              title="Genera una factura a partir de este presupuesto (idempotente)"
+            >
+              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileCheck2 className="h-4 w-4" />} Convertir a factura
+            </button>
+          )}
           {presu.estado === "aprobado" && (
             <Link
               href={`/ventas/nueva?presupuesto_id=${presu.id}`}
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white hover:bg-[#3F8E91]"
+              className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
             >
               <FileCheck2 className="h-4 w-4" /> Cobrar en Caja
             </Link>
@@ -209,6 +247,18 @@ export default function PresupuestoDetallePage() {
 
       {error && <div className="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">{error}</div>}
       {ok && <div className="rounded-md bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-700">✓ {ok}</div>}
+
+      {presu.convertido_factura_id && (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-[#4FAEB2]/10 border border-[#4FAEB2]/40 p-3 text-sm text-[#2b6d70]">
+          <span>Este presupuesto fue convertido en factura.</span>
+          <Link
+            href={`/facturas/${presu.convertido_factura_id}`}
+            className="inline-flex items-center gap-1.5 rounded-md bg-[#4FAEB2] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#3F8E91]"
+          >
+            <FileCheck2 className="h-3.5 w-3.5" /> Abrir factura
+          </Link>
+        </div>
+      )}
 
       {presu.estado === "convertido" && presu.convertido_pedido_id && (
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-violet-50 border border-violet-200 p-3 text-sm text-violet-800">

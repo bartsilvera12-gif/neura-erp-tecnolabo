@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { FileText, ArrowLeft, Plus, Trash2, Loader2 } from "lucide-react";
+import { FileText, ArrowLeft, Plus, Trash2, Loader2, Image as ImageIcon, ChevronDown } from "lucide-react";
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
 import SelectFromList from "@/components/inventario/SelectFromList";
 import ClienteBuscador, { type ClienteBuscadorItem } from "@/components/clientes/ClienteBuscador";
@@ -32,7 +32,27 @@ type Item = {
   precio_unitario: number;
   iva_tipo: IvaTipoPresupuesto;
   descuento: number;
+  // Presentación comercial (Fase 1): visible en el presupuesto, NO en la factura.
+  imagen_url: string | null;
+  descripcion_comercial: string | null;
+  especificaciones_tecnicas: string | null;
+  /** Texto libre: una "clave: valor" por línea → se convierte en array. */
+  caracteristicas_texto: string | null;
 };
+
+/** Convierte el textarea de características ("clave: valor" por línea) a array jsonb. */
+function parseCaracteristicas(texto: string | null): Array<{ label: string; valor: string }> {
+  if (!texto) return [];
+  return texto
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      const idx = l.indexOf(":");
+      if (idx === -1) return { label: "", valor: l };
+      return { label: l.slice(0, idx).trim(), valor: l.slice(idx + 1).trim() };
+    });
+}
 
 function fmtGs(n: number) {
   return "Gs. " + (Number(n) || 0).toLocaleString("es-PY", { maximumFractionDigits: 0 });
@@ -72,6 +92,10 @@ export default function NuevoPresupuestoPage() {
   const [formaPago, setFormaPago] = useState("");
   const [plazoEntrega, setPlazoEntrega] = useState("");
   const [observaciones, setObservaciones] = useState("");
+  const [moneda, setMoneda] = useState<"PYG" | "USD">("PYG");
+  const [tipoCambio, setTipoCambio] = useState("1");
+  const [condiciones, setCondiciones] = useState("");
+  const [expandido, setExpandido] = useState<Record<number, boolean>>({});
 
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -141,6 +165,10 @@ export default function NuevoPresupuestoPage() {
         precio_unitario: p.precio_venta,
         iva_tipo: "10%",
         descuento: 0,
+        imagen_url: null,
+        descripcion_comercial: null,
+        especificaciones_tecnicas: null,
+        caracteristicas_texto: null,
       },
     ]);
     setSelProd("");
@@ -158,6 +186,10 @@ export default function NuevoPresupuestoPage() {
         precio_unitario: 0,
         iva_tipo: "10%",
         descuento: 0,
+        imagen_url: null,
+        descripcion_comercial: null,
+        especificaciones_tecnicas: null,
+        caracteristicas_texto: null,
       },
     ]);
   }
@@ -203,10 +235,12 @@ export default function NuevoPresupuestoPage() {
           cliente_ruc: clienteRuc.trim() || null,
           cliente_telefono: clienteTel.trim() || null,
           cliente_direccion: clienteDir.trim() || null,
-          moneda: "PYG",
+          moneda,
+          tipo_cambio: moneda === "USD" ? Number(tipoCambio) || 1 : 1,
           validez_dias: validezDias.trim() === "" ? null : parseInt(validezDias, 10),
           forma_pago: formaPago.trim() || null,
           plazo_entrega: plazoEntrega.trim() || null,
+          condiciones_comerciales: condiciones.trim() || null,
           observaciones: observaciones.trim() || null,
           items: items.map((it) => ({
             producto_id: it.producto_id,
@@ -217,6 +251,10 @@ export default function NuevoPresupuestoPage() {
             precio_unitario: Number(it.precio_unitario),
             iva_tipo: it.iva_tipo,
             descuento: Number(it.descuento) || 0,
+            imagen_url: it.imagen_url?.trim() || null,
+            descripcion_comercial: it.descripcion_comercial?.trim() || null,
+            especificaciones_tecnicas: it.especificaciones_tecnicas?.trim() || null,
+            caracteristicas: parseCaracteristicas(it.caracteristicas_texto),
           })),
         }),
       });
@@ -329,10 +367,25 @@ export default function NuevoPresupuestoPage() {
               <tbody className="divide-y divide-slate-100">
                 {items.map((it, i) => {
                   const t = itemTotals(it);
+                  const abierto = !!expandido[i];
+                  const tieneDetalle =
+                    !!it.imagen_url || !!it.descripcion_comercial || !!it.especificaciones_tecnicas || !!it.caracteristicas_texto;
                   return (
-                    <tr key={i}>
+                    <Fragment key={i}>
+                    <tr>
                       <td className="py-2 pr-2">
-                        <input value={it.producto_nombre} onChange={(e) => updItem(i, { producto_nombre: e.target.value })} className={inputClass} placeholder="Descripción" />
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setExpandido((p) => ({ ...p, [i]: !p[i] }))}
+                            className={`shrink-0 rounded p-1 hover:bg-slate-100 ${tieneDetalle ? "text-[#4FAEB2]" : "text-slate-400"}`}
+                            aria-label="Detalle comercial"
+                            title="Imagen y especificaciones técnicas"
+                          >
+                            <ChevronDown className={`h-4 w-4 transition-transform ${abierto ? "rotate-180" : ""}`} />
+                          </button>
+                          <input value={it.producto_nombre} onChange={(e) => updItem(i, { producto_nombre: e.target.value })} className={inputClass} placeholder="Descripción" />
+                        </div>
                       </td>
                       <td className="py-2 px-2">
                         <input type="number" min="0" step="0.01" value={it.cantidad} onChange={(e) => updItem(i, { cantidad: Number(e.target.value) })} className={inputClass} />
@@ -353,6 +406,38 @@ export default function NuevoPresupuestoPage() {
                         <button onClick={() => delItem(i)} className="text-red-600 hover:text-red-700" aria-label="Eliminar"><Trash2 className="h-4 w-4" /></button>
                       </td>
                     </tr>
+                    {abierto && (
+                      <tr className="bg-slate-50/60">
+                        <td colSpan={7} className="px-3 py-3">
+                          <div className="grid grid-cols-1 lg:grid-cols-[160px_1fr] gap-4">
+                            <div>
+                              <label className={labelClass}><ImageIcon className="inline h-3.5 w-3.5 mr-1" />Imagen (URL)</label>
+                              <input value={it.imagen_url ?? ""} onChange={(e) => updItem(i, { imagen_url: e.target.value })} className={inputClass} placeholder="https://…" />
+                              {it.imagen_url ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={it.imagen_url} alt="" className="mt-2 h-24 w-full rounded-md border border-slate-200 object-cover" />
+                              ) : null}
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                              <div className="sm:col-span-2">
+                                <label className={labelClass}>Descripción comercial</label>
+                                <textarea value={it.descripcion_comercial ?? ""} onChange={(e) => updItem(i, { descripcion_comercial: e.target.value })} rows={2} className={inputClass} placeholder="Texto comercial que verá el cliente" />
+                              </div>
+                              <div>
+                                <label className={labelClass}>Especificaciones técnicas</label>
+                                <textarea value={it.especificaciones_tecnicas ?? ""} onChange={(e) => updItem(i, { especificaciones_tecnicas: e.target.value })} rows={3} className={inputClass} placeholder="Detalle técnico" />
+                              </div>
+                              <div>
+                                <label className={labelClass}>Características (una &laquo;clave: valor&raquo; por línea)</label>
+                                <textarea value={it.caracteristicas_texto ?? ""} onChange={(e) => updItem(i, { caracteristicas_texto: e.target.value })} rows={3} className={inputClass} placeholder={"Potencia: 1500W\nGarantía: 12 meses"} />
+                              </div>
+                            </div>
+                          </div>
+                          <p className="mt-2 text-xs text-slate-500">Estos datos aparecen en el presupuesto. Al convertir a factura NO se copian al concepto fiscal.</p>
+                        </td>
+                      </tr>
+                    )}
+                    </Fragment>
                   );
                 })}
               </tbody>
@@ -375,6 +460,19 @@ export default function NuevoPresupuestoPage() {
         <h2 className="text-sm font-semibold text-gray-700 mb-3">Condiciones comerciales</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
+            <label className={labelClass}>Moneda</label>
+            <select value={moneda} onChange={(e) => setMoneda(e.target.value as "PYG" | "USD")} className={`${inputClass} bg-white`}>
+              <option value="PYG">Guaraníes (PYG)</option>
+              <option value="USD">Dólares (USD)</option>
+            </select>
+          </div>
+          {moneda === "USD" && (
+            <div>
+              <label className={labelClass}>Tipo de cambio</label>
+              <input type="number" min="0" step="0.01" value={tipoCambio} onChange={(e) => setTipoCambio(e.target.value)} className={inputClass} placeholder="Ej: 7500" />
+            </div>
+          )}
+          <div>
             <label className={labelClass}>Validez (días)</label>
             <input type="number" min="0" value={validezDias} onChange={(e) => setValidezDias(e.target.value)} className={inputClass} />
           </div>
@@ -385,6 +483,10 @@ export default function NuevoPresupuestoPage() {
           <div>
             <label className={labelClass}>Plazo de entrega</label>
             <input value={plazoEntrega} onChange={(e) => setPlazoEntrega(e.target.value)} className={inputClass} placeholder="Ej: 5 días hábiles" />
+          </div>
+          <div className="sm:col-span-3">
+            <label className={labelClass}>Condiciones comerciales (texto libre)</label>
+            <textarea value={condiciones} onChange={(e) => setCondiciones(e.target.value)} rows={2} className={inputClass} placeholder="Garantía, términos, notas comerciales…" />
           </div>
           <div className="sm:col-span-3">
             <label className={labelClass}>Observaciones</label>

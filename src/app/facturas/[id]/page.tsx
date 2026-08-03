@@ -19,6 +19,7 @@ type FacturaApiRow = {
   moneda: string;
   cliente_id: string;
   cliente_display?: string;
+  presupuesto_id?: string | null;
 };
 
 type SifenResumen = {
@@ -176,6 +177,14 @@ function FacturaDetalleInner() {
               {factura.cliente_display ?? "Ver cliente"}
             </Link>
           </p>
+          {factura.presupuesto_id && (
+            <p className="text-sm text-slate-500 mt-0.5">
+              Origen:{" "}
+              <Link href={`/presupuestos/${factura.presupuesto_id}`} className="text-[#4FAEB2] font-medium hover:underline">
+                Ver presupuesto de origen
+              </Link>
+            </p>
+          )}
         </div>
         <div className="flex gap-2 print:hidden">
           <button
