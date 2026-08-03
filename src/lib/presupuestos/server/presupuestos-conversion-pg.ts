@@ -178,6 +178,22 @@ export async function convertirPresupuestoAFactura(
       );
     }
 
+    // 5b) Cuenta por cobrar para factura a crédito (receivable cobrable).
+    if (tipoPago === "credito" && total > 0) {
+      const tCxc = quoteSchemaTable(schema, "cuentas_por_cobrar");
+      await client.query(
+        `INSERT INTO ${tCxc} (
+           empresa_id, cliente_id, factura_id, numero_factura, fecha_emision, fecha_vencimiento,
+           moneda, total, saldo, estado
+         ) VALUES (
+           $1::uuid, $2::uuid, $3::uuid, $4, CURRENT_DATE, (CURRENT_DATE + ($5 || ' days')::interval)::date,
+           $6, $7::numeric, $7::numeric, 'pendiente'
+         )
+         ON CONFLICT (empresa_id, factura_id) WHERE factura_id IS NOT NULL DO NOTHING`,
+        [empresaId, pre.cliente_id, facturaId, numeroFactura, String(diasVenc), pre.moneda, total],
+      );
+    }
+
     // 6) Marca presupuesto convertido + vínculo.
     await client.query(
       `UPDATE ${tPre}

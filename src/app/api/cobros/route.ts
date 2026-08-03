@@ -1,16 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTenantSupabaseFromAuthWithRol } from "@/lib/supabase/tenant-api";
+import { fetchDataSchemaForEmpresaId } from "@/lib/supabase/empresa-data-schema";
 import { successResponse, errorResponse } from "@/lib/api/response";
 import { API_ERRORS } from "@/lib/api/errors";
-import { registrarCobro, CobroError } from "@/lib/cobros/server/cobros-pg";
+import { registrarCobroPg, CobroError } from "@/lib/cobros/server/cobros-tx-pg";
 
-/** POST /api/cobros — registra un cobro contra una cuenta por cobrar. */
+/**
+ * POST /api/cobros — registra un cobro contra una cuenta por cobrar.
+ * Transaccional e idempotente: enviá `idempotency_key` (o header
+ * `Idempotency-Key`) para que doble clic / reintentos no dupliquen el cobro.
+ */
 export async function POST(request: NextRequest) {
   try {
     const ctx = await getTenantSupabaseFromAuthWithRol(request);
     if (!ctx) return NextResponse.json(errorResponse(API_ERRORS.UNAUTHORIZED), { status: 401 });
     const usuarioNombre = ctx.auth.nombre ?? ctx.auth.user?.email ?? null;
-    const usuarioId = ctx.auth.user?.id ?? null;
+    const usuarioId = ctx.auth.usuarioCatalogId ?? null;
+    const schema = await fetchDataSchemaForEmpresaId(ctx.auth.empresa_id);
 
     let body: Record<string, unknown>;
     try {
@@ -19,7 +25,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(errorResponse("JSON inválido."), { status: 400 });
     }
 
-    const result = await registrarCobro(ctx.supabase, ctx.auth.empresa_id, {
+    const idempotencyKey =
+      (typeof body.idempotency_key === "string" && body.idempotency_key) || request.headers.get("Idempotency-Key") || null;
+
+    const result = await registrarCobroPg(schema, ctx.auth.empresa_id, {
       cuenta_por_cobrar_id: String(body.cuenta_por_cobrar_id ?? ""),
       monto: Number(body.monto),
       metodo_pago: (body.metodo_pago as "efectivo" | "transferencia" | "tarjeta" | "otro") ?? "efectivo",
@@ -31,6 +40,8 @@ export async function POST(request: NextRequest) {
       fecha_pago: typeof body.fecha_pago === "string" ? body.fecha_pago : null,
       usuario_id: usuarioId,
       usuario_nombre: usuarioNombre,
+      usuario_email: ctx.auth.user?.email ?? null,
+      idempotency_key: idempotencyKey,
     });
 
     return NextResponse.json(successResponse(result));
