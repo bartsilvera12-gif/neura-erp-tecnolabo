@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { IVA_POR_DEFECTO } from "@/lib/branding/cliente";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { FileText, ArrowLeft, Plus, Trash2, Loader2 } from "lucide-react";
@@ -124,7 +125,7 @@ export default function EditarPresupuestoPage() {
           cantidad: Number(it.cantidad) || 0,
           unidad_medida: it.unidad_medida ? String(it.unidad_medida) : null,
           precio_unitario: Number(it.precio_unitario) || 0,
-          iva_tipo: (it.iva_tipo === "5%" || it.iva_tipo === "EXENTA" ? it.iva_tipo : "10%") as IvaTipoPresupuesto,
+          iva_tipo: (it.iva_tipo === "5%" || it.iva_tipo === "EXENTA" ? it.iva_tipo : IVA_POR_DEFECTO) as IvaTipoPresupuesto,
           descuento: Number(it.descuento) || 0,
         })));
         setCargando(false);
@@ -148,14 +149,14 @@ export default function EditarPresupuestoPage() {
     if (items.some((it) => it.producto_id === p.id)) return;
     setItems((prev) => [...prev, {
       producto_id: p.id, producto_nombre: p.nombre, sku: p.sku || null,
-      cantidad: 1, unidad_medida: p.unidad_medida, precio_unitario: p.precio_venta, iva_tipo: "10%", descuento: 0,
+      cantidad: 1, unidad_medida: p.unidad_medida, precio_unitario: p.precio_venta, iva_tipo: IVA_POR_DEFECTO, descuento: 0,
     }]);
     setSelProd("");
   }
   function agregarManual() {
     setItems((prev) => [...prev, {
       producto_id: null, producto_nombre: "", sku: null,
-      cantidad: 1, unidad_medida: null, precio_unitario: 0, iva_tipo: "10%", descuento: 0,
+      cantidad: 1, unidad_medida: null, precio_unitario: 0, iva_tipo: IVA_POR_DEFECTO, descuento: 0,
     }]);
   }
   function updItem(i: number, patch: Partial<Item>) {

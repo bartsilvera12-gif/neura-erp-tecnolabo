@@ -12,6 +12,7 @@ import { generarYAbrirRecibo } from "@/lib/recibos/client";
 import type { TipoIvaVenta, TipoVenta, MonedaVenta, LineaVenta, MetodoPago, TipoPrecioVenta } from "@/lib/ventas/types";
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
 import { productoMatchesQuery } from "@/lib/productos/token-search";
+import { IVA_POR_DEFECTO } from "@/lib/branding/cliente";
 import type { Producto, MetodoValuacion } from "@/lib/inventario/types";
 
 /** Miniatura de producto con fallback a un placeholder si no hay imagen o falla. */
@@ -334,8 +335,8 @@ export default function NuevaVentaPage() {
           .map((it) => {
             const cantidad = Number(it.cantidad) || 0;
             const precio = Number(it.precio_unitario) || 0;
-            const ivaRaw = String(it.iva_tipo ?? "10%");
-            const iva: TipoIvaVenta = ivaRaw === "5%" ? "5%" : ivaRaw === "EXENTA" ? "EXENTA" : "10%";
+            const ivaRaw = String(it.iva_tipo ?? IVA_POR_DEFECTO);
+            const iva: TipoIvaVenta = ivaRaw === "5%" ? "5%" : ivaRaw === "EXENTA" ? "EXENTA" : ivaRaw === "10%" ? "10%" : IVA_POR_DEFECTO;
             const totalLinea = cantidad * precio;
             const montoIva = calcIva(iva, totalLinea);
             const subtotal = totalLinea - montoIva;
@@ -396,7 +397,7 @@ export default function NuevaVentaPage() {
           .map((it) => {
             const cantidad = Number(it.cantidad) || 0;
             const precio = Number(it.precio_venta) || 0;
-            const iva: TipoIvaVenta = "10%";
+            const iva: TipoIvaVenta = IVA_POR_DEFECTO;
             // IVA incluido: total de línea = precio × cantidad; IVA desglosado desde adentro.
             const totalLinea = cantidad * precio;
             const montoIva = calcIva(iva, totalLinea);
@@ -469,7 +470,7 @@ export default function NuevaVentaPage() {
             const iva: TipoIvaVenta =
               it.tipo_iva === "EXENTA" || it.tipo_iva === "5%" || it.tipo_iva === "10%"
                 ? it.tipo_iva
-                : "10%";
+                : IVA_POR_DEFECTO;
             const totalLinea = cantidad * precio;
             const montoIva = calcIva(iva, totalLinea);
             const subtotal = totalLinea - montoIva;
@@ -744,7 +745,7 @@ export default function NuevaVentaPage() {
           cantidad: 1,
           precio_venta_original: precio,
           precio_venta: precio,
-          tipo_iva: "10%",
+          tipo_iva: IVA_POR_DEFECTO,
           tipo_precio: "minorista",
           subtotal: 0,
           monto_iva: 0,
@@ -1503,7 +1504,7 @@ export default function NuevaVentaPage() {
         excludeIds={items.map((i) => i.producto_id)}
         moneda={moneda}
         tipoCambio={tipoCambioNum}
-        ivaDefault="10%"
+        ivaDefault={IVA_POR_DEFECTO}
       />
 
       {showCrearCliente && (

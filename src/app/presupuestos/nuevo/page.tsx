@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { IVA_POR_DEFECTO } from "@/lib/branding/cliente";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FileText, ArrowLeft, Plus, Trash2, Loader2, Image as ImageIcon, ChevronDown } from "lucide-react";
@@ -163,7 +164,7 @@ export default function NuevoPresupuestoPage() {
         cantidad: 1,
         unidad_medida: p.unidad_medida,
         precio_unitario: p.precio_venta,
-        iva_tipo: "10%",
+        iva_tipo: IVA_POR_DEFECTO,
         descuento: 0,
         imagen_url: null,
         descripcion_comercial: null,
@@ -184,7 +185,7 @@ export default function NuevoPresupuestoPage() {
         cantidad: 1,
         unidad_medida: null,
         precio_unitario: 0,
-        iva_tipo: "10%",
+        iva_tipo: IVA_POR_DEFECTO,
         descuento: 0,
         imagen_url: null,
         descripcion_comercial: null,

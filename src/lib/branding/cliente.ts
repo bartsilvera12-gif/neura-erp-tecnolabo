@@ -18,6 +18,15 @@ export const CLIENTE_NOMBRE: string = NOMBRE_PUBLICO || NOMBRE_SERVIDOR || "Tecn
 /** Slug técnico: repo, schema y subdominio. */
 export const CLIENTE_SLUG = "tecnolabo";
 
+/**
+ * IVA por defecto de las líneas (ventas, presupuestos, facturas).
+ *
+ * Tecnolabo opera en Bolivia y NO cobra el IVA paraguayo: los precios son el
+ * costo del producto sin impuesto. Por eso el default es "EXENTA".
+ * (El cajero igual puede elegir 5%/10% en una línea puntual si hiciera falta.)
+ */
+export const IVA_POR_DEFECTO: "EXENTA" | "5%" | "10%" = "EXENTA";
+
 /** Nombre del producto tal como se muestra en títulos y documentos. */
 export const CLIENTE_ERP_NOMBRE = `${CLIENTE_NOMBRE} ERP`;
 
