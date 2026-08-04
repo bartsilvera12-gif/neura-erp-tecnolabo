@@ -11,8 +11,8 @@
   --zentra-sidebar-elevated: #104A4E;
   --zentra-sidebar-border: rgba(255, 255, 255, 0.08);
   --zentra-sidebar-hover: rgba(255, 255, 255, 0.06);
-  --zentra-sidebar-active: rgba(255, 255, 255, 0.18);
-  --zentra-sidebar-accent: #4FAEB2;
+  --zentra-sidebar-active: rgba(226, 59, 59, 0.20);
+  --zentra-sidebar-accent: #E23B3B;
   --zentra-sidebar-active-text: #FFFFFF;
   --zentra-login-bg-mid: #145053;
   --zentra-login-bg-deep: #0a3437;
@@ -170,9 +170,11 @@ body {
    ============================================================================= */
 .zentra-sidebar-bg {
   background:
-    radial-gradient(ellipse 120% 60% at 100% 0%, rgba(255, 255, 255, 0.06), transparent 55%),
-    radial-gradient(ellipse 120% 60% at 0% 0%, rgba(255, 255, 255, 0.04), transparent 55%),
-    linear-gradient(180deg, #104A4E 0%, #0B3A3D 35%, #082A2D 100%);
+    url('/brand/lab-pattern.svg') top left repeat,
+    radial-gradient(ellipse 120% 55% at 100% 0%, rgba(226, 59, 59, 0.12), transparent 52%),
+    radial-gradient(ellipse 120% 60% at 0% 8%, rgba(255, 255, 255, 0.05), transparent 55%),
+    linear-gradient(180deg, #0F4448 0%, #0B3336 42%, #06181B 100%);
+  background-size: 180px 180px, auto, auto, auto;
 }
 
 /* =============================================================================

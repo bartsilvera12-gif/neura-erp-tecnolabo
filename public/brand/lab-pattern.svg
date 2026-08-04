@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <g fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Matraz Erlenmeyer -->
+    <path d="M22 20h18M27 20v14L15 56a4 4 0 0 0 3 7h24a4 4 0 0 0 3-7L33 34V20"/>
+    <line x1="20" y1="50" x2="40" y2="50"/>
+    <!-- Tubo de ensayo -->
+    <path d="M126 22v34a8 8 0 0 0 16 0V22"/>
+    <line x1="122" y1="22" x2="146" y2="22"/>
+    <line x1="127" y1="44" x2="141" y2="44"/>
+    <!-- Molécula (hexágono + átomos) -->
+    <polygon points="70,104 90,94 110,104 110,126 90,136 70,126"/>
+    <circle cx="90" cy="94" r="3.5"/>
+    <circle cx="110" cy="104" r="3.5"/>
+    <circle cx="70" cy="126" r="3.5"/>
+    <!-- Vaso de precipitado -->
+    <path d="M126 118v30a5 5 0 0 0 5 5h18a5 5 0 0 0 5-5v-30"/>
+    <line x1="121" y1="118" x2="155" y2="118"/>
+    <line x1="131" y1="132" x2="140" y2="132"/>
+    <line x1="131" y1="140" x2="140" y2="140"/>
+    <!-- Gota / pipeta -->
+    <path d="M32 118v22M28 122a10 10 0 0 0 8 0"/>
+    <circle cx="32" cy="150" r="4"/>
+  </g>
+</svg>

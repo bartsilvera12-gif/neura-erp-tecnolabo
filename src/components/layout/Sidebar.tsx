@@ -701,22 +701,22 @@ export default function Sidebar() {
             : "fixed inset-y-0 left-0 z-50 -translate-x-full lg:translate-x-0 transition-transform duration-200"
         }`}
       >
-      {/* Logo: dos assets distintos segun estado.
-          - Expandido: /brand/zentra-logo-official.png (logo + texto ZENTRA)
-          - Colapsado: /brand/zentralogo.png (solo icono Z) -> queda nitido en 44x44
-          Header con justify-center porque el toggle ahora es una pestania
-          flotante en el borde derecho (estilo Coolify/acai-house). */}
+      {/* Logo TECNO/LABO en tarjeta blanca (legible sobre el fondo oscuro).
+          - Expandido: /brand/tecnolabo-logo.png (marca completa)
+          - Colapsado: /brand/tecnolabo-mark.png (marca cuadrada, nítida en 48x48) */}
       <div className="flex h-[7.25rem] shrink-0 items-center justify-center gap-2 border-b border-[color:var(--zentra-sidebar-border)] bg-[color:var(--zentra-sidebar-elevated)]/35 px-3 py-2.5">
         <Link href="/" className="flex items-center justify-center min-w-0 flex-1 overflow-hidden">
           <div
-            className={`relative flex items-center justify-center ${collapsed ? "h-11 w-11" : "h-[4.5rem] w-full max-w-[200px]"}`}
+            className={`relative flex items-center justify-center bg-white shadow-lg ring-1 ring-black/10 ${
+              collapsed ? "h-12 w-12 rounded-full p-1.5" : "h-[4.75rem] w-full max-w-[210px] rounded-xl px-3 py-2"
+            }`}
           >
             <Image
-              src={collapsed ? "/brand/zentralogo.png" : "/brand/zentra-logo-official.png"}
-              alt="ZENTRA"
-              width={400}
-              height={220}
-              sizes={collapsed ? "44px" : "200px"}
+              src={collapsed ? "/brand/tecnolabo-mark.png" : "/brand/tecnolabo-logo.png"}
+              alt="TECNO/LABO"
+              width={560}
+              height={280}
+              sizes={collapsed ? "48px" : "210px"}
               className="h-full w-full object-contain object-center"
               priority
             />
