@@ -59,15 +59,17 @@ export default function LoginPage() {
   return (
     <div className="zentra-login-bg flex min-h-dvh w-full flex-col items-center justify-center overflow-x-hidden overflow-y-auto px-4 py-5 md:h-dvh md:overflow-y-hidden md:py-6">
       <div className="flex w-full max-w-[22rem] shrink-0 flex-col items-center gap-3 sm:max-w-sm sm:gap-4">
-        <div className="w-full max-w-[13.5rem] shrink-0 sm:max-w-[15rem]">
-          <Image
-            src="/brand/zentra-logo-official.png"
-            alt="ZENTRA"
-            width={480}
-            height={264}
-            priority
-            className="h-auto w-full max-h-[4.25rem] object-contain object-center sm:max-h-[4.75rem]"
-          />
+        <div className="w-full max-w-[15rem] shrink-0 sm:max-w-[16.5rem]">
+          <div className="mx-auto flex items-center justify-center rounded-2xl bg-white px-4 py-3 shadow-[0_16px_32px_-8px_rgba(0,0,0,0.35)] ring-1 ring-black/10">
+            <Image
+              src="/brand/tecnolabo-logo.png"
+              alt="TECNO/LABO"
+              width={560}
+              height={280}
+              priority
+              className="h-auto w-full max-h-[4.5rem] object-contain object-center sm:max-h-[5rem]"
+            />
+          </div>
         </div>
 
         <p className="text-center text-sm text-sky-100/90">Iniciá sesión para continuar</p>

@@ -40,13 +40,13 @@ export default function ZentraLoader({
             "radial-gradient(circle at 50% 40%, rgba(255,255,255,0.10), transparent 65%)",
         }}
       />
-      <div className="relative z-10 h-32 w-[15rem] sm:h-40 sm:w-[18rem]">
+      <div className="relative z-10 flex h-28 w-[16rem] items-center justify-center rounded-2xl bg-white p-5 shadow-[0_18px_44px_-10px_rgba(0,0,0,0.45)] sm:h-32 sm:w-[19rem]">
         <Image
-          src="/brand/zentra-logo-official.png"
-          alt="ZENTRA"
+          src="/brand/tecnolabo-logo.png"
+          alt="TECNO/LABO"
           fill
-          sizes="(min-width: 640px) 18rem, 15rem"
-          className="object-contain object-center drop-shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
+          sizes="(min-width: 640px) 19rem, 16rem"
+          className="object-contain object-center p-5"
           priority
         />
       </div>

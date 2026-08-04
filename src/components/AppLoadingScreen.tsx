@@ -80,10 +80,10 @@ function ZentraLogo() {
         </g>
       </svg>
       <span
-        className="text-xl font-bold text-white"
-        style={{ letterSpacing: "0.55em", paddingLeft: "0.55em" }}
+        className="text-lg font-bold text-white"
+        style={{ letterSpacing: "0.32em", paddingLeft: "0.32em" }}
       >
-        ZENTRA
+        TECNO/LABO
       </span>
     </div>
   );
