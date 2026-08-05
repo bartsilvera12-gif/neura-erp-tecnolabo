@@ -6,11 +6,11 @@
   --foreground: #0F172A;
   --foreground-muted: #475569;
   --card: #FFFFFF;
-  /* Sidebar Zentra — teal oficial: deep teal oscuro con acento turquesa. */
-  --zentra-sidebar: #0B3A3D;
-  --zentra-sidebar-elevated: #104A4E;
-  --zentra-sidebar-border: rgba(255, 255, 255, 0.08);
-  --zentra-sidebar-hover: rgba(255, 255, 255, 0.06);
+  /* Sidebar TECNO/LABO — grafito-teal muy oscuro (estética laboratorio) + acento rojo de marca. */
+  --zentra-sidebar: #0A1618;
+  --zentra-sidebar-elevated: #0E1F21;
+  --zentra-sidebar-border: rgba(111, 227, 220, 0.10);
+  --zentra-sidebar-hover: rgba(255, 255, 255, 0.05);
   --zentra-sidebar-active: rgba(226, 59, 59, 0.20);
   --zentra-sidebar-accent: #E23B3B;
   --zentra-sidebar-active-text: #FFFFFF;
@@ -171,10 +171,10 @@ body {
 .zentra-sidebar-bg {
   background:
     url('/brand/lab-pattern.svg') top left repeat,
-    radial-gradient(ellipse 120% 55% at 100% 0%, rgba(226, 59, 59, 0.12), transparent 52%),
-    radial-gradient(ellipse 120% 60% at 0% 8%, rgba(255, 255, 255, 0.05), transparent 55%),
-    linear-gradient(180deg, #0F4448 0%, #0B3336 42%, #06181B 100%);
-  background-size: 180px 180px, auto, auto, auto;
+    radial-gradient(ellipse 130% 50% at 100% 0%, rgba(226, 59, 59, 0.13), transparent 55%),
+    radial-gradient(ellipse 100% 55% at 0% 4%, rgba(111, 227, 220, 0.06), transparent 55%),
+    linear-gradient(165deg, #0D1F21 0%, #091416 48%, #04090A 100%);
+  background-size: 220px 220px, auto, auto, auto;
 }
 
 /* =============================================================================
