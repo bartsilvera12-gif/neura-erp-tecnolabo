@@ -16,6 +16,8 @@ type ProductoLite = {
   sku: string;
   precio_venta: number;
   unidad_medida: string;
+  /** Ruta en Storage (bucket privado). Se firma al generar el PDF. */
+  imagen_path: string | null;
 };
 type ClienteLite = {
   id: string;
@@ -35,6 +37,8 @@ type Item = {
   descuento: number;
   // Presentación comercial (Fase 1): visible en el presupuesto, NO en la factura.
   imagen_url: string | null;
+  /** Imagen del producto en Storage (se hereda al elegir producto; se firma en el PDF). */
+  imagen_path: string | null;
   descripcion_comercial: string | null;
   especificaciones_tecnicas: string | null;
   /** Texto libre: una "clave: valor" por línea → se convierte en array. */
@@ -116,6 +120,7 @@ export default function NuevoPresupuestoPage() {
                 sku: String(p.sku ?? ""),
                 precio_venta: Number(p.precio_venta) || 0,
                 unidad_medida: String(p.unidad_medida ?? "UNIDAD"),
+                imagen_path: (p.imagen_path as string | null) ?? null,
               }))
           );
         }
@@ -167,6 +172,7 @@ export default function NuevoPresupuestoPage() {
         iva_tipo: IVA_POR_DEFECTO,
         descuento: 0,
         imagen_url: null,
+        imagen_path: p.imagen_path ?? null,
         descripcion_comercial: null,
         especificaciones_tecnicas: null,
         caracteristicas_texto: null,
@@ -188,6 +194,7 @@ export default function NuevoPresupuestoPage() {
         iva_tipo: IVA_POR_DEFECTO,
         descuento: 0,
         imagen_url: null,
+        imagen_path: null,
         descripcion_comercial: null,
         especificaciones_tecnicas: null,
         caracteristicas_texto: null,
@@ -254,6 +261,7 @@ export default function NuevoPresupuestoPage() {
             iva_tipo: it.iva_tipo,
             descuento: Number(it.descuento) || 0,
             imagen_url: it.imagen_url?.trim() || null,
+            imagen_path: it.imagen_path ?? null,
             descripcion_comercial: it.descripcion_comercial?.trim() || null,
             especificaciones_tecnicas: it.especificaciones_tecnicas?.trim() || null,
             caracteristicas: parseCaracteristicas(it.caracteristicas_texto),

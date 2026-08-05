@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTenantSupabaseFromAuth } from "@/lib/supabase/tenant-api";
 import { membreteA4 } from "@/lib/documentos/membrete";
+import { signProductoImagen } from "@/lib/inventario/imagen-storage";
 
 /**
  * GET /api/presupuestos/[id]/pdf?auto=1
@@ -75,12 +76,45 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   const itq = await ctx.supabase
     .from("presupuesto_items")
     .select(
-      "producto_nombre, sku, cantidad, unidad_medida, precio_unitario, iva_tipo, descuento, total, imagen_url, descripcion_comercial, especificaciones_tecnicas, caracteristicas",
+      "producto_id, producto_nombre, sku, cantidad, unidad_medida, precio_unitario, iva_tipo, descuento, total, imagen_url, imagen_path, descripcion_comercial, especificaciones_tecnicas, caracteristicas",
     )
     .eq("empresa_id", ctx.auth.empresa_id)
     .eq("presupuesto_id", id)
     .order("created_at", { ascending: true });
   const items = (itq.data ?? []) as Record<string, unknown>[];
+
+  // Imágenes: el bucket es privado, así que se firma `imagen_path` -> URL efímera
+  // solo para este render. Cada ítem trae su imagen_path (heredada del producto al
+  // crearse); para presupuestos anteriores a esa herencia, se resuelve desde el
+  // producto por producto_id. Si el ítem ya trae una URL directa (externa), se respeta.
+  try {
+    const sinResolver = items.filter((it) => !it.imagen_url && !it.imagen_path && it.producto_id);
+    const pathPorProducto = new Map<string, string>();
+    const prodIds = Array.from(new Set(sinResolver.map((it) => String(it.producto_id))));
+    if (prodIds.length > 0) {
+      const pr = await ctx.supabase
+        .from("productos")
+        .select("id, imagen_path")
+        .eq("empresa_id", ctx.auth.empresa_id)
+        .in("id", prodIds);
+      for (const row of (pr.data ?? []) as Array<{ id: string; imagen_path: string | null }>) {
+        if (row.imagen_path) pathPorProducto.set(String(row.id), row.imagen_path);
+      }
+    }
+    await Promise.all(
+      items.map(async (it) => {
+        if (it.imagen_url) return;
+        const path =
+          (it.imagen_path as string | null) ||
+          (it.producto_id ? pathPorProducto.get(String(it.producto_id)) ?? null : null);
+        if (path) {
+          it.imagen_url = (await signProductoImagen(ctx.supabase, String(path), 3600)) ?? null;
+        }
+      }),
+    );
+  } catch {
+    // Sin imágenes firmadas el PDF sale igual, solo sin fotos.
+  }
 
   // Nombre del negocio.
   let nombreEmpresa: string | null = null;
@@ -103,10 +137,13 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   const rowHtml = (it: Record<string, unknown>, full: boolean): string => {
     const cant = Number(it.cantidad) || 0;
     const unidad = it.unidad_medida ? ` ${esc(it.unidad_medida)}` : "";
+    const nombreHtml = `${esc(it.producto_nombre)}${it.sku ? `<span class="sku"> · ${esc(it.sku)}</span>` : ""}`;
     const descCom = it.descripcion_comercial ? `<div class="desc">${esc(it.descripcion_comercial)}</div>` : "";
-    let detalle = descCom;
+    const imgUrl = it.imagen_url ? esc(String(it.imagen_url)) : "";
+    let celda: string;
     if (full) {
-      const img = it.imagen_url ? `<img class="itemimg" src="${esc(it.imagen_url)}" alt="" />` : "";
+      // Hoja completa: imagen grande + especificaciones + características.
+      const img = imgUrl ? `<img class="itemimg" src="${imgUrl}" alt="" />` : "";
       const espec = it.especificaciones_tecnicas
         ? `<div class="espec"><b>Especificaciones:</b> ${esc(it.especificaciones_tecnicas)}</div>`
         : "";
@@ -118,14 +155,22 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
             .map((c) => `<li>${esc(c.label ?? "")}${c.label && c.valor ? ": " : ""}${esc(c.valor ?? "")}</li>`)
             .join("")}</ul>`
         : "";
-      detalle = descCom || espec || carac || img
-        ? `<div class="itemdetalle">${img}<div class="itemtxt">${descCom}${espec}${carac}</div></div>`
-        : "";
+      const detalle =
+        descCom || espec || carac || img
+          ? `<div class="itemdetalle">${img}<div class="itemtxt">${descCom}${espec}${carac}</div></div>`
+          : "";
+      celda = `${nombreHtml}${detalle}`;
+    } else {
+      // Copia compacta (2 por hoja): miniatura de la imagen al lado del nombre.
+      const thumb = imgUrl ? `<img class="thumb" src="${imgUrl}" alt="" />` : "";
+      celda = thumb
+        ? `<div class="itemc">${thumb}<div>${nombreHtml}${descCom}</div></div>`
+        : `${nombreHtml}${descCom}`;
     }
     return `
       <tr>
         <td class="c">${cant.toLocaleString("es-PY", { maximumFractionDigits: 3 })}${unidad}</td>
-        <td>${esc(it.producto_nombre)}${it.sku ? `<span class="sku"> · ${esc(it.sku)}</span>` : ""}${detalle}</td>
+        <td>${celda}</td>
         <td class="r">${fmtMoneda(it.precio_unitario, moneda)}</td>
         <td class="c">${esc(IVA_LABEL[String(it.iva_tipo)] ?? it.iva_tipo)}</td>
         <td class="r">${Number(it.descuento) > 0 ? fmtMoneda(it.descuento, moneda) : "—"}</td>
@@ -265,9 +310,13 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   thead th.r { text-align: right; }
   tbody td { padding: 4px 7px; border-bottom: 1px solid #eef2f4; vertical-align: top; }
   tbody td.c { text-align: center; }
-  tbody td.r { text-align: right; }
+  tbody td.r { text-align: right; white-space: nowrap; }
+  thead th.r { white-space: nowrap; }
   .sku { color: #9ca3af; font-size: 9.5px; }
   .desc { color: #374151; font-size: 10px; margin-top: 1px; }
+  .itemc { display: flex; gap: 6px; align-items: flex-start; }
+  .itemc .thumb { width: 34px; height: 34px; object-fit: cover; border-radius: 4px; border: 1px solid #e5e7eb; flex: 0 0 auto; }
+  .dual .copia .itemc .thumb { width: 30px; height: 30px; }
   .itemdetalle { display: flex; gap: 8px; margin-top: 6px; align-items: flex-start; }
   .itemimg { width: 52px; height: 52px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; }
   .itemtxt { flex: 1; }

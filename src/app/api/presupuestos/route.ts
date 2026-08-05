@@ -33,6 +33,15 @@ function parseItems(raw: unknown): PresupuestoItemInput[] | null {
       precio_unitario: precio,
       iva_tipo: asIva(r.iva_tipo),
       descuento: Math.max(0, Number(r.descuento) || 0),
+      // Presentación comercial del ítem (imagen, descripción y specs): visible en el
+      // presupuesto, NO en la factura. Antes se descartaba aquí y nunca se guardaba.
+      imagen_url: r.imagen_url ? String(r.imagen_url) : null,
+      imagen_path: r.imagen_path ? String(r.imagen_path) : null,
+      descripcion_comercial: r.descripcion_comercial ? String(r.descripcion_comercial).slice(0, 2000) : null,
+      especificaciones_tecnicas: r.especificaciones_tecnicas ? String(r.especificaciones_tecnicas).slice(0, 4000) : null,
+      caracteristicas: Array.isArray(r.caracteristicas)
+        ? (r.caracteristicas as Array<{ label?: string; valor?: string }>)
+        : null,
     });
   }
   return out;
