@@ -20,17 +20,21 @@ type PresupuestoRow = {
 };
 
 const ESTADO_BADGE: Record<EstadoPresupuesto, string> = {
+  borrador: "bg-slate-100 text-slate-500",
   creado: "bg-slate-100 text-slate-700",
   enviado: "bg-sky-100 text-sky-700",
   aprobado: "bg-emerald-100 text-emerald-700",
   rechazado: "bg-red-100 text-red-700",
+  vencido: "bg-amber-100 text-amber-700",
   convertido: "bg-violet-100 text-violet-700",
 };
 const ESTADO_DOT: Record<EstadoPresupuesto, string> = {
+  borrador: "bg-slate-300",
   creado: "bg-slate-400",
   enviado: "bg-sky-500",
   aprobado: "bg-emerald-500",
   rechazado: "bg-red-500",
+  vencido: "bg-amber-500",
   convertido: "bg-violet-500",
 };
 

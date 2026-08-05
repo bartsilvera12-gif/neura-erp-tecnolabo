@@ -88,14 +88,14 @@ export async function convertirPresupuestoAFactura(
     const guard = await client.query(
       `INSERT INTO ${tConv} (empresa_id, presupuesto_id, tipo_destino, created_by)
          VALUES ($1::uuid, $2::uuid, 'factura', $3::uuid)
-       ON CONFLICT (presupuesto_id) DO NOTHING
+       ON CONFLICT (presupuesto_id, tipo_destino) DO NOTHING
        RETURNING id`,
       [empresaId, input.presupuestoId, input.usuarioId ?? null],
     );
 
     if (guard.rowCount === 0) {
       const prev = await client.query(
-        `SELECT factura_id FROM ${tConv} WHERE presupuesto_id = $1::uuid AND empresa_id = $2::uuid`,
+        `SELECT factura_id FROM ${tConv} WHERE presupuesto_id = $1::uuid AND empresa_id = $2::uuid AND tipo_destino = 'factura'`,
         [input.presupuestoId, empresaId],
       );
       const facturaId = prev.rows[0]?.factura_id as string | null;
@@ -149,25 +149,26 @@ export async function convertirPresupuestoAFactura(
 
     // 5) Ítems: descripción = SOLO nombre comercial (sin especificaciones técnicas).
     const items = await client.query(
-      `SELECT producto_id, producto_nombre, sku, cantidad, precio_unitario, descuento, subtotal, monto_iva, total
+      `SELECT id, producto_id, producto_nombre, sku, cantidad, precio_unitario, descuento, subtotal, monto_iva, total
          FROM ${tPreItems} WHERE presupuesto_id = $1::uuid AND empresa_id = $2::uuid ORDER BY created_at`,
       [input.presupuestoId, empresaId],
     );
     for (const it of items.rows) {
       await client.query(
         `INSERT INTO ${tFacItems} (
-           factura_id, empresa_id, descripcion, producto_id, sku,
+           factura_id, empresa_id, descripcion, producto_id, sku, presupuesto_item_id,
            cantidad, precio_unitario, descuento, subtotal, iva, total
          ) VALUES (
-           $1::uuid, $2::uuid, $3, $4::uuid, $5,
-           $6, $7, $8, $9, $10, $11
+           $1::uuid, $2::uuid, $3, $4::uuid, $5, $6::uuid,
+           $7, $8, $9, $10, $11, $12
          )`,
         [
           facturaId,
           empresaId,
-          it.producto_nombre, // nombre comercial, NO especificaciones
+          it.producto_nombre, // SOLO nombre comercial, NO especificaciones/imagen
           it.producto_id ?? null,
           it.sku ?? null,
+          it.id, // referencia interna al ítem original del presupuesto
           it.cantidad,
           it.precio_unitario,
           it.descuento ?? 0,

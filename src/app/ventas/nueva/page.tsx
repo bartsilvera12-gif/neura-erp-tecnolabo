@@ -866,6 +866,7 @@ export default function NuevaVentaPage() {
           pedidoId,
           pedidoCajaId,
           cajaId: cajaActivaFinal,
+          presupuestoId,
           pagos: pagosArrayFinal,
         }
       );

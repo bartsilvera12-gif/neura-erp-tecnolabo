@@ -33,6 +33,8 @@ export interface CrearPresupuestoInput {
   plazo_entrega: string | null;
   condiciones_comerciales?: string | null;
   observaciones: string | null;
+  /** 'borrador' | 'creado'. Default 'creado'. */
+  estado?: string | null;
   items: PresupuestoItemInput[];
 }
 
@@ -129,7 +131,7 @@ export async function crearPresupuesto(
       cliente_telefono: input.cliente_telefono?.trim() || null,
       cliente_direccion: input.cliente_direccion?.trim() || null,
       numero_control: numero,
-      estado: "creado",
+      estado: input.estado === "borrador" ? "borrador" : "creado",
       moneda: input.moneda || "PYG",
       tipo_cambio: input.tipo_cambio && input.tipo_cambio > 0 ? input.tipo_cambio : 1,
       condiciones_comerciales: input.condiciones_comerciales?.trim() || null,

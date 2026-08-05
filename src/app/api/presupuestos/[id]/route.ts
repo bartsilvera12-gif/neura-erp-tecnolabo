@@ -172,9 +172,15 @@ export async function PATCH(request: NextRequest, ctxParams: { params: Promise<{
     }
     if (nuevoEstado === "convertido") {
       return NextResponse.json(
-        errorResponse("Para convertir usá la acción 'Convertir en pedido'."),
+        errorResponse("Para convertir usá la acción 'Convertir a factura' o 'Convertir a venta'."),
         { status: 400 }
       );
+    }
+    const estadoAnterior = (cur.data as { estado: string }).estado;
+    const motivo = typeof body.motivo === "string" && body.motivo.trim() ? body.motivo.trim() : null;
+    // Motivo obligatorio para aprobado/rechazado.
+    if ((nuevoEstado === "aprobado" || nuevoEstado === "rechazado") && !motivo) {
+      return NextResponse.json(errorResponse("Indicá un motivo para aprobar o rechazar."), { status: 400 });
     }
 
     const upd = await ctx.supabase
@@ -186,6 +192,22 @@ export async function PATCH(request: NextRequest, ctxParams: { params: Promise<{
       .maybeSingle();
     if (upd.error) throw new Error(upd.error.message);
     if (!upd.data) return NextResponse.json(errorResponse(API_ERRORS.NOT_FOUND), { status: 404 });
+
+    // Historial: usuario + fecha + motivo del cambio de estado.
+    try {
+      await ctx.supabase.from("presupuesto_estado_historial").insert({
+        empresa_id: ctx.auth.empresa_id,
+        presupuesto_id: id,
+        estado_anterior: estadoAnterior,
+        estado_nuevo: nuevoEstado,
+        motivo,
+        observacion: motivo,
+        usuario_id: ctx.auth.usuarioCatalogId ?? null,
+        usuario_nombre: ctx.auth.nombre ?? ctx.auth.user?.email ?? null,
+      });
+    } catch (histErr) {
+      console.error("[presupuesto historial estado]", histErr instanceof Error ? histErr.message : histErr);
+    }
 
     return NextResponse.json(successResponse({ presupuesto: upd.data }));
   } catch (err) {

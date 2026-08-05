@@ -173,6 +173,9 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   .totales tr td { padding: 5px 10px; border: none; }
   .totales tr td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
   .totales .total-row td { border-top: 2px solid #4FAEB2; font-weight: 800; font-size: 16px; color: #1f2937; }
+  .firmas { display: flex; justify-content: space-between; gap: 40px; margin-top: 48px; }
+  .firma { flex: 1; text-align: center; }
+  .firma .linea { border-top: 1px solid #374151; margin-top: 38px; padding-top: 6px; font-size: 11px; color: #4b5563; }
   .cond { margin-top: 20px; }
   .cond h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #6b7280; margin: 0 0 6px; }
   .cond ul { margin: 0; padding-left: 18px; font-size: 13px; }
@@ -250,6 +253,11 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
 
     ${condiciones.length ? `<div class="cond"><h3>Condiciones comerciales</h3><ul>${condiciones.map((c) => `<li>${c}</li>`).join("")}</ul></div>` : ""}
     ${p.observaciones ? `<div class="obs"><strong>Observaciones:</strong>\n${esc(p.observaciones)}</div>` : ""}
+
+    <div class="firmas">
+      <div class="firma"><div class="linea">Firma y aclaración — ${esc(negocio)}</div></div>
+      <div class="firma"><div class="linea">Aceptación del cliente${p.cliente_nombre ? ` — ${esc(p.cliente_nombre)}` : ""}</div></div>
+    </div>
 
     <div class="legal">
       Presupuesto sujeto a disponibilidad de stock y validez indicada.<br>

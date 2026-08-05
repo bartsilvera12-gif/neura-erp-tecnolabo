@@ -222,7 +222,7 @@ export default function NuevoPresupuestoPage() {
     items.length > 0 &&
     items.every((it) => it.producto_nombre.trim() && it.cantidad > 0 && it.precio_unitario >= 0);
 
-  async function guardar() {
+  async function guardar(estado: "creado" | "borrador" = "creado") {
     if (guardando || !valido) return;
     setGuardando(true);
     setError(null);
@@ -243,6 +243,7 @@ export default function NuevoPresupuestoPage() {
           plazo_entrega: plazoEntrega.trim() || null,
           condiciones_comerciales: condiciones.trim() || null,
           observaciones: observaciones.trim() || null,
+          estado,
           items: items.map((it) => ({
             producto_id: it.producto_id,
             producto_nombre: it.producto_nombre.trim(),
@@ -500,7 +501,10 @@ export default function NuevoPresupuestoPage() {
         <Link href="/presupuestos" className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">
           Cancelar
         </Link>
-        <button onClick={guardar} disabled={!valido || guardando} className="inline-flex items-center justify-center gap-1.5 rounded-md bg-[#4FAEB2] px-5 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50">
+        <button onClick={() => guardar("borrador")} disabled={!valido || guardando} className="inline-flex items-center justify-center gap-1.5 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50">
+          Guardar borrador
+        </button>
+        <button onClick={() => guardar("creado")} disabled={!valido || guardando} className="inline-flex items-center justify-center gap-1.5 rounded-md bg-[#4FAEB2] px-5 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50">
           {guardando ? <><Loader2 className="h-4 w-4 animate-spin" /> Guardando…</> : "Guardar presupuesto"}
         </button>
       </div>

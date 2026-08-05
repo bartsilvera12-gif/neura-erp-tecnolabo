@@ -1,22 +1,36 @@
-export type EstadoPresupuesto = "creado" | "enviado" | "aprobado" | "rechazado" | "convertido";
+export type EstadoPresupuesto =
+  | "borrador"
+  | "creado"
+  | "enviado"
+  | "aprobado"
+  | "rechazado"
+  | "vencido"
+  | "convertido";
 
 export type IvaTipoPresupuesto = "EXENTA" | "5%" | "10%";
 
 export const ESTADOS_PRESUPUESTO: EstadoPresupuesto[] = [
+  "borrador",
   "creado",
   "enviado",
   "aprobado",
   "rechazado",
+  "vencido",
   "convertido",
 ];
 
 export const ESTADO_LABEL: Record<EstadoPresupuesto, string> = {
+  borrador: "Borrador",
   creado: "Creado",
   enviado: "Enviado",
   aprobado: "Aprobado",
   rechazado: "Rechazado",
+  vencido: "Vencido",
   convertido: "Convertido",
 };
+
+/** Estados que exigen registrar motivo/usuario en el historial. */
+export const ESTADOS_CON_MOTIVO: EstadoPresupuesto[] = ["aprobado", "rechazado", "convertido"];
 
 export interface PresupuestoItem {
   id?: string;

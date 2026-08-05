@@ -43,6 +43,21 @@ export async function GET(request: NextRequest) {
   try {
     const ctx = await getTenantSupabaseFromAuth(request);
     if (!ctx) return NextResponse.json(errorResponse(API_ERRORS.UNAUTHORIZED), { status: 401 });
+
+    // Auto-vencimiento: presupuestos con fecha de vencimiento pasada y aún
+    // pendientes (creado/enviado/borrador) pasan a 'vencido'. Idempotente.
+    try {
+      const hoy = new Date().toISOString().slice(0, 10);
+      await ctx.supabase
+        .from("presupuestos")
+        .update({ estado: "vencido", updated_at: new Date().toISOString() })
+        .eq("empresa_id", ctx.auth.empresa_id)
+        .lt("fecha_vencimiento", hoy)
+        .in("estado", ["borrador", "creado", "enviado"]);
+    } catch (vErr) {
+      console.error("[presupuestos auto-vencido]", vErr instanceof Error ? vErr.message : vErr);
+    }
+
     const estado = new URL(request.url).searchParams.get("estado");
     let q = ctx.supabase
       .from("presupuestos")
@@ -139,10 +154,13 @@ export async function POST(request: NextRequest) {
       cliente_telefono: body.cliente_telefono ? String(body.cliente_telefono) : null,
       cliente_direccion: body.cliente_direccion ? String(body.cliente_direccion) : null,
       moneda: body.moneda === "USD" ? "USD" : "PYG",
+      tipo_cambio: typeof body.tipo_cambio === "number" ? body.tipo_cambio : null,
       validez_dias: validez,
       forma_pago: body.forma_pago ? String(body.forma_pago) : null,
       plazo_entrega: body.plazo_entrega ? String(body.plazo_entrega) : null,
+      condiciones_comerciales: body.condiciones_comerciales ? String(body.condiciones_comerciales).slice(0, 4000) : null,
       observaciones: body.observaciones ? String(body.observaciones).slice(0, 4000) : null,
+      estado: body.estado === "borrador" ? "borrador" : "creado",
       items,
     });
 

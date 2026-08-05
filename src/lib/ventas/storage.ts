@@ -80,6 +80,8 @@ export async function saveVenta(
     pedidoId?: string | null;
     pedidoCajaId?: string | null;
     cajaId?: string | null;
+    /** Presupuesto de origen (guarda ventas.presupuesto_id). */
+    presupuestoId?: string | null;
     /** Si esta seteado (2+ items), es pago mixto: se ignora pagoDetalle. */
     pagos?: PagoLinea[] | null;
   }
@@ -112,6 +114,7 @@ export async function saveVenta(
         pedido_id: opts?.pedidoId ?? null,
         pedido_caja_id: opts?.pedidoCajaId ?? null,
         caja_id: opts?.cajaId ?? null,
+        presupuesto_id: opts?.presupuestoId ?? null,
       }),
     });
 

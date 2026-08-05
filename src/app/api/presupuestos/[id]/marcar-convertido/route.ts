@@ -28,17 +28,45 @@ export async function POST(
       return NextResponse.json(errorResponse("venta_id es obligatorio."), { status: 400 });
     }
 
+    // Relación presupuesto↔venta (idempotente por tipo_destino).
+    await ctx.supabase.from("presupuesto_conversiones").upsert(
+      {
+        empresa_id: ctx.auth.empresa_id,
+        presupuesto_id: id,
+        tipo_destino: "venta",
+        venta_id: ventaId,
+        created_by: ctx.auth.usuarioCatalogId ?? null,
+      },
+      { onConflict: "presupuesto_id,tipo_destino", ignoreDuplicates: true },
+    );
+
+    // Marca convertido usando la columna correcta (convertido_venta_id).
     const { error } = await ctx.supabase
       .from("presupuestos")
       .update({
         estado: "convertido",
-        convertido_pedido_id: ventaId,
+        convertido_venta_id: ventaId,
+        convertido_at: new Date().toISOString(),
+        convertido_por: ctx.auth.usuarioCatalogId ?? null,
         updated_at: new Date().toISOString(),
       })
       .eq("id", id)
       .eq("empresa_id", ctx.auth.empresa_id)
       .neq("estado", "convertido"); // idempotente
     if (error) throw new Error(error.message);
+
+    // Historial (best-effort).
+    try {
+      await ctx.supabase.from("presupuesto_estado_historial").insert({
+        empresa_id: ctx.auth.empresa_id,
+        presupuesto_id: id,
+        estado_nuevo: "convertido",
+        motivo: "Convertido a venta",
+        observacion: "Convertido a venta",
+        usuario_id: ctx.auth.usuarioCatalogId ?? null,
+        usuario_nombre: ctx.auth.nombre ?? ctx.auth.user?.email ?? null,
+      });
+    } catch { /* best-effort */ }
 
     return NextResponse.json(successResponse({ ok: true }));
   } catch (err) {

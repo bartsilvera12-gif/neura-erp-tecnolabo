@@ -91,6 +91,8 @@ export interface CreateVentaPgParams {
   /** Usuario que registra la venta (auditoría de movimientos de inventario). */
   usuarioId?: string | null;
   usuarioNombre?: string | null;
+  /** Presupuesto de origen (si la venta se genera desde un presupuesto aprobado). */
+  presupuestoId?: string | null;
 }
 
 function recalcTotals(items: CreateVentaItemInput[]) {
@@ -536,6 +538,7 @@ export async function createVentaTransaccionalPg(
       tipo_venta: params.tipoVenta,
       plazo_dias: params.plazoDias,
       metodo_pago: params.metodoPago,
+      presupuesto_id: params.presupuestoId ?? null,
       genera_nota_remision: generaNota,
       nota_remision_numero: notaRemisionNumero,
       fecha: fechaIso,

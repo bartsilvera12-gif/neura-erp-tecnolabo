@@ -145,6 +145,7 @@ export async function POST(request: NextRequest) {
     const permitirSinStock = o.permitir_sin_stock === true;
     // Pedido (proyecto) que se está facturando desde Caja. Opcional.
     const pedidoId = typeof o.pedido_id === "string" && o.pedido_id.trim() ? o.pedido_id.trim() : null;
+    const presupuestoId = typeof o.presupuesto_id === "string" && o.presupuesto_id.trim() ? o.presupuesto_id.trim() : null;
     // Pedido del modulo Consulta (tabla pedidos_caja). Opcional, independiente
     // del legacy proyectos. Cuando viene, al finalizar la venta marcamos el
     // pedido como facturado via marcarPedidoFacturado.
@@ -243,6 +244,7 @@ export async function POST(request: NextRequest) {
       totalDeclarado,
       pedidoCocina,
       permitirSinStock,
+      presupuestoId,
       generaNotaRemision: o.genera_nota_remision === true,
       cajaId: o.caja_id != null && String(o.caja_id).trim() !== "" ? String(o.caja_id) : null,
       usuarioId: auth.usuarioCatalogId ?? null,

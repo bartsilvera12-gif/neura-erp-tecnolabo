@@ -42,18 +42,22 @@ type ItemRow = {
 };
 
 const ESTADO_BADGE: Record<EstadoPresupuesto, string> = {
+  borrador: "bg-slate-100 text-slate-500",
   creado: "bg-slate-100 text-slate-700",
   enviado: "bg-sky-100 text-sky-700",
   aprobado: "bg-emerald-100 text-emerald-700",
   rechazado: "bg-red-100 text-red-700",
+  vencido: "bg-amber-100 text-amber-700",
   convertido: "bg-violet-100 text-violet-700",
 };
-// Transiciones permitidas desde la UI (no incluye 'convertido', que va por /convertir).
+// Transiciones permitidas desde la UI (no incluye 'convertido', que va por conversión).
 const SIGUIENTES: Record<EstadoPresupuesto, EstadoPresupuesto[]> = {
+  borrador: ["creado", "enviado"],
   creado: ["enviado", "aprobado", "rechazado"],
   enviado: ["aprobado", "rechazado"],
   aprobado: ["rechazado"],
   rechazado: ["creado", "enviado"],
+  vencido: ["enviado", "aprobado"],
   convertido: [],
 };
 
@@ -106,6 +110,12 @@ export default function PresupuestoDetallePage() {
 
   async function cambiarEstado(nuevo: EstadoPresupuesto) {
     if (busy) return;
+    // Aprobar/rechazar exigen motivo (queda en el historial).
+    let motivo: string | null = null;
+    if (nuevo === "aprobado" || nuevo === "rechazado") {
+      motivo = prompt(nuevo === "aprobado" ? "Motivo de aprobación:" : "Motivo de rechazo:") ?? "";
+      if (!motivo.trim()) return;
+    }
     setBusy(true);
     setError(null);
     setOk(null);
@@ -113,7 +123,7 @@ export default function PresupuestoDetallePage() {
       const res = await fetchWithSupabaseSession(`/api/presupuestos/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ estado: nuevo }),
+        body: JSON.stringify({ estado: nuevo, motivo }),
       });
       const body = await res.json();
       if (!res.ok || body?.success === false) {
