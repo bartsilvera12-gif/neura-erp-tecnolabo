@@ -3,6 +3,7 @@ import { getTenantSupabaseFromAuth } from "@/lib/supabase/tenant-api";
 import { successResponse, errorResponse } from "@/lib/api/response";
 import { API_ERRORS } from "@/lib/api/errors";
 import { ESTADOS_PRESUPUESTO, type EstadoPresupuesto } from "@/lib/presupuestos/types";
+import { firmarImagenesItems } from "@/lib/inventario/imagen-storage";
 
 const PRESU_COLS =
   "id, cliente_id, cliente_nombre, cliente_ruc, cliente_telefono, cliente_direccion, " +
@@ -11,7 +12,8 @@ const PRESU_COLS =
   "convertido_pedido_id, convertido_venta_id, convertido_factura_id, created_at, updated_at";
 
 const ITEM_COLS =
-  "id, producto_id, producto_nombre, sku, cantidad, unidad_medida, precio_unitario, iva_tipo, subtotal, monto_iva, descuento, total";
+  "id, producto_id, producto_nombre, sku, cantidad, unidad_medida, precio_unitario, iva_tipo, subtotal, monto_iva, descuento, total, " +
+  "imagen_url, imagen_path, descripcion_comercial, especificaciones_tecnicas, caracteristicas";
 
 /** GET /api/presupuestos/[id] — detalle + ítems. */
 export async function GET(request: NextRequest, ctxParams: { params: Promise<{ id: string }> }) {
@@ -37,7 +39,11 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
       .order("created_at", { ascending: true });
     if (itq.error) throw new Error(itq.error.message);
 
-    return NextResponse.json(successResponse({ presupuesto: pq.data, items: itq.data ?? [] }));
+    // Firmar la imagen de cada ítem (bucket privado) para mostrarla en la nota.
+    const items = (itq.data ?? []) as unknown as Record<string, unknown>[];
+    await firmarImagenesItems(ctx.supabase, ctx.auth.empresa_id, items);
+
+    return NextResponse.json(successResponse({ presupuesto: pq.data, items }));
   } catch (err) {
     console.error("[/api/presupuestos/[id] GET]", err instanceof Error ? err.message : err);
     return NextResponse.json(errorResponse("No se pudo cargar el presupuesto."), { status: 500 });
@@ -125,6 +131,12 @@ export async function PATCH(request: NextRequest, ctxParams: { params: Promise<{
           monto_iva: Math.round(iva),
           descuento: desc,
           total: Math.round(bruto),
+          // Presentación comercial: preservarla al editar (antes se perdía).
+          imagen_url: it.imagen_url ? String(it.imagen_url) : null,
+          imagen_path: it.imagen_path ? String(it.imagen_path) : null,
+          descripcion_comercial: it.descripcion_comercial ? String(it.descripcion_comercial).slice(0, 2000) : null,
+          especificaciones_tecnicas: it.especificaciones_tecnicas ? String(it.especificaciones_tecnicas).slice(0, 4000) : null,
+          caracteristicas: Array.isArray(it.caracteristicas) ? it.caracteristicas : [],
         });
       }
 

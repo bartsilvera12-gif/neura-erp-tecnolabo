@@ -123,6 +123,52 @@ export async function resolverImagenesPublicas<
 }
 
 /**
+ * Resuelve la imagen visible de una lista de ítems que referencian productos
+ * (presupuestos, pedidos, etc.). Para cada ítem, en orden de preferencia:
+ *   1. `imagen_url` directa (p. ej. URL externa) → se respeta.
+ *   2. `imagen_path` propio del ítem → se firma (bucket privado).
+ *   3. `producto_id` → se toma el `imagen_path` del producto y se firma
+ *      (cubre ítems creados antes de heredar la imagen).
+ * Muta cada ítem seteando `imagen_url` con la URL firmada efímera. Silencioso
+ * ante fallos: un ítem sin imagen simplemente queda sin `imagen_url`.
+ */
+export async function firmarImagenesItems(
+  supabase: AppSupabaseClient,
+  empresaId: string,
+  items: Array<Record<string, unknown>>,
+  ttlSeconds = 3600
+): Promise<void> {
+  try {
+    const pathPorProducto = new Map<string, string>();
+    const sinResolver = items.filter((it) => !it.imagen_url && !it.imagen_path && it.producto_id);
+    const prodIds = Array.from(new Set(sinResolver.map((it) => String(it.producto_id))));
+    if (prodIds.length > 0) {
+      const pr = await supabase
+        .from("productos")
+        .select("id, imagen_path")
+        .eq("empresa_id", empresaId)
+        .in("id", prodIds);
+      for (const row of (pr.data ?? []) as Array<{ id: string; imagen_path: string | null }>) {
+        if (row.imagen_path) pathPorProducto.set(String(row.id), row.imagen_path);
+      }
+    }
+    await Promise.all(
+      items.map(async (it) => {
+        if (it.imagen_url) return;
+        const path =
+          (it.imagen_path as string | null) ||
+          (it.producto_id ? pathPorProducto.get(String(it.producto_id)) ?? null : null);
+        if (path) {
+          it.imagen_url = (await signProductoImagen(supabase, String(path), ttlSeconds)) ?? null;
+        }
+      })
+    );
+  } catch {
+    // Sin imágenes firmadas los ítems salen igual, solo sin foto.
+  }
+}
+
+/**
  * Valida que el path pertenezca a la empresa indicada (primer segmento).
  * Previene cross-tenant en operaciones que reciben paths arbitrarios.
  */

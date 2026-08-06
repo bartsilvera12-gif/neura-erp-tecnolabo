@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTenantSupabaseFromAuth } from "@/lib/supabase/tenant-api";
 import { membreteA4 } from "@/lib/documentos/membrete";
-import { signProductoImagen } from "@/lib/inventario/imagen-storage";
+import { firmarImagenesItems } from "@/lib/inventario/imagen-storage";
 
 /**
  * GET /api/presupuestos/[id]/pdf?auto=1
@@ -87,34 +87,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   // solo para este render. Cada ítem trae su imagen_path (heredada del producto al
   // crearse); para presupuestos anteriores a esa herencia, se resuelve desde el
   // producto por producto_id. Si el ítem ya trae una URL directa (externa), se respeta.
-  try {
-    const sinResolver = items.filter((it) => !it.imagen_url && !it.imagen_path && it.producto_id);
-    const pathPorProducto = new Map<string, string>();
-    const prodIds = Array.from(new Set(sinResolver.map((it) => String(it.producto_id))));
-    if (prodIds.length > 0) {
-      const pr = await ctx.supabase
-        .from("productos")
-        .select("id, imagen_path")
-        .eq("empresa_id", ctx.auth.empresa_id)
-        .in("id", prodIds);
-      for (const row of (pr.data ?? []) as Array<{ id: string; imagen_path: string | null }>) {
-        if (row.imagen_path) pathPorProducto.set(String(row.id), row.imagen_path);
-      }
-    }
-    await Promise.all(
-      items.map(async (it) => {
-        if (it.imagen_url) return;
-        const path =
-          (it.imagen_path as string | null) ||
-          (it.producto_id ? pathPorProducto.get(String(it.producto_id)) ?? null : null);
-        if (path) {
-          it.imagen_url = (await signProductoImagen(ctx.supabase, String(path), 3600)) ?? null;
-        }
-      }),
-    );
-  } catch {
-    // Sin imágenes firmadas el PDF sale igual, solo sin fotos.
-  }
+  await firmarImagenesItems(ctx.supabase, ctx.auth.empresa_id, items);
 
   // Nombre del negocio.
   let nombreEmpresa: string | null = null;

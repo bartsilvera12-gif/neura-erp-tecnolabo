@@ -39,6 +39,9 @@ type ItemRow = {
   iva_tipo: string;
   descuento: number | string;
   total: number | string;
+  /** URL firmada de la imagen del producto (resuelta por el backend). */
+  imagen_url?: string | null;
+  descripcion_comercial?: string | null;
 };
 
 const ESTADO_BADGE: Record<EstadoPresupuesto, string> = {
@@ -331,7 +334,19 @@ export default function PresupuestoDetallePage() {
             <tbody className="divide-y divide-slate-100">
               {items.map((it) => (
                 <tr key={it.id}>
-                  <td className="py-2.5 px-4 text-gray-800">{it.producto_nombre}{it.sku ? <span className="text-gray-400 text-xs"> · {it.sku}</span> : null}</td>
+                  <td className="py-2.5 px-4 text-gray-800">
+                    <div className="flex items-start gap-2.5">
+                      {it.imagen_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={it.imagen_url} alt="" className="h-10 w-10 flex-none rounded-md border border-slate-200 object-cover" />
+                      ) : null}
+                      <span>
+                        {it.producto_nombre}
+                        {it.sku ? <span className="text-gray-400 text-xs"> · {it.sku}</span> : null}
+                        {it.descripcion_comercial ? <span className="block text-xs text-gray-500">{it.descripcion_comercial}</span> : null}
+                      </span>
+                    </div>
+                  </td>
                   <td className="py-2.5 px-4 text-center tabular-nums">{Number(it.cantidad).toLocaleString("es-PY")} {it.unidad_medida ?? ""}</td>
                   <td className="py-2.5 px-4 text-right tabular-nums">{fmtGs(it.precio_unitario, presu.moneda)}</td>
                   <td className="py-2.5 px-4 text-center">{it.iva_tipo}</td>
