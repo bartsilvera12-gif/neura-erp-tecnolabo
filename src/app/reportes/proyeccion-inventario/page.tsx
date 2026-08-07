@@ -93,7 +93,7 @@ export default function ProyeccionInventarioPage() {
                 key={d}
                 onClick={() => setDias(d)}
                 className={`rounded-lg border px-3 py-2 text-xs font-semibold transition-colors ${
-                  dias === d ? "border-[#4FAEB2] bg-[#4FAEB2] text-white" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                  dias === d ? "border-[#1E2125] bg-[#1E2125] text-white" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
                 }`}
               >
                 Últimos {d} días
@@ -112,13 +112,13 @@ export default function ProyeccionInventarioPage() {
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 xl:grid-cols-6">
-            <button onClick={() => setEstado("")} className={`rounded-xl border p-3 text-left transition-colors ${estado === "" ? "border-[#4FAEB2] bg-[#4FAEB2]/5" : "border-slate-200 bg-white hover:bg-slate-50"}`}>
+            <button onClick={() => setEstado("")} className={`rounded-xl border p-3 text-left transition-colors ${estado === "" ? "border-[#1E2125] bg-[#1E2125]/5" : "border-slate-200 bg-white hover:bg-slate-50"}`}>
               <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Productos</p>
-              <p className="mt-1 text-2xl font-bold tabular-nums text-[#3F8E91]">{fmtNum(t.total)}</p>
+              <p className="mt-1 text-2xl font-bold tabular-nums text-[#17191C]">{fmtNum(t.total)}</p>
               <p className="mt-0.5 text-[11px] text-slate-400">últimos {data.dias} días</p>
             </button>
             {(["critico", "bajo", "normal", "sobrestock", "sin_movimiento"] as EstadoStock[]).map((e) => (
-              <button key={e} onClick={() => setEstado(estado === e ? "" : e)} className={`rounded-xl border p-3 text-left transition-colors ${estado === e ? "border-[#4FAEB2] bg-[#4FAEB2]/5" : "border-slate-200 bg-white hover:bg-slate-50"}`}>
+              <button key={e} onClick={() => setEstado(estado === e ? "" : e)} className={`rounded-xl border p-3 text-left transition-colors ${estado === e ? "border-[#1E2125] bg-[#1E2125]/5" : "border-slate-200 bg-white hover:bg-slate-50"}`}>
                 <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">{ESTADO_STOCK_LABEL[e]}</p>
                 <p className="mt-1 text-2xl font-bold tabular-nums text-slate-900">{fmtNum(t[e])}</p>
                 <p className="mt-0.5 text-[11px] text-slate-400">{ESTADO_HINT[e]}</p>
@@ -126,19 +126,19 @@ export default function ProyeccionInventarioPage() {
             ))}
           </div>
 
-          <div className="rounded-2xl border border-[#4FAEB2]/30 bg-white p-6 shadow-sm ring-1 ring-[#4FAEB2]/10">
+          <div className="rounded-2xl border border-[#1E2125]/30 bg-white p-6 shadow-sm ring-1 ring-[#1E2125]/10">
             <div className="mb-4 flex flex-wrap items-center gap-3">
               <input
                 type="text"
                 placeholder="Buscar por nombre o SKU…"
                 value={busquedaDraft}
                 onChange={(e) => setBusquedaDraft(e.target.value)}
-                className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30 sm:min-w-72"
+                className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30 sm:min-w-72"
               />
               <select
                 value={estado}
                 onChange={(e) => setEstado(e.target.value as EstadoStock | "")}
-                className="w-44 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30"
+                className="w-44 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30"
               >
                 {ESTADO_FILTROS.map((e) => (
                   <option key={e || "todos"} value={e}>{e === "" ? "Todos los estados" : ESTADO_STOCK_LABEL[e]}</option>
@@ -147,7 +147,7 @@ export default function ProyeccionInventarioPage() {
               <select
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
-                className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30"
+                className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30"
               >
                 {PAGE_SIZES.map((n) => (<option key={n} value={n}>{n} / pág.</option>))}
               </select>
@@ -158,24 +158,24 @@ export default function ProyeccionInventarioPage() {
 
             <div className="overflow-x-auto rounded-xl border border-slate-200">
               <table className="w-full min-w-[1000px] text-sm">
-                <thead className="border-b-2 border-[#4FAEB2]/40 bg-[#E5F4F4]">
+                <thead className="border-b-2 border-[#1E2125]/40 bg-[#EEF0F2]">
                   <tr>
-                    <th className="px-3 py-3 text-left text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Producto</th>
-                    <th className="px-3 py-3 text-left text-xs font-bold uppercase tracking-wide text-[#3F8E91]">SKU</th>
-                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Stock</th>
-                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Stock mín.</th>
-                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Vendido ({data.dias}d)</th>
-                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Prom./día</th>
-                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Días cob.</th>
-                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Quiebre est.</th>
-                    <th className="px-3 py-3 text-center text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Estado</th>
+                    <th className="px-3 py-3 text-left text-xs font-bold uppercase tracking-wide text-[#17191C]">Producto</th>
+                    <th className="px-3 py-3 text-left text-xs font-bold uppercase tracking-wide text-[#17191C]">SKU</th>
+                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#17191C]">Stock</th>
+                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#17191C]">Stock mín.</th>
+                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#17191C]">Vendido ({data.dias}d)</th>
+                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#17191C]">Prom./día</th>
+                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#17191C]">Días cob.</th>
+                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#17191C]">Quiebre est.</th>
+                    <th className="px-3 py-3 text-center text-xs font-bold uppercase tracking-wide text-[#17191C]">Estado</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {data.productos.length === 0 ? (
                     <tr><td colSpan={9} className="py-8 text-center text-sm text-slate-400">Sin productos para el filtro.</td></tr>
                   ) : data.productos.map((p) => (
-                    <tr key={p.producto_id} className="transition-colors hover:bg-[#4FAEB2]/5">
+                    <tr key={p.producto_id} className="transition-colors hover:bg-[#1E2125]/5">
                       <td className="px-3 py-2.5 text-xs font-semibold text-slate-900">{p.nombre}</td>
                       <td className="px-3 py-2.5 font-mono text-xs text-slate-500">{p.sku ?? "—"}</td>
                       <td className={`px-3 py-2.5 text-right text-xs tabular-nums font-medium ${p.stock_actual <= p.stock_minimo ? "text-red-600" : "text-slate-700"}`}>{fmtNum(p.stock_actual)}</td>

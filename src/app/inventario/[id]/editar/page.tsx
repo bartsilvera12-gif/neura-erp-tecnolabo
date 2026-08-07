@@ -476,7 +476,7 @@ export default function EditarProductoPage() {
                     type="button"
                     onClick={() => setModoReceta(opt.v)}
                     className={`text-left rounded-lg border-2 p-3 transition-all ${
-                      activo ? "border-[#4FAEB2] bg-[#4FAEB2]/[0.06] shadow-sm" : "border-slate-200 hover:border-slate-300"
+                      activo ? "border-[#1E2125] bg-[#1E2125]/[0.06] shadow-sm" : "border-slate-200 hover:border-slate-300"
                     }`}
                   >
                     <span className="text-sm font-semibold text-slate-900">{opt.titulo}</span>
@@ -486,7 +486,7 @@ export default function EditarProductoPage() {
               })}
             </div>
             {modoReceta === "produccion_previa" && (
-              <p className="mt-2 text-xs text-[#4FAEB2]">
+              <p className="mt-2 text-xs text-[#1E2125]">
                 Usá el botón <strong>Fabricar</strong> en el detalle de la receta para producir y cargar stock.
               </p>
             )}
@@ -556,7 +556,7 @@ export default function EditarProductoPage() {
                   type="button"
                   onClick={handleGenerarSku}
                   disabled={generandoSku}
-                  className="shrink-0 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-[#3F8E91] hover:bg-[#4FAEB2]/5 disabled:opacity-50"
+                  className="shrink-0 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-[#17191C] hover:bg-[#1E2125]/5 disabled:opacity-50"
                 >
                   {generandoSku ? "…" : "Generar SKU"}
                 </button>

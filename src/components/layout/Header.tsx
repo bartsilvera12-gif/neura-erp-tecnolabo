@@ -92,7 +92,7 @@ export default function Header() {
       <button
         type="button"
         onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-        className="rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-[#3F8E91] lg:hidden"
+        className="rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-[#17191C] lg:hidden"
         aria-label="Abrir menú"
       >
         <Menu className="h-5 w-5" />
@@ -110,11 +110,11 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 shadow-sm transition-all hover:border-[#4FAEB2]/60"
+            className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 shadow-sm transition-all hover:border-[#1E2125]/60"
           >
             <div
               className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white"
-              style={{ boxShadow: "0 0 0 3px rgba(79, 174, 178, 0.25)" }}
+              style={{ boxShadow: "0 0 0 3px rgba(30, 33, 37, 0.25)" }}
             >
               {CLIENTE_LOGO_URL ? (
                 <Image
@@ -127,14 +127,14 @@ export default function Header() {
                   priority
                 />
               ) : (
-                <span className="text-sm font-bold text-[#3F8E91]">
+                <span className="text-sm font-bold text-[#17191C]">
                   {CLIENTE_NOMBRE.charAt(0).toUpperCase()}
                 </span>
               )}
             </div>
             <div className="hidden text-left sm:block">
               <p className="max-w-[180px] truncate text-sm font-semibold text-slate-900">{displayName}</p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#3F8E91]">{displayRole}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#17191C]">{displayRole}</p>
             </div>
             <ChevronDown
               className={`h-4 w-4 text-slate-400 transition-transform ${userMenuOpen ? "rotate-180" : ""}`}
@@ -142,19 +142,19 @@ export default function Header() {
           </button>
 
           {userMenuOpen ? (
-            <div className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl ring-1 ring-[#4FAEB2]/15">
+            <div className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl ring-1 ring-[#1E2125]/15">
               {/* franja superior turquesa */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#4FAEB2] via-[#4FAEB2]/80 to-[#4FAEB2]/40"
+                className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#1E2125] via-[#1E2125]/80 to-[#1E2125]/40"
               />
               <div className="flex items-center gap-2 px-4 pt-4 pb-2">
                 <span
                   aria-hidden="true"
-                  className="inline-block h-1.5 w-1.5 rounded-full bg-[#4FAEB2]"
-                  style={{ boxShadow: "0 0 0 3px rgba(79, 174, 178, 0.18)" }}
+                  className="inline-block h-1.5 w-1.5 rounded-full bg-[#1E2125]"
+                  style={{ boxShadow: "0 0 0 3px rgba(30, 33, 37, 0.18)" }}
                 />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4FAEB2]">Sesión</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1E2125]">Sesión</p>
               </div>
               <div className="border-b border-slate-100 px-4 pb-3">
                 <p className="truncate text-sm font-semibold text-slate-900">{dropdownName}</p>
@@ -168,7 +168,7 @@ export default function Header() {
                   await signOut();
                   router.push("/login");
                 }}
-                className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#3F8E91]"
+                className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-slate-700 transition-colors hover:bg-slate-50 hover:text-[#17191C]"
               >
                 <LogOut className="h-4 w-4" />
                 Cerrar sesión

@@ -443,7 +443,7 @@ export default function NuevaCompraPage() {
                   type="file"
                   accept="image/jpeg,image/png,image/webp,application/pdf"
                   onChange={handleComprobanteChange}
-                  className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-[#4FAEB2] file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-[#3F8E91]"
+                  className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-[#1E2125] file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-[#17191C]"
                 />
                 {comprobanteFile && !comprobanteError && (
                   <p className="mt-1.5 text-xs text-green-600">✓ {comprobanteFile.name} listo para subir al guardar.</p>
@@ -603,7 +603,7 @@ export default function NuevaCompraPage() {
                           placeholder="Ej: CHIA-500" className={`${inputSmClass} uppercase ${errorSku ? "border-red-300 bg-red-50" : ""}`} />
                         <button type="button" onClick={generarSku} disabled={generandoSku}
                           title="Generar el próximo SKU según el tipo (REV/MEN/MP)"
-                          className="shrink-0 rounded-lg border border-[#4FAEB2]/40 bg-white px-3 text-xs font-semibold text-[#3F8E91] transition-colors hover:bg-[#4FAEB2]/10 disabled:opacity-50 disabled:cursor-not-allowed">
+                          className="shrink-0 rounded-lg border border-[#1E2125]/40 bg-white px-3 text-xs font-semibold text-[#17191C] transition-colors hover:bg-[#1E2125]/10 disabled:opacity-50 disabled:cursor-not-allowed">
                           {generandoSku ? "…" : "Generar"}
                         </button>
                       </div>
@@ -669,13 +669,13 @@ export default function NuevaCompraPage() {
                         <td className="py-2 px-2">
                           <input type="number" min={0} step="any" value={l.cantidad || ""}
                             onChange={(e) => editarLinea(i, { cantidad: parseFloat(e.target.value) || 0 })}
-                            className="w-14 rounded-md border border-slate-200 px-2 py-1.5 text-right text-sm outline-none focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20" />
+                            className="w-14 rounded-md border border-slate-200 px-2 py-1.5 text-right text-sm outline-none focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20" />
                         </td>
                         <td className="py-2 px-2">
                           <MontoInput value={l.costo_unitario_input}
                             onChange={(n) => editarLinea(i, { costo_unitario_input: n })}
                             decimals={cab.moneda === "USD"}
-                            className="w-24 rounded-md border border-slate-200 px-2 py-1.5 text-right text-sm outline-none focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20" />
+                            className="w-24 rounded-md border border-slate-200 px-2 py-1.5 text-right text-sm outline-none focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20" />
                           {cab.moneda === "USD" && l.costo_unitario_pyg > 0 && (
                             <div className="mt-0.5 text-right text-[10px] text-gray-400">≈ {formatGs(l.costo_unitario_pyg)}</div>
                           )}
@@ -683,7 +683,7 @@ export default function NuevaCompraPage() {
                         <td className="py-2 px-2">
                           <select value={l.iva_tipo}
                             onChange={(e) => editarLinea(i, { iva_tipo: e.target.value as TipoIva })}
-                            className="w-full rounded-md border border-slate-200 px-1.5 py-1.5 text-sm outline-none focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 bg-white">
+                            className="w-full rounded-md border border-slate-200 px-1.5 py-1.5 text-sm outline-none focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 bg-white">
                             <option value="exenta">Exenta</option>
                             <option value="5">5%</option>
                             <option value="10">10%</option>
@@ -694,7 +694,7 @@ export default function NuevaCompraPage() {
                             onChange={(n) => editarLinea(i, { precio_venta: n })}
                             decimals={false}
                             placeholder={l.es_insumo_no_vendible ? "Opcional" : "0"}
-                            className="w-24 rounded-md border border-slate-200 px-2 py-1.5 text-right text-sm outline-none focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20" />
+                            className="w-24 rounded-md border border-slate-200 px-2 py-1.5 text-right text-sm outline-none focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20" />
                           {l.margen_venta !== null && (
                             <div className={`mt-0.5 text-right text-[10px] ${margenColor(l.margen_venta)}`}>Margen {l.margen_venta.toFixed(1)}%</div>
                           )}
@@ -847,11 +847,11 @@ function ProductoBuscador({
         }}
         placeholder="Buscar producto por nombre o SKU…"
         autoComplete="off"
-        className="h-10 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm shadow-sm outline-none transition-all placeholder:text-slate-400 hover:border-[#4FAEB2]/60 focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20"
+        className="h-10 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm shadow-sm outline-none transition-all placeholder:text-slate-400 hover:border-[#1E2125]/60 focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20"
       />
       {open && (
         <div className="absolute left-0 right-0 z-50 mt-1.5">
-          <ul ref={listRef} className="max-h-[280px] overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-xl ring-1 ring-[#4FAEB2]/15">
+          <ul ref={listRef} className="max-h-[280px] overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-xl ring-1 ring-[#1E2125]/15">
             {resultados.length === 0 ? (
               <li className="px-3 py-3 text-center text-xs text-slate-400">
                 {query.trim() ? "Sin productos que coincidan." : "No hay más productos para agregar."}
@@ -862,7 +862,7 @@ function ProductoBuscador({
                   <button type="button" data-idx={i}
                     onMouseEnter={() => setHl(i)} onClick={() => pick(p)}
                     className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                      i === hl ? "bg-[#4FAEB2]/10 text-[#2F6E71]" : "text-slate-700 hover:bg-slate-50"
+                      i === hl ? "bg-[#1E2125]/10 text-[#2F6E71]" : "text-slate-700 hover:bg-slate-50"
                     }`}>
                     <span className="min-w-0 flex-1 truncate">
                       <span className="font-medium">{p.nombre}</span>
@@ -935,7 +935,7 @@ function ProveedorBuscador({
 
   if (selected) {
     return (
-      <div className="flex h-[42px] items-center justify-between gap-2 rounded-lg border border-[#4FAEB2]/40 bg-[#4FAEB2]/[0.06] px-3 shadow-sm">
+      <div className="flex h-[42px] items-center justify-between gap-2 rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.06] px-3 shadow-sm">
         <span className="min-w-0 flex-1 truncate text-sm">
           <span className="font-semibold text-slate-800">{selected.nombre}</span>
           {selected.ruc && <span className="ml-2 text-xs text-slate-500">RUC {selected.ruc}</span>}
@@ -969,11 +969,11 @@ function ProveedorBuscador({
         }}
         placeholder="Buscar proveedor por nombre o RUC…"
         autoComplete="off"
-        className="h-[42px] w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm shadow-sm outline-none transition-all placeholder:text-slate-400 hover:border-[#4FAEB2]/60 focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20"
+        className="h-[42px] w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm shadow-sm outline-none transition-all placeholder:text-slate-400 hover:border-[#1E2125]/60 focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20"
       />
       {open && (
         <div className="absolute left-0 right-0 z-50 mt-1.5">
-          <ul ref={listRef} className="max-h-[260px] overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-xl ring-1 ring-[#4FAEB2]/15">
+          <ul ref={listRef} className="max-h-[260px] overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-xl ring-1 ring-[#1E2125]/15">
             {resultados.length === 0 ? (
               <li className="px-3 py-3 text-center text-xs text-slate-400">
                 {proveedores.length === 0 ? "No hay proveedores. Creá uno abajo." : "Sin proveedores que coincidan."}
@@ -984,7 +984,7 @@ function ProveedorBuscador({
                   <button type="button" data-idx={i}
                     onMouseEnter={() => setHl(i)} onClick={() => pick(p)}
                     className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                      i === hl ? "bg-[#4FAEB2]/10 text-[#2F6E71]" : "text-slate-700 hover:bg-slate-50"
+                      i === hl ? "bg-[#1E2125]/10 text-[#2F6E71]" : "text-slate-700 hover:bg-slate-50"
                     }`}>
                     <span className="min-w-0 flex-1 truncate font-medium">{p.nombre}</span>
                     {p.ruc && <span className="shrink-0 text-xs text-slate-400">RUC {p.ruc}</span>}

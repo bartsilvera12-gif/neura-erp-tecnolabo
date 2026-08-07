@@ -125,7 +125,7 @@ export default function NuevaRecetaPage() {
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             <Link
               href="/inventario/nuevo"
-              className="inline-flex items-center rounded-lg bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] transition-colors"
+              className="inline-flex items-center rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-medium text-white hover:bg-[#17191C] transition-colors"
             >
               Ir a Inventario
             </Link>

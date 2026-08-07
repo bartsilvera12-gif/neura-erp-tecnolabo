@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Neura ERP — Zentra (paleta turquesa rediseño 2026: #4FAEB2 primary) */
+/* Neura ERP — Zentra (paleta turquesa rediseño 2026: #1E2125 primary) */
 :root {
   --background: #F8FAFC;
   --foreground: #0F172A;
@@ -17,10 +17,10 @@
   --zentra-login-bg-mid: #145053;
   --zentra-login-bg-deep: #0a3437;
   --sidebar: var(--zentra-sidebar);
-  --primary: #4FAEB2;
-  --primary-hover: #3F8E91;
-  --primary-label: #3F8E91;
-  --primary-light: #E5F4F4;
+  --primary: #1E2125;
+  --primary-hover: #17191C;
+  --primary-label: #17191C;
+  --primary-light: #EEF0F2;
   --border: #E2E8F0;
   /* Badges de estado */
   --badge-success-bg: #DCFCE7;
@@ -33,7 +33,7 @@
   --shadow-card: 0 1px 2px 0 rgba(15, 23, 42, 0.04), 0 1px 3px 0 rgba(15, 23, 42, 0.05);
   --shadow-pop: 0 12px 32px -12px rgba(15, 23, 42, 0.20);
   --radius-card: 0.875rem;
-  --ring-primary: rgba(79, 174, 178, 0.30);
+  --ring-primary: rgba(30, 33, 37, 0.30);
 }
 
 .dark {
@@ -43,9 +43,9 @@
   --card: #1E293B;
   /* Lateral ERP: misma identidad en modo oscuro */
   --sidebar: var(--zentra-sidebar);
-  --primary: #4FAEB2;
-  --primary-hover: #3F8E91;
-  --primary-label: #3F8E91;
+  --primary: #1E2125;
+  --primary-hover: #17191C;
+  --primary-label: #17191C;
   --primary-light: #1E4D4F;
   --border: #334155;
   --badge-success-bg: #14532D;
@@ -126,42 +126,42 @@ body {
 /* Fondo pantalla login (solo layout visual) */
 .zentra-login-bg {
   background:
-    radial-gradient(ellipse 100% 70% at 50% 0%, rgba(79, 174, 178, 0.14), transparent 52%),
+    radial-gradient(ellipse 100% 70% at 50% 0%, rgba(30, 33, 37, 0.14), transparent 52%),
     linear-gradient(168deg, var(--zentra-login-bg-mid) 0%, var(--zentra-sidebar) 42%, var(--zentra-login-bg-deep) 100%);
 }
 
 /* =============================================================================
-   Override de colores brand — Zentra (#4FAEB2)
+   Override de colores brand — Zentra (#1E2125)
    Reemplaza usos hex literales (Tailwind arbitrary values) en toda la app
    sin tocar 293+ archivos. Solo afecta clases existentes; no toca semánticos
    (green/red/amber/etc.).
-   Migrado de #14B8A6 a #4FAEB2 (rediseño Zentra 2026).
+   Migrado de #14B8A6 a #1E2125 (rediseño Zentra 2026).
    ============================================================================= */
-.bg-\[\#0EA5E9\]   { background-color: #4FAEB2 !important; }
-.bg-\[\#0284C7\]   { background-color: #3F8E91 !important; }
-.bg-\[\#38BDF8\]   { background-color: #4FAEB2 !important; }
-.bg-\[\#14B8A6\]   { background-color: #4FAEB2 !important; }
-.bg-\[\#0F9488\]   { background-color: #3F8E91 !important; }
-.hover\:bg-\[\#0EA5E9\]:hover { background-color: #4FAEB2 !important; }
-.hover\:bg-\[\#0284C7\]:hover { background-color: #3F8E91 !important; }
-.hover\:bg-\[\#14B8A6\]:hover { background-color: #4FAEB2 !important; }
-.hover\:bg-\[\#0F9488\]:hover { background-color: #3F8E91 !important; }
+.bg-\[\#0EA5E9\]   { background-color: #1E2125 !important; }
+.bg-\[\#0284C7\]   { background-color: #17191C !important; }
+.bg-\[\#38BDF8\]   { background-color: #1E2125 !important; }
+.bg-\[\#14B8A6\]   { background-color: #1E2125 !important; }
+.bg-\[\#0F9488\]   { background-color: #17191C !important; }
+.hover\:bg-\[\#0EA5E9\]:hover { background-color: #1E2125 !important; }
+.hover\:bg-\[\#0284C7\]:hover { background-color: #17191C !important; }
+.hover\:bg-\[\#14B8A6\]:hover { background-color: #1E2125 !important; }
+.hover\:bg-\[\#0F9488\]:hover { background-color: #17191C !important; }
 
-.text-\[\#0EA5E9\] { color: #4FAEB2 !important; }
-.text-\[\#0284C7\] { color: #3F8E91 !important; }
-.text-\[\#38BDF8\] { color: #4FAEB2 !important; }
-.text-\[\#14B8A6\] { color: #4FAEB2 !important; }
-.text-\[\#0F9488\] { color: #3F8E91 !important; }
-.hover\:text-\[\#0284C7\]:hover { color: #3F8E91 !important; }
+.text-\[\#0EA5E9\] { color: #1E2125 !important; }
+.text-\[\#0284C7\] { color: #17191C !important; }
+.text-\[\#38BDF8\] { color: #1E2125 !important; }
+.text-\[\#14B8A6\] { color: #1E2125 !important; }
+.text-\[\#0F9488\] { color: #17191C !important; }
+.hover\:text-\[\#0284C7\]:hover { color: #17191C !important; }
 
-.border-\[\#0EA5E9\] { border-color: #4FAEB2 !important; }
-.border-\[\#0284C7\] { border-color: #3F8E91 !important; }
-.border-\[\#14B8A6\] { border-color: #4FAEB2 !important; }
+.border-\[\#0EA5E9\] { border-color: #1E2125 !important; }
+.border-\[\#0284C7\] { border-color: #17191C !important; }
+.border-\[\#14B8A6\] { border-color: #1E2125 !important; }
 
-.focus\:ring-\[\#0EA5E9\]:focus { --tw-ring-color: #4FAEB2 !important; }
-.focus\:border-\[\#0EA5E9\]:focus { border-color: #4FAEB2 !important; }
-.focus\:ring-\[\#14B8A6\]:focus { --tw-ring-color: #4FAEB2 !important; }
-.focus\:border-\[\#14B8A6\]:focus { border-color: #4FAEB2 !important; }
+.focus\:ring-\[\#0EA5E9\]:focus { --tw-ring-color: #1E2125 !important; }
+.focus\:border-\[\#0EA5E9\]:focus { border-color: #1E2125 !important; }
+.focus\:ring-\[\#14B8A6\]:focus { --tw-ring-color: #1E2125 !important; }
+.focus\:border-\[\#14B8A6\]:focus { border-color: #1E2125 !important; }
 
 /* =============================================================================
    Sidebar — gradiente sutil estilo Zentra (top más claro, bottom más oscuro).
@@ -203,7 +203,7 @@ body {
 }
 
 .zentra-sidebar-scroll::-webkit-scrollbar-thumb {
-  background-color: rgba(79, 174, 178, 0.35);
+  background-color: rgba(30, 33, 37, 0.35);
   border-radius: 8px;
   border: 1px solid transparent;
   background-clip: padding-box;
@@ -211,11 +211,11 @@ body {
 }
 
 .zentra-sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(79, 174, 178, 0.65);
+  background-color: rgba(30, 33, 37, 0.65);
 }
 
 .zentra-sidebar-scroll::-webkit-scrollbar-thumb:active {
-  background-color: rgba(79, 174, 178, 0.85);
+  background-color: rgba(30, 33, 37, 0.85);
 }
 
 .zentra-sidebar-scroll::-webkit-scrollbar-corner {
@@ -231,7 +231,7 @@ body {
 .app-loading-bg {
   background:
     radial-gradient(ellipse 90% 60% at 50% 30%, rgba(255, 255, 255, 0.08), transparent 55%),
-    linear-gradient(168deg, #5CB8BC 0%, #4FAEB2 45%, #3E8C90 100%);
+    linear-gradient(168deg, #5CB8BC 0%, #1E2125 45%, #3E8C90 100%);
 }
 
 /* Logo Z: las dos mitades se separan suavemente y vuelven a su sitio */
@@ -270,7 +270,7 @@ body {
 
 .zentra-dashboard-shell {
   background:
-    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(79, 174, 178, 0.06), transparent 60%),
+    radial-gradient(ellipse 80% 40% at 50% 0%, rgba(30, 33, 37, 0.06), transparent 60%),
     #F8FAFC;
 }
 
@@ -299,7 +299,7 @@ select:focus-visible,
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus-visible,
 textarea:focus-visible {
   outline: none;
-  border-color: #4FAEB2;
+  border-color: #1E2125;
   box-shadow: 0 0 0 3px var(--ring-primary);
 }
 

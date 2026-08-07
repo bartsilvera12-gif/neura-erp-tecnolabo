@@ -21,9 +21,9 @@ export function ReportCard({
   actionLabel?: string;
 }) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-[#4FAEB2]/40 hover:shadow-md">
+    <article className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-[#1E2125]/40 hover:shadow-md">
       <div className="flex items-start gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#E5F4F4] text-[#3F8E91]">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EEF0F2] text-[#17191C]">
           <Icon className="h-5 w-5" aria-hidden />
         </div>
         <div className="min-w-0">
@@ -35,7 +35,7 @@ export function ReportCard({
       <div className="mt-auto pt-5">
         <Link
           href={href}
-          className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#4FAEB2] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#3F8E91]"
+          className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#1E2125] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#17191C]"
         >
           {actionLabel}
           <span aria-hidden>→</span>

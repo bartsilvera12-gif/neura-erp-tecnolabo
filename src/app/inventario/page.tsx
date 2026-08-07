@@ -207,10 +207,10 @@ export default function InventarioPage() {
           <div className="flex items-center gap-2">
             <span
               aria-hidden="true"
-              className="inline-block h-1.5 w-1.5 rounded-full bg-[#4FAEB2]"
-              style={{ boxShadow: "0 0 0 3px rgba(79, 174, 178, 0.18)" }}
+              className="inline-block h-1.5 w-1.5 rounded-full bg-[#1E2125]"
+              style={{ boxShadow: "0 0 0 3px rgba(30, 33, 37, 0.18)" }}
             />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4FAEB2]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1E2125]">
               Zentra · Stock
             </p>
           </div>
@@ -234,12 +234,12 @@ export default function InventarioPage() {
       </header>
 
       {/* Tarjeta principal */}
-      <section className="rounded-2xl border-2 border-[#4FAEB2]/20 bg-white shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)]">
+      <section className="rounded-2xl border-2 border-[#1E2125]/20 bg-white shadow-[0_2px_10px_-2px_rgba(30,33,37,0.12)]">
         {/* Barra de acciones + filtros */}
-        <div className="flex flex-col gap-3 border-b border-[#4FAEB2]/15 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent p-4 sm:p-5">
+        <div className="flex flex-col gap-3 border-b border-[#1E2125]/15 bg-gradient-to-r from-[#1E2125]/5 to-transparent p-4 sm:p-5">
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#4FAEB2]/10 text-[#4FAEB2]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#1E2125]/10 text-[#1E2125]">
                 <Package className="h-4 w-4" />
               </div>
               <div className="min-w-0">
@@ -256,7 +256,7 @@ export default function InventarioPage() {
             <div className="ml-auto flex items-center gap-2">
               <Link
                 href="/notas-salida"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-all hover:border-[#4FAEB2] hover:bg-[#4FAEB2]/5 active:scale-95"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition-all hover:border-[#1E2125] hover:bg-[#1E2125]/5 active:scale-95"
               >
                 Notas de salida
               </Link>
@@ -268,7 +268,7 @@ export default function InventarioPage() {
               </Link>
               <Link
                 href="/inventario/nuevo"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] px-3.5 py-2 text-xs font-semibold text-white shadow-sm shadow-[#4FAEB2]/30 transition-all hover:bg-[#3F8E91] active:scale-95"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] px-3.5 py-2 text-xs font-semibold text-white shadow-sm shadow-[#1E2125]/30 transition-all hover:bg-[#17191C] active:scale-95"
               >
                 <Plus className="h-3.5 w-3.5" />
                 Nuevo producto
@@ -286,7 +286,7 @@ export default function InventarioPage() {
                 value={searchDraft}
                 onChange={(e) => setSearchDraft(e.target.value)}
                 placeholder="Buscar por nombre o SKU..."
-                className="h-10 w-full rounded-lg border-2 border-slate-200 bg-white pl-9 pr-9 text-sm outline-none transition-all focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20"
+                className="h-10 w-full rounded-lg border-2 border-slate-200 bg-white pl-9 pr-9 text-sm outline-none transition-all focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20"
               />
               {searchDraft && (
                 <button
@@ -305,7 +305,7 @@ export default function InventarioPage() {
               <select
                 value={categoriaId}
                 onChange={(e) => { setCategoriaId(e.target.value); setPage(1); }}
-                className="h-10 w-full rounded-lg border-2 border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition-all focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 lg:w-[190px]"
+                className="h-10 w-full rounded-lg border-2 border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition-all focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 lg:w-[190px]"
                 aria-label="Filtrar por categoría"
               >
                 <option value="">Todas las categorías</option>
@@ -318,7 +318,7 @@ export default function InventarioPage() {
               <select
                 value={pageSize}
                 onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
-                className="col-span-2 h-10 w-full rounded-lg border-2 border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition-all focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 sm:col-span-1 lg:w-[120px]"
+                className="col-span-2 h-10 w-full rounded-lg border-2 border-slate-200 bg-white px-3 text-sm text-slate-700 outline-none transition-all focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 sm:col-span-1 lg:w-[120px]"
                 aria-label="Cantidad por página"
               >
                 {PAGE_SIZE_OPTIONS.map((n) => (
@@ -332,12 +332,12 @@ export default function InventarioPage() {
             <div className="flex items-center gap-2 text-xs text-slate-500">
               <span>Filtros activos:</span>
               {search && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#4FAEB2]/10 px-2 py-0.5 font-medium text-[#4FAEB2]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#1E2125]/10 px-2 py-0.5 font-medium text-[#1E2125]">
                   Búsqueda: &quot;{search}&quot;
                 </span>
               )}
               {categoriaId && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#4FAEB2]/10 px-2 py-0.5 font-medium text-[#4FAEB2]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#1E2125]/10 px-2 py-0.5 font-medium text-[#1E2125]">
                   {categoriaId === "__sin__"
                     ? "Sin categoría"
                     : categoriaById.get(categoriaId) ?? "Categoría"}
@@ -358,7 +358,7 @@ export default function InventarioPage() {
         <EdgeScrollArea>
           <table className="w-full min-w-[820px] text-left text-sm">
             <thead>
-              <tr className="border-b-2 border-[#4FAEB2]/15 bg-[#4FAEB2]/5 text-[11px] font-bold uppercase tracking-wider text-[#3F8E91]">
+              <tr className="border-b-2 border-[#1E2125]/15 bg-[#1E2125]/5 text-[11px] font-bold uppercase tracking-wider text-[#17191C]">
                 <th className="px-5 py-3">Producto</th>
                 <th className="hidden px-3 py-3 lg:table-cell">SKU</th>
                 <th className="hidden px-3 py-3 md:table-cell">Categoría</th>
@@ -403,7 +403,7 @@ export default function InventarioPage() {
                   return (
                     <tr
                       key={p.id}
-                      className="border-b border-slate-100 transition-colors hover:bg-[#4FAEB2]/5"
+                      className="border-b border-slate-100 transition-colors hover:bg-[#1E2125]/5"
                     >
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-2">
@@ -488,7 +488,7 @@ export default function InventarioPage() {
                             href={`/inventario/${p.id}/editar`}
                             title="Editar producto"
                             aria-label={`Editar ${p.nombre}`}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-500 transition-all hover:bg-[#4FAEB2]/10 hover:text-[#4FAEB2]"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-slate-500 transition-all hover:bg-[#1E2125]/10 hover:text-[#1E2125]"
                           >
                             <Pencil className="h-4 w-4" />
                           </Link>
@@ -516,7 +516,7 @@ export default function InventarioPage() {
 
         {/* Paginacion */}
         {total > 0 && (
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t-2 border-[#4FAEB2]/15 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent px-4 py-3 sm:px-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t-2 border-[#1E2125]/15 bg-gradient-to-r from-[#1E2125]/5 to-transparent px-4 py-3 sm:px-5">
             <p className="text-xs text-slate-500">
               Página{" "}
               <span className="font-semibold text-slate-900">{safePage}</span>{" "}
@@ -549,7 +549,7 @@ export default function InventarioPage() {
                     const n = parseInt(e.target.value, 10);
                     if (Number.isFinite(n)) setPage(Math.max(1, Math.min(totalPages, n)));
                   }}
-                  className="h-8 w-16 rounded-md border border-slate-200 bg-white px-2 text-center text-xs outline-none focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20"
+                  className="h-8 w-16 rounded-md border border-slate-200 bg-white px-2 text-center text-xs outline-none focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20"
                 />
               </div>
               <PagBtn
@@ -686,7 +686,7 @@ function PagBtn({
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 transition-all hover:border-[#4FAEB2] hover:text-[#4FAEB2] disabled:cursor-not-allowed disabled:border-slate-100 disabled:bg-slate-50 disabled:text-slate-300"
+      className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 transition-all hover:border-[#1E2125] hover:text-[#1E2125] disabled:cursor-not-allowed disabled:border-slate-100 disabled:bg-slate-50 disabled:text-slate-300"
     >
       {children}
     </button>

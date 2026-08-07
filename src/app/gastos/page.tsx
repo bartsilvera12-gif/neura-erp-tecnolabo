@@ -66,10 +66,10 @@ export default function GastosPage() {
           <div className="flex items-center gap-2">
             <span
               aria-hidden="true"
-              className="inline-block h-1.5 w-1.5 rounded-full bg-[#4FAEB2]"
-              style={{ boxShadow: "0 0 0 3px rgba(79, 174, 178, 0.18)" }}
+              className="inline-block h-1.5 w-1.5 rounded-full bg-[#1E2125]"
+              style={{ boxShadow: "0 0 0 3px rgba(30, 33, 37, 0.18)" }}
             />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4FAEB2]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1E2125]">
               Zentra · Egresos
             </p>
           </div>
@@ -78,14 +78,14 @@ export default function GastosPage() {
         </div>
         <Link
           href="/gastos/nuevo"
-          className="flex shrink-0 items-center gap-1.5 rounded-lg bg-[#4FAEB2] px-3 py-1.5 text-xs font-semibold text-white shadow-sm shadow-[#4FAEB2]/25 transition-colors hover:bg-[#3F8E91] active:scale-95"
+          className="flex shrink-0 items-center gap-1.5 rounded-lg bg-[#1E2125] px-3 py-1.5 text-xs font-semibold text-white shadow-sm shadow-[#1E2125]/25 transition-colors hover:bg-[#17191C] active:scale-95"
         >
           <span>+</span>
           Nuevo gasto
         </Link>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm ring-1 ring-[#4FAEB2]/15">
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm ring-1 ring-[#1E2125]/15">
         {cargando ? (
           <div className="py-16 text-center text-gray-400 text-sm animate-pulse">Cargando gastos…</div>
         ) : gastos.length === 0 ? (
@@ -116,7 +116,7 @@ export default function GastosPage() {
             </thead>
             <tbody className="divide-y divide-slate-200">
               {gastos.map((g) => (
-                <tr key={g.id} className="hover:bg-[#4FAEB2]/[0.04] transition-colors">
+                <tr key={g.id} className="hover:bg-[#1E2125]/[0.04] transition-colors">
                   <td className="px-5 py-3.5 text-sm text-gray-600">{formatFecha(g.fecha)}</td>
                   <td className="px-5 py-3.5 text-sm font-medium text-gray-800 hidden md:table-cell">{g.categoria || "—"}</td>
                   <td className="px-5 py-3.5 text-sm text-gray-600 max-w-[200px] truncate">

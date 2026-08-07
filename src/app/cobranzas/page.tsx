@@ -120,13 +120,13 @@ export default function CobranzasPage() {
       </Link>
 
       <div className="flex items-center gap-3">
-        <CalendarClock className="h-7 w-7 text-[#4FAEB2]" />
+        <CalendarClock className="h-7 w-7 text-[#1E2125]" />
         <h1 className="text-2xl font-bold text-gray-800">Cobranzas</h1>
       </div>
 
       <div className="flex items-center gap-1 border-b border-slate-200">
-        <button onClick={() => setTab("gestion")} className={`px-4 py-2 text-sm font-semibold border-b-2 ${tab === "gestion" ? "border-[#4FAEB2] text-[#3F8E91]" : "border-transparent text-slate-500"}`}>Gestión por cliente</button>
-        <button onClick={() => setTab("tramos")} className={`px-4 py-2 text-sm font-semibold border-b-2 ${tab === "tramos" ? "border-[#4FAEB2] text-[#3F8E91]" : "border-transparent text-slate-500"}`}>Tramos de cobranza</button>
+        <button onClick={() => setTab("gestion")} className={`px-4 py-2 text-sm font-semibold border-b-2 ${tab === "gestion" ? "border-[#1E2125] text-[#17191C]" : "border-transparent text-slate-500"}`}>Gestión por cliente</button>
+        <button onClick={() => setTab("tramos")} className={`px-4 py-2 text-sm font-semibold border-b-2 ${tab === "tramos" ? "border-[#1E2125] text-[#17191C]" : "border-transparent text-slate-500"}`}>Tramos de cobranza</button>
       </div>
 
       {error && <div className="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">{error}</div>}
@@ -145,8 +145,8 @@ export default function CobranzasPage() {
             </div>
           ))}
           <div className="flex justify-between pt-2">
-            <button onClick={addTramo} className="inline-flex items-center gap-1 text-sm font-semibold text-[#3F8E91] hover:underline"><Plus className="h-4 w-4" /> Agregar tramo</button>
-            <button onClick={guardarTramos} disabled={busy} className="inline-flex items-center gap-1.5 rounded-md bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50"><Save className="h-4 w-4" /> Guardar tramos</button>
+            <button onClick={addTramo} className="inline-flex items-center gap-1 text-sm font-semibold text-[#17191C] hover:underline"><Plus className="h-4 w-4" /> Agregar tramo</button>
+            <button onClick={guardarTramos} disabled={busy} className="inline-flex items-center gap-1.5 rounded-md bg-[#1E2125] px-4 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50"><Save className="h-4 w-4" /> Guardar tramos</button>
           </div>
         </div>
       )}
@@ -170,7 +170,7 @@ export default function CobranzasPage() {
                   <input type="date" value={pFecha} onChange={(e) => setPFecha(e.target.value)} className={`${inputClass} w-40`} />
                   <input type="number" value={pMonto} onChange={(e) => setPMonto(e.target.value)} className={`${inputClass} w-32`} placeholder="Monto" />
                   <input value={pObs} onChange={(e) => setPObs(e.target.value)} className={`${inputClass} flex-1 min-w-[120px]`} placeholder="Observación" />
-                  <button onClick={registrarPromesa} disabled={busy} className="rounded-md bg-[#4FAEB2] px-3 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50">Registrar</button>
+                  <button onClick={registrarPromesa} disabled={busy} className="rounded-md bg-[#1E2125] px-3 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50">Registrar</button>
                 </div>
                 <div className="divide-y divide-slate-100">
                   {promesas.length === 0 ? <p className="text-sm text-gray-400 py-2">Sin promesas.</p> : promesas.map((p) => (
@@ -207,7 +207,7 @@ export default function CobranzasPage() {
                   </div>
                   <div className="flex gap-2">
                     <input value={gObs} onChange={(e) => setGObs(e.target.value)} className={`${inputClass} flex-1`} placeholder="Observación" />
-                    <button onClick={registrarGestion} disabled={busy} className="rounded-md bg-[#4FAEB2] px-3 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50">Registrar</button>
+                    <button onClick={registrarGestion} disabled={busy} className="rounded-md bg-[#1E2125] px-3 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50">Registrar</button>
                   </div>
                 </div>
                 <div className="divide-y divide-slate-100">
@@ -215,7 +215,7 @@ export default function CobranzasPage() {
                     const Icon = TIPO_ICON[g.tipo] ?? StickyNote;
                     return (
                       <div key={g.id} className="py-2 flex items-start gap-2 text-sm">
-                        <Icon className="h-4 w-4 text-[#4FAEB2] mt-0.5 shrink-0" />
+                        <Icon className="h-4 w-4 text-[#1E2125] mt-0.5 shrink-0" />
                         <div className="flex-1">
                           <div className="font-medium text-gray-800">{TIPO_LABEL[g.tipo] ?? g.tipo}{g.resultado ? ` · ${g.resultado}` : ""}</div>
                           {g.observacion && <div className="text-xs text-gray-500">{g.observacion}</div>}

@@ -39,7 +39,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 <title>Nota de salida ${esc(n.numero)}</title>
 <style>
   body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; color: #1f2937; margin: 0; padding: 28px; font-size: 13px; }
-  .head { display: flex; justify-content: space-between; border-bottom: 3px solid #4FAEB2; padding-bottom: 12px; }
+  .head { display: flex; justify-content: space-between; border-bottom: 3px solid #1E2125; padding-bottom: 12px; }
   h1 { font-size: 20px; margin: 0; }
   .muted { color: #6b7280; font-size: 12px; }
   .badge { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 11px; font-weight: 600; background: #fef2f2; color: #b91c1c; }
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   @media print { body { padding: 0; } }
 </style></head><body>
   <div class="head">
-    <div><div style="font-size:16px;font-weight:700;color:#4FAEB2">${esc(negocio)}</div><div class="muted">Nota de salida de inventario</div></div>
+    <div><div style="font-size:16px;font-weight:700;color:#1E2125">${esc(negocio)}</div><div class="muted">Nota de salida de inventario</div></div>
     <div style="text-align:right"><h1>Nota de salida</h1><div class="muted">${esc(n.numero)}</div><div style="margin-top:4px"><span class="badge">${esc(ESTADO_LABEL[String(n.estado)] ?? n.estado)}</span></div></div>
   </div>
   <div class="grid">

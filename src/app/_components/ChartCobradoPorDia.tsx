@@ -72,7 +72,7 @@ export default function ChartCobradoPorDia({
           width={52}
         />
         <Tooltip
-          cursor={{ stroke: "rgba(37,99,235,0.25)", strokeWidth: 1 }}
+          cursor={{ stroke: "rgba(23,25,28,0.25)", strokeWidth: 1 }}
           content={({ active, payload }) => {
             if (!active || !payload?.length) return null;
             const row = payload[0].payload as Punto;

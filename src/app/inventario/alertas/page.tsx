@@ -91,7 +91,7 @@ export default function AlertasStockPage() {
                     <td className="py-2.5 px-4 text-right tabular-nums">{fmt(a.stock_minimo)}</td>
                     <td className="py-2.5 px-4 text-right tabular-nums font-semibold text-amber-600">{fmt(a.faltante)}</td>
                     <td className="py-2.5 px-4 text-right">
-                      <Link href={`/inventario/productos/${a.id}/historial`} className="text-xs font-semibold text-[#3F8E91] hover:underline">Ver</Link>
+                      <Link href={`/inventario/productos/${a.id}/historial`} className="text-xs font-semibold text-[#17191C] hover:underline">Ver</Link>
                     </td>
                   </tr>
                 ))}

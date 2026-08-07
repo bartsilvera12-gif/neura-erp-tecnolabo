@@ -84,10 +84,10 @@ export default function CreditosReportePage() {
           placeholder="Buscar cliente por nombre o RUC…"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
-          className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30 sm:min-w-72"
+          className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30 sm:min-w-72"
         />
         <select value={aging} onChange={(e) => setAging(e.target.value as AgingBucket)}
-          className="w-52 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30">
+          className="w-52 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30">
           {AGING_OPCIONES.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
         <label className="flex items-center gap-2 text-sm text-slate-600">
@@ -101,7 +101,7 @@ export default function CreditosReportePage() {
       ) : !data ? (
         <div className="rounded-xl border border-slate-200 bg-white p-6 text-slate-500 shadow-sm">No se pudo cargar el reporte.</div>
       ) : (
-        <div className="rounded-2xl border border-[#4FAEB2]/30 bg-white p-6 shadow-sm ring-1 ring-[#4FAEB2]/10">
+        <div className="rounded-2xl border border-[#1E2125]/30 bg-white p-6 shadow-sm ring-1 ring-[#1E2125]/10">
           {filtrados.length === 0 ? (
             <p className="py-6 text-center text-sm text-slate-400">
               {soloConSaldo ? "No hay clientes con saldo de crédito pendiente." : "No hay clientes con ventas a crédito."}
@@ -109,16 +109,16 @@ export default function CreditosReportePage() {
           ) : (
             <div className="overflow-x-auto rounded-xl border border-slate-200">
               <table className="w-full min-w-[880px] text-sm">
-                <thead className="border-b-2 border-[#4FAEB2]/40 bg-[#E5F4F4]">
+                <thead className="border-b-2 border-[#1E2125]/40 bg-[#EEF0F2]">
                   <tr>
                     {["Cliente", "RUC / CI", "Ventas", "Total", "Cobrado", "Saldo", "Vencido", "Próx. venc.", ""].map((h, i) => (
-                      <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#3F8E91] ${i >= 2 && i <= 6 ? "text-right" : i === 7 || i === 8 ? "text-center" : "text-left"}`}>{h}</th>
+                      <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#17191C] ${i >= 2 && i <= 6 ? "text-right" : i === 7 || i === 8 ? "text-center" : "text-left"}`}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {filtrados.map((c) => (
-                    <tr key={c.cliente_id} className="transition-colors hover:bg-[#4FAEB2]/5">
+                    <tr key={c.cliente_id} className="transition-colors hover:bg-[#1E2125]/5">
                       <td className="px-3 py-2.5 text-xs font-medium text-slate-800">{c.cliente_nombre}</td>
                       <td className="px-3 py-2.5 font-mono text-xs text-slate-500">{c.cliente_ruc || "—"}</td>
                       <td className="px-3 py-2.5 text-right text-xs tabular-nums text-slate-600">{c.ventas_credito}</td>
@@ -130,7 +130,7 @@ export default function CreditosReportePage() {
                       </td>
                       <td className="px-3 py-2.5 text-center text-xs tabular-nums text-slate-600">{formatFecha(c.proximo_vencimiento)}</td>
                       <td className="px-3 py-2.5 text-center">
-                        <Link href={`/reportes/creditos/${encodeURIComponent(c.cliente_id)}`} className="rounded-lg bg-[#4FAEB2] px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-[#3F8E91]">Ver extracto</Link>
+                        <Link href={`/reportes/creditos/${encodeURIComponent(c.cliente_id)}`} className="rounded-lg bg-[#1E2125] px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-[#17191C]">Ver extracto</Link>
                       </td>
                     </tr>
                   ))}

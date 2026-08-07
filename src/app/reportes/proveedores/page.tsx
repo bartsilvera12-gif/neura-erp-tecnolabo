@@ -97,7 +97,7 @@ export default function ProveedoresReportePage() {
                       <td className="py-3 pr-4 text-right tabular-nums font-semibold text-slate-800">{formatGs(p.total)}</td>
                       <td className="py-3 pr-4 text-slate-600 text-xs tabular-nums">{formatFecha(p.ultima_compra)}</td>
                       <td className="py-3 text-right">
-                        <Link href={`/proveedores/${p.id}/editar`} className="text-sm font-medium text-[#3F8E91] hover:text-[#2F6F72] hover:underline">Ver proveedor</Link>
+                        <Link href={`/proveedores/${p.id}/editar`} className="text-sm font-medium text-[#17191C] hover:text-[#2F6F72] hover:underline">Ver proveedor</Link>
                       </td>
                     </tr>
                   ))}

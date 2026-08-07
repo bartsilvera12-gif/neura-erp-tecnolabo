@@ -490,10 +490,10 @@ export default function ProyectosKanbanClient() {
           <div className="flex items-center gap-2">
             <span
               aria-hidden="true"
-              className="inline-block h-1.5 w-1.5 rounded-full bg-[#4FAEB2]"
-              style={{ boxShadow: "0 0 0 3px rgba(79, 174, 178, 0.18)" }}
+              className="inline-block h-1.5 w-1.5 rounded-full bg-[#1E2125]"
+              style={{ boxShadow: "0 0 0 3px rgba(30, 33, 37, 0.18)" }}
             />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4FAEB2]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1E2125]">
               Zentra · Cocina
             </p>
           </div>

@@ -575,7 +575,7 @@ export default function NuevoProductoPage() {
                   type="button"
                   onClick={handleGenerarSku}
                   disabled={generandoSku}
-                  className="shrink-0 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-[#3F8E91] hover:bg-[#4FAEB2]/5 disabled:opacity-50"
+                  className="shrink-0 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-[#17191C] hover:bg-[#1E2125]/5 disabled:opacity-50"
                 >
                   {generandoSku ? "…" : "Generar SKU"}
                 </button>

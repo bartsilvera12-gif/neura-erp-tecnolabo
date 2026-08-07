@@ -62,9 +62,9 @@ export default function ArqueoDenominaciones({
         <PanelDenom titulo="Monedas" tipo="moneda" value={value} onSet={setCantidad} disabled={disabled} />
         <PanelDenom titulo="Billetes" tipo="billete" value={value} onSet={setCantidad} disabled={disabled} />
       </div>
-      <div className="mt-3 flex items-center justify-between rounded-xl border-2 border-[#4FAEB2]/40 bg-[#E5F4F4] px-4 py-3">
-        <span className="text-sm font-bold uppercase tracking-wide text-[#3F8E91]">Total contado</span>
-        <span className="text-lg font-bold tabular-nums text-[#3F8E91]">{fmtGs(total)}</span>
+      <div className="mt-3 flex items-center justify-between rounded-xl border-2 border-[#1E2125]/40 bg-[#EEF0F2] px-4 py-3">
+        <span className="text-sm font-bold uppercase tracking-wide text-[#17191C]">Total contado</span>
+        <span className="text-lg font-bold tabular-nums text-[#17191C]">{fmtGs(total)}</span>
       </div>
     </div>
   );
@@ -106,7 +106,7 @@ function PanelDenom({
                 placeholder="0"
                 onChange={(e) => onSet(d.valor, e.target.value)}
                 onFocus={(e) => e.target.select()}
-                className="w-16 shrink-0 rounded-lg border-2 border-slate-200 px-2 py-1.5 text-center text-sm font-semibold tabular-nums outline-none focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 disabled:bg-slate-50 disabled:text-slate-400"
+                className="w-16 shrink-0 rounded-lg border-2 border-slate-200 px-2 py-1.5 text-center text-sm font-semibold tabular-nums outline-none focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 disabled:bg-slate-50 disabled:text-slate-400"
               />
               <span className="ml-auto whitespace-nowrap text-right text-sm tabular-nums font-semibold text-slate-800">
                 {fmtGs(d.valor * cantidad)}

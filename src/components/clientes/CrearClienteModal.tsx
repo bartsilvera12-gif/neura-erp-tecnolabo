@@ -22,7 +22,7 @@ export interface ClienteCreado {
 type TipoCli = "empresa" | "persona";
 
 const inputClass =
-  "w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20";
+  "w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20";
 const labelClass = "mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-600";
 
 export default function CrearClienteModal({
@@ -100,10 +100,10 @@ export default function CrearClienteModal({
       onClick={busy ? undefined : onClose}
     >
       <div
-        className="w-full max-w-lg overflow-hidden rounded-2xl border-2 border-[#4FAEB2]/20 bg-white shadow-2xl"
+        className="w-full max-w-lg overflow-hidden rounded-2xl border-2 border-[#1E2125]/20 bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-start justify-between gap-3 border-b border-slate-100 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent px-5 py-4">
+        <div className="flex items-start justify-between gap-3 border-b border-slate-100 bg-gradient-to-r from-[#1E2125]/5 to-transparent px-5 py-4">
           <div>
             <h3 className="text-base font-bold text-slate-800">Crear cliente</h3>
             <p className="mt-0.5 text-xs text-slate-500">Se crea en el módulo Clientes y queda seleccionado en la venta.</p>
@@ -121,7 +121,7 @@ export default function CrearClienteModal({
                 key={t}
                 type="button"
                 onClick={() => setTipo(t)}
-                className={`flex-1 py-2 transition-colors ${tipo === t ? "bg-[#4FAEB2] text-white" : "bg-white text-slate-600 hover:bg-slate-50"} ${t === "persona" ? "border-l-2 border-slate-200" : ""}`}
+                className={`flex-1 py-2 transition-colors ${tipo === t ? "bg-[#1E2125] text-white" : "bg-white text-slate-600 hover:bg-slate-50"} ${t === "persona" ? "border-l-2 border-slate-200" : ""}`}
               >
                 {t === "empresa" ? "Empresa" : "Persona"}
               </button>
@@ -182,7 +182,7 @@ export default function CrearClienteModal({
           <button onClick={onClose} disabled={busy} className="rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 disabled:opacity-50">
             Cancelar
           </button>
-          <button onClick={submit} disabled={busy} className="inline-flex items-center gap-2 rounded-lg bg-[#4FAEB2] px-5 py-2 text-sm font-bold text-white transition-colors hover:bg-[#3F8E91] disabled:opacity-50">
+          <button onClick={submit} disabled={busy} className="inline-flex items-center gap-2 rounded-lg bg-[#1E2125] px-5 py-2 text-sm font-bold text-white transition-colors hover:bg-[#17191C] disabled:opacity-50">
             {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             Crear cliente
           </button>

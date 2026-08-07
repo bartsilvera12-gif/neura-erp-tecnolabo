@@ -92,7 +92,7 @@ export default function RolesPage() {
         <ArrowLeft className="h-4 w-4" /> Volver a configuración
       </Link>
       <div className="flex items-center gap-3">
-        <ShieldCheck className="h-7 w-7 text-[#4FAEB2]" />
+        <ShieldCheck className="h-7 w-7 text-[#1E2125]" />
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Roles y permisos</h1>
           <p className="text-sm text-gray-500">Permisos por acción. Un usuario sin roles conserva el acceso legado; al asignarle un rol se aplican sus permisos (en frontend y backend).</p>
@@ -107,7 +107,7 @@ export default function RolesPage() {
           <label className="block text-xs font-medium text-gray-600 mb-1">Nuevo rol</label>
           <input value={nuevoNombre} onChange={(e) => setNuevoNombre(e.target.value)} className={inputClass} placeholder="Ej: Cajero, Depósito, Cobrador" />
         </div>
-        <button onClick={crearRol} disabled={busy || !nuevoNombre.trim()} className="inline-flex items-center gap-1 rounded-md bg-[#4FAEB2] px-3 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50"><Plus className="h-4 w-4" /> Crear</button>
+        <button onClick={crearRol} disabled={busy || !nuevoNombre.trim()} className="inline-flex items-center gap-1 rounded-md bg-[#1E2125] px-3 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50"><Plus className="h-4 w-4" /> Crear</button>
       </div>
 
       {roles.map((rol, i) => (
@@ -120,15 +120,15 @@ export default function RolesPage() {
             {catalogo.map((c) => {
               const has = rol.permisos.includes(c.permiso);
               return (
-                <label key={c.permiso} className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium cursor-pointer ${has ? "border-[#4FAEB2] bg-[#4FAEB2]/8 text-[#3F8E91]" : "border-slate-200 text-slate-600"}`}>
-                  <input type="checkbox" checked={has} onChange={() => togglePerm(i, c.permiso)} className="accent-[#4FAEB2]" />
+                <label key={c.permiso} className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium cursor-pointer ${has ? "border-[#1E2125] bg-[#1E2125]/8 text-[#17191C]" : "border-slate-200 text-slate-600"}`}>
+                  <input type="checkbox" checked={has} onChange={() => togglePerm(i, c.permiso)} className="accent-[#1E2125]" />
                   {c.label}
                 </label>
               );
             })}
           </div>
           <div className="flex justify-end">
-            <button onClick={() => guardarRol(rol)} disabled={busy} className="inline-flex items-center gap-1.5 rounded-md bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50"><Save className="h-4 w-4" /> Guardar</button>
+            <button onClick={() => guardarRol(rol)} disabled={busy} className="inline-flex items-center gap-1.5 rounded-md bg-[#1E2125] px-4 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50"><Save className="h-4 w-4" /> Guardar</button>
           </div>
         </div>
       ))}
@@ -148,7 +148,7 @@ export default function RolesPage() {
                     <td className="py-2 pr-2 text-gray-800">{u.nombre}<div className="text-xs text-gray-400">{u.email}</div></td>
                     {roles.map((r) => {
                       const tiene = asignaciones.some((a) => a.usuario_email.toLowerCase() === u.email.toLowerCase() && a.rol_id === r.id);
-                      return <td key={r.id} className="py-2 px-2 text-center"><input type="checkbox" checked={tiene} onChange={() => toggleAsignacion(u.email, r.id, tiene)} className="accent-[#4FAEB2]" /></td>;
+                      return <td key={r.id} className="py-2 px-2 text-center"><input type="checkbox" checked={tiene} onChange={() => toggleAsignacion(u.email, r.id, tiene)} className="accent-[#1E2125]" /></td>;
                     })}
                   </tr>
                 ))}

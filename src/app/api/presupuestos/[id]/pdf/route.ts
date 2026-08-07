@@ -233,7 +233,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   html, body { margin: 0; padding: 0; }
   body { font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #1f2937; background: #e5e7eb; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .toolbar { position: sticky; top: 0; z-index: 10; background: #111827; color: #fff; padding: 10px 16px; display: flex; gap: 12px; align-items: center; justify-content: center; }
-  .toolbar button { background: #4FAEB2; color: #fff; border: 0; padding: 8px 16px; border-radius: 6px; font-size: 14px; cursor: pointer; }
+  .toolbar button { background: #1E2125; color: #fff; border: 0; padding: 8px 16px; border-radius: 6px; font-size: 14px; cursor: pointer; }
   .toolbar .hint { font-size: 12px; color: #cbd5e1; }
 
   .sheet { width: 210mm; margin: 12px auto; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.15); }
@@ -266,19 +266,19 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   .corte { display: flex; align-items: center; gap: 8px; padding: 1mm 8mm; color: #6b7280; font-size: 10px; border-top: 1px dashed #9ca3af; border-bottom: 1px dashed #9ca3af; }
   .corte span { flex: 1; text-align: center; letter-spacing: 2px; text-transform: uppercase; }
 
-  .head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #4FAEB2; padding-bottom: 6px; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #1E2125; padding-bottom: 6px; }
   .negocio { font-size: 16px; font-weight: 800; color: #1f2937; }
   .copia.full .negocio { font-size: 22px; }
   .doc-tag { color: #6b7280; font-size: 10px; margin-top: 2px; letter-spacing: .08em; text-transform: uppercase; }
   .meta { text-align: right; font-size: 11px; }
-  .meta .num { font-size: 15px; font-weight: 700; color: #4FAEB2; }
+  .meta .num { font-size: 15px; font-weight: 700; color: #1E2125; }
   .copia.full .meta .num { font-size: 18px; }
   .grid2 { display: flex; gap: 12px; margin-top: 8px; }
   .box { flex: 1; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 9px; }
   .box h3 { margin: 0 0 3px; font-size: 9.5px; text-transform: uppercase; letter-spacing: .06em; color: #6b7280; }
   .box p { margin: 1px 0; font-size: 11px; }
   table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11px; }
-  thead th { background: #4FAEB2; color: #fff; text-align: left; padding: 4px 7px; font-size: 9.5px; text-transform: uppercase; letter-spacing: .04em; }
+  thead th { background: #1E2125; color: #fff; text-align: left; padding: 4px 7px; font-size: 9.5px; text-transform: uppercase; letter-spacing: .04em; }
   thead th.c, thead th.r { text-align: center; }
   thead th.r { text-align: right; }
   tbody td { padding: 4px 7px; border-bottom: 1px solid #eef2f4; vertical-align: top; }
@@ -299,7 +299,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   .totales { width: 52%; margin-left: auto; margin-top: 6px; font-size: 11px; }
   .totales tr td { padding: 3px 7px; border: none; }
   .totales tr td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
-  .totales .total-row td { border-top: 2px solid #4FAEB2; font-weight: 800; font-size: 13px; color: #1f2937; }
+  .totales .total-row td { border-top: 2px solid #1E2125; font-weight: 800; font-size: 13px; color: #1f2937; }
   .copia.full table { font-size: 13px; }
   .copia.full thead th { padding: 8px 10px; font-size: 11px; }
   .copia.full tbody td { padding: 8px 10px; }

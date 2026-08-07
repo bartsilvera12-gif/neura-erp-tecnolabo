@@ -109,7 +109,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   *{box-sizing:border-box} html,body{margin:0;padding:0}
   body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1f2937;background:#f3f4f6}
   .page{width:210mm;min-height:297mm;margin:0 auto;background:#fff;padding:16mm 14mm}
-  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #4FAEB2;padding-bottom:12px}
+  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #1E2125;padding-bottom:12px}
   .negocio{font-size:21px;font-weight:800} .tag{color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
   .meta{text-align:right;font-size:12px}
   .box{margin-top:14px;border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px}
@@ -118,13 +118,13 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   .card{flex:1;border:1px solid #e5e7eb;border-radius:8px;padding:8px 10px}
   .card .l{font-size:10px;text-transform:uppercase;color:#6b7280} .card .v{font-size:15px;font-weight:800;margin-top:2px}
   table{width:100%;border-collapse:collapse;margin-top:16px;font-size:12px}
-  thead th{background:#4FAEB2;color:#fff;text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase}
+  thead th{background:#1E2125;color:#fff;text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase}
   thead th.r{text-align:right} tbody td{padding:6px 8px;border-bottom:1px solid #eef2f4} td.r{text-align:right} td.venc{color:#dc2626;font-weight:600}
   h2.sec{font-size:13px;margin:18px 0 0}
   .tot{margin-top:10px;text-align:right;font-size:14px;font-weight:800}
   .legal{margin-top:22px;padding-top:10px;border-top:1px dashed #d1d5db;font-size:10px;color:#6b7280;text-align:center}
   .toolbar{position:sticky;top:0;background:#111827;padding:10px;text-align:center}
-  .toolbar button{background:#4FAEB2;color:#fff;border:0;padding:8px 16px;border-radius:6px;font-size:14px;cursor:pointer}
+  .toolbar button{background:#1E2125;color:#fff;border:0;padding:8px 16px;border-radius:6px;font-size:14px;cursor:pointer}
   .corte{display:none}
   @media print{
     body{background:#fff}.toolbar{display:none}

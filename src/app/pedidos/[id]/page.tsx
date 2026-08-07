@@ -145,7 +145,7 @@ export default function VerPedidoPage({
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
-        <Loader2 className="h-7 w-7 animate-spin text-[#4FAEB2]" />
+        <Loader2 className="h-7 w-7 animate-spin text-[#1E2125]" />
       </div>
     );
   }
@@ -160,7 +160,7 @@ export default function VerPedidoPage({
           </p>
           <Link
             href="/pedidos"
-            className="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-[#3F8E91] hover:underline"
+            className="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-[#17191C] hover:underline"
           >
             ← Volver al listado
           </Link>
@@ -179,8 +179,8 @@ export default function VerPedidoPage({
       {/* Header */}
       <header className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 flex-1">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#4FAEB2]/8 border border-[#4FAEB2]/30 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#3F8E91] mb-3">
-            <Receipt className="h-3 w-3 text-[#4FAEB2]" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#1E2125]/8 border border-[#1E2125]/30 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#17191C] mb-3">
+            <Receipt className="h-3 w-3 text-[#1E2125]" />
             Pedidos · Detalle
           </div>
           <div className="flex items-center gap-3 flex-wrap">
@@ -204,7 +204,7 @@ export default function VerPedidoPage({
         <div className="flex items-center gap-2 flex-wrap">
           <Link
             href="/pedidos"
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-[#4FAEB2] hover:text-[#3F8E91]"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-[#1E2125] hover:text-[#17191C]"
           >
             ← Listado
           </Link>
@@ -219,12 +219,12 @@ export default function VerPedidoPage({
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Items — toma 2/3 */}
-        <section className="lg:col-span-2 bg-white rounded-2xl border-2 border-[#4FAEB2]/20 shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)] overflow-hidden">
-          <div className="px-5 py-4 border-b border-[#4FAEB2]/15 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent">
+        <section className="lg:col-span-2 bg-white rounded-2xl border-2 border-[#1E2125]/20 shadow-[0_2px_10px_-2px_rgba(30,33,37,0.12)] overflow-hidden">
+          <div className="px-5 py-4 border-b border-[#1E2125]/15 bg-gradient-to-r from-[#1E2125]/5 to-transparent">
             <h2 className="text-[15px] font-bold text-slate-800 flex items-center gap-2">
-              <Package className="h-4 w-4 text-[#4FAEB2]" />
+              <Package className="h-4 w-4 text-[#1E2125]" />
               Productos
-              <span className="inline-flex items-center justify-center min-w-[24px] h-[22px] px-2 rounded-full bg-[#4FAEB2] text-white text-[11px] font-bold tabular-nums">
+              <span className="inline-flex items-center justify-center min-w-[24px] h-[22px] px-2 rounded-full bg-[#1E2125] text-white text-[11px] font-bold tabular-nums">
                 {pedido.items.length}
               </span>
             </h2>
@@ -256,7 +256,7 @@ export default function VerPedidoPage({
                     <td colSpan={5} className="px-5 py-3 text-right font-bold text-slate-700">
                       Total
                     </td>
-                    <td className="px-3 py-3 text-right font-bold tabular-nums text-lg text-[#3F8E91]">
+                    <td className="px-3 py-3 text-right font-bold tabular-nums text-lg text-[#17191C]">
                       {fmtGs(total)}
                     </td>
                   </tr>
@@ -271,7 +271,7 @@ export default function VerPedidoPage({
           {/* Cliente */}
           <InfoCard
             title="Cliente"
-            icon={<User className="h-4 w-4 text-[#4FAEB2]" />}
+            icon={<User className="h-4 w-4 text-[#1E2125]" />}
           >
             {pedido.cliente_nombre ? (
               <>
@@ -293,7 +293,7 @@ export default function VerPedidoPage({
           {/* Vendedor */}
           <InfoCard
             title="Vendedor"
-            icon={<User className="h-4 w-4 text-[#4FAEB2]" />}
+            icon={<User className="h-4 w-4 text-[#1E2125]" />}
           >
             <p className="text-sm text-slate-700">
               {pedido.armado_por_email ?? (
@@ -306,7 +306,7 @@ export default function VerPedidoPage({
           {(pedido.estado === "en_caja" || pedido.estado === "facturado") && (
             <InfoCard
               title="Cajero"
-              icon={<User className="h-4 w-4 text-[#4FAEB2]" />}
+              icon={<User className="h-4 w-4 text-[#1E2125]" />}
             >
               <p className="text-sm text-slate-700">
                 {pedido.abierto_por_email ?? (
@@ -325,7 +325,7 @@ export default function VerPedidoPage({
           {pedido.observacion && (
             <InfoCard
               title="Observación"
-              icon={<FileText className="h-4 w-4 text-[#4FAEB2]" />}
+              icon={<FileText className="h-4 w-4 text-[#1E2125]" />}
             >
               <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">
                 {pedido.observacion}
@@ -336,7 +336,7 @@ export default function VerPedidoPage({
           {/* Línea de tiempo */}
           <InfoCard
             title="Línea de tiempo"
-            icon={<Clock className="h-4 w-4 text-[#4FAEB2]" />}
+            icon={<Clock className="h-4 w-4 text-[#1E2125]" />}
           >
             <ul className="space-y-2 text-xs">
               <Evento
@@ -373,7 +373,7 @@ export default function VerPedidoPage({
             <Link
               href={`/api/ventas/${pedido.venta_id}/comprobante-a4`}
               target="_blank"
-              className="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-[#4FAEB2] hover:bg-[#3F8E91] text-white text-sm font-bold py-3 transition-colors shadow-md shadow-[#4FAEB2]/30"
+              className="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-bold py-3 transition-colors shadow-md shadow-[#1E2125]/30"
             >
               <ExternalLink className="h-4 w-4" />
               Ver ticket de venta
@@ -405,7 +405,7 @@ function ItemRow({ it }: { it: PedidoCajaItem }) {
       <td className="px-3 py-3">
         {showsPres ? (
           <>
-            <span className="inline-flex items-center gap-1 rounded-md bg-[#4FAEB2]/10 text-[#3F8E91] border border-[#4FAEB2]/20 px-2 py-0.5 text-[11px] font-bold">
+            <span className="inline-flex items-center gap-1 rounded-md bg-[#1E2125]/10 text-[#17191C] border border-[#1E2125]/20 px-2 py-0.5 text-[11px] font-bold">
               {it.presentacion_nombre}
             </span>
             {cantBase > 1 && (
@@ -498,7 +498,7 @@ function Acciones({
     <>
       <Link
         href={`/pedidos/${pedido.id}/editar`}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-[#4FAEB2] hover:text-[#3F8E91]"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-[#1E2125] hover:text-[#17191C]"
       >
         <Pencil className="h-3.5 w-3.5" />
         Editar
@@ -525,7 +525,7 @@ function Acciones({
       </button>
       <Link
         href="/ventas"
-        className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] text-white text-sm font-bold px-4 py-2 transition-colors shadow-sm shadow-[#4FAEB2]/30"
+        className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-bold px-4 py-2 transition-colors shadow-sm shadow-[#1E2125]/30"
         title="Ir a la Caja para cobrar"
       >
         Ir a cobrar

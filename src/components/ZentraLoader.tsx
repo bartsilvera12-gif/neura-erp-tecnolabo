@@ -21,7 +21,7 @@ export default function ZentraLoader({
   const letters = Array.from(label);
   return (
     <div
-      className={`flex flex-col items-center justify-center gap-7 bg-[#4FAEB2] ${
+      className={`flex flex-col items-center justify-center gap-7 bg-[#1E2125] ${
         overlay
           ? "fixed inset-0 z-[200] h-screen w-screen overflow-hidden"
           : "w-full"

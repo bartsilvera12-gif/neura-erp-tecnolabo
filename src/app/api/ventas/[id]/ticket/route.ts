@@ -343,8 +343,8 @@ function renderNotaRemision(opts: {
   .obs { font-size:12px; margin-top:12px; }
   .legal { margin-top:18px; font-size:11px; color:#555; border-top:1px dashed #bbb; padding-top:10px; }
   .actions { max-width:720px; margin:0 auto 12px; text-align:right; }
-  .actions button { background:#4FAEB2; color:#fff; border:none; border-radius:8px; padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.15); }
-  .actions button:hover { background:#3F8E91; }
+  .actions button { background:#1E2125; color:#fff; border:none; border-radius:8px; padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.15); }
+  .actions button:hover { background:#17191C; }
   .corte { display:none; }
   @page { size: A4 portrait; margin: 10mm; }
   @media print {

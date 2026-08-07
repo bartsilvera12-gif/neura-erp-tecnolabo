@@ -5,7 +5,7 @@
  * Muestra el estado de cada caja (abierta / en cierre), totales en vivo y modales
  * para abrir, registrar movimiento, pasar a cierre y cerrar (arqueo) por caja.
  *
- * Paleta turquesa del sistema #4FAEB2.
+ * Paleta turquesa del sistema #1E2125.
  */
 
 import { useCallback, useEffect, useState } from "react";
@@ -186,8 +186,8 @@ export default function CajaControlPanel({ onStateChange }: Props) {
 
   if (loading && cajas.length === 0) {
     return (
-      <div className="rounded-2xl border-2 border-[#4FAEB2]/20 bg-white p-4 flex items-center gap-3">
-        <Loader2 className="h-4 w-4 animate-spin text-[#4FAEB2]" />
+      <div className="rounded-2xl border-2 border-[#1E2125]/20 bg-white p-4 flex items-center gap-3">
+        <Loader2 className="h-4 w-4 animate-spin text-[#1E2125]" />
         <span className="text-sm text-slate-500">Cargando estado de caja...</span>
       </div>
     );
@@ -213,7 +213,7 @@ export default function CajaControlPanel({ onStateChange }: Props) {
         <button
           type="button"
           onClick={() => setModal("abrir")}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] text-white text-sm font-bold px-4 py-2.5 transition-colors shadow-sm shadow-[#4FAEB2]/30"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-bold px-4 py-2.5 transition-colors shadow-sm shadow-[#1E2125]/30"
         >
           <Unlock className="h-4 w-4" />
           Abrir caja
@@ -240,13 +240,13 @@ export default function CajaControlPanel({ onStateChange }: Props) {
       {/* Barra superior: título + abrir otra caja */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <h2 className="flex items-center gap-2 text-[15px] font-bold text-slate-800">
-          <Wallet className="h-4 w-4 text-[#4FAEB2]" />
+          <Wallet className="h-4 w-4 text-[#1E2125]" />
           Cajas ({cajas.length})
         </h2>
         <button
           type="button"
           onClick={() => setModal("abrir")}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] text-white text-xs font-bold px-3 py-2 transition-colors shadow-sm shadow-[#4FAEB2]/30"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white text-xs font-bold px-3 py-2 transition-colors shadow-sm shadow-[#1E2125]/30"
         >
           <Unlock className="h-3.5 w-3.5" />
           Abrir otra caja
@@ -257,11 +257,11 @@ export default function CajaControlPanel({ onStateChange }: Props) {
         const c = cr.caja;
         const enCierre = c.estado === "en_cierre";
         return (
-          <div key={c.id} className="rounded-2xl border-2 border-[#4FAEB2]/25 bg-white shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)] overflow-hidden">
+          <div key={c.id} className="rounded-2xl border-2 border-[#1E2125]/25 bg-white shadow-[0_2px_10px_-2px_rgba(30,33,37,0.12)] overflow-hidden">
             {/* Header por caja */}
-            <div className="px-5 py-4 border-b border-[#4FAEB2]/15 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent flex items-center justify-between gap-3 flex-wrap">
+            <div className="px-5 py-4 border-b border-[#1E2125]/15 bg-gradient-to-r from-[#1E2125]/5 to-transparent flex items-center justify-between gap-3 flex-wrap">
               <div className="flex items-center gap-3">
-                <div className={`h-10 w-10 rounded-xl flex items-center justify-center shadow-sm ${enCierre ? "bg-amber-500 shadow-amber-500/30" : "bg-[#4FAEB2] shadow-[#4FAEB2]/30"}`}>
+                <div className={`h-10 w-10 rounded-xl flex items-center justify-center shadow-sm ${enCierre ? "bg-amber-500 shadow-amber-500/30" : "bg-[#1E2125] shadow-[#1E2125]/30"}`}>
                   <Wallet className="h-4.5 w-4.5 text-white" />
                 </div>
                 <div>
@@ -291,7 +291,7 @@ export default function CajaControlPanel({ onStateChange }: Props) {
                     <button
                       type="button"
                       onClick={() => { setTarget(cr); setModal("mov"); }}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold px-3 py-2 hover:border-[#4FAEB2] hover:text-[#3F8E91] hover:bg-[#4FAEB2]/5 transition-colors"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white text-slate-700 text-xs font-semibold px-3 py-2 hover:border-[#1E2125] hover:text-[#17191C] hover:bg-[#1E2125]/5 transition-colors"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       Movimiento
@@ -330,7 +330,7 @@ export default function CajaControlPanel({ onStateChange }: Props) {
               <Metric label="Efectivo" value={fmtGs(cr.total_efectivo)} icon={<ArrowDownRight className="h-3.5 w-3.5 text-emerald-600" />} highlight="emerald" />
               <Metric label="Transfer" value={fmtGs(cr.total_transferencia)} icon={<ArrowDownRight className="h-3.5 w-3.5 text-sky-600" />} />
               <Metric label="Tarjeta" value={fmtGs(cr.total_tarjeta)} icon={<ArrowDownRight className="h-3.5 w-3.5 text-violet-600" />} />
-              <Metric label="Esperado efectivo" value={fmtGs(cr.efectivo_esperado)} icon={<Wallet className="h-3.5 w-3.5 text-[#4FAEB2]" />} highlight="turquesa" />
+              <Metric label="Esperado efectivo" value={fmtGs(cr.efectivo_esperado)} icon={<Wallet className="h-3.5 w-3.5 text-[#1E2125]" />} highlight="turquesa" />
             </div>
 
             {cr.movimientos.length > 0 && (
@@ -409,7 +409,7 @@ function Metric({
 }) {
   const bg =
     highlight === "turquesa"
-      ? "bg-[#4FAEB2]/5"
+      ? "bg-[#1E2125]/5"
       : highlight === "emerald"
       ? "bg-emerald-50/50"
       : "bg-white";
@@ -465,10 +465,10 @@ function ModalBase({
       onClick={onClose}
     >
       <div
-        className={`bg-white rounded-2xl shadow-2xl w-full ${maxWidthClass} border-2 border-[#4FAEB2]/20 overflow-hidden`}
+        className={`bg-white rounded-2xl shadow-2xl w-full ${maxWidthClass} border-2 border-[#1E2125]/20 overflow-hidden`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent flex items-start justify-between">
+        <div className="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-[#1E2125]/5 to-transparent flex items-start justify-between">
           <div>
             <h3 className="text-base font-bold text-slate-800">{title}</h3>
             {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
@@ -518,8 +518,8 @@ function ModalConfirmar({
     <ModalBase title={title} subtitle={subtitle} onClose={busy ? () => {} : onClose}>
       <div className="p-5 space-y-4">
         <div className="flex items-start gap-3">
-          <div className="h-9 w-9 shrink-0 rounded-xl bg-[#E5F4F4] border border-[#4FAEB2]/25 flex items-center justify-center">
-            <AlertTriangle className="h-4.5 w-4.5 text-[#3F8E91]" />
+          <div className="h-9 w-9 shrink-0 rounded-xl bg-[#EEF0F2] border border-[#1E2125]/25 flex items-center justify-center">
+            <AlertTriangle className="h-4.5 w-4.5 text-[#17191C]" />
           </div>
           <p className="text-sm text-slate-600 leading-relaxed">{mensaje}</p>
         </div>
@@ -542,7 +542,7 @@ function ModalConfirmar({
           type="button"
           onClick={submit}
           disabled={busy}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] disabled:opacity-50 text-white text-sm font-bold px-5 py-2 transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white text-sm font-bold px-5 py-2 transition-colors"
         >
           {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
           {confirmLabel}
@@ -626,7 +626,7 @@ function ModalAbrir({
                   onClick={() => setNumero(n)}
                   className={`rounded-lg border-2 px-3 py-1.5 text-sm font-bold transition-colors ${
                     ocupada ? "border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed"
-                    : sel ? "border-[#4FAEB2] bg-[#4FAEB2] text-white"
+                    : sel ? "border-[#1E2125] bg-[#1E2125] text-white"
                     : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
                   }`}
                 >
@@ -660,7 +660,7 @@ function ModalAbrir({
               onChange={(n) => setMonto(String(n))}
               decimals={false}
               autoFocus
-              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm font-semibold tabular-nums focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none"
+              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm font-semibold tabular-nums focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none"
             />
           </div>
         )}
@@ -673,7 +673,7 @@ function ModalAbrir({
             value={obs}
             onChange={(e) => setObs(e.target.value)}
             rows={2}
-            className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none resize-none"
+            className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none resize-none"
           />
         </div>
         {err && (
@@ -693,7 +693,7 @@ function ModalAbrir({
         <button
           onClick={submit}
           disabled={busy}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] disabled:opacity-50 text-white text-sm font-bold px-5 py-2 transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white text-sm font-bold px-5 py-2 transition-colors"
         >
           {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
           Abrir caja
@@ -716,14 +716,14 @@ function ModoArqueoToggle({
       <button
         type="button"
         onClick={() => onChange("arqueo")}
-        className={`flex-1 py-2 transition-colors ${modo === "arqueo" ? "bg-[#4FAEB2] text-white" : "bg-white text-slate-600 hover:bg-slate-50"}`}
+        className={`flex-1 py-2 transition-colors ${modo === "arqueo" ? "bg-[#1E2125] text-white" : "bg-white text-slate-600 hover:bg-slate-50"}`}
       >
         Contar por denominaciones
       </button>
       <button
         type="button"
         onClick={() => onChange("monto")}
-        className={`flex-1 py-2 transition-colors border-l-2 border-slate-200 ${modo === "monto" ? "bg-[#4FAEB2] text-white" : "bg-white text-slate-600 hover:bg-slate-50"}`}
+        className={`flex-1 py-2 transition-colors border-l-2 border-slate-200 ${modo === "monto" ? "bg-[#1E2125] text-white" : "bg-white text-slate-600 hover:bg-slate-50"}`}
       >
         Monto directo
       </button>
@@ -825,7 +825,7 @@ function ModalCerrar({
               onChange={(n) => setMonto(String(n))}
               decimals={false}
               autoFocus
-              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm font-semibold tabular-nums focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none"
+              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm font-semibold tabular-nums focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none"
             />
           </div>
         )}
@@ -862,7 +862,7 @@ function ModalCerrar({
             value={obs}
             onChange={(e) => setObs(e.target.value)}
             rows={2}
-            className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none resize-none"
+            className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none resize-none"
             placeholder={
               diferencia !== 0
                 ? "Sugerido: explicá la diferencia"
@@ -968,7 +968,7 @@ function ModalMovimiento({
                 onClick={() => setTipo(t)}
                 className={`rounded-md py-1.5 text-xs font-bold border-2 transition-colors capitalize ${
                   tipo === t
-                    ? "border-[#4FAEB2] bg-[#4FAEB2] text-white"
+                    ? "border-[#1E2125] bg-[#1E2125] text-white"
                     : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
                 }`}
               >
@@ -988,7 +988,7 @@ function ModalMovimiento({
             onChange={(e) => setConcepto(e.target.value)}
             placeholder="Ej: Pago de delivery, Vuelto, etc."
             maxLength={200}
-            className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none"
+            className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none"
           />
         </div>
 
@@ -1001,7 +1001,7 @@ function ModalMovimiento({
               value={monto}
               onChange={(n) => setMonto(String(n))}
               decimals={false}
-              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm font-semibold tabular-nums focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none"
+              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm font-semibold tabular-nums focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none"
             />
           </div>
           <div>
@@ -1011,7 +1011,7 @@ function ModalMovimiento({
             <select
               value={medio}
               onChange={(e) => setMedio(e.target.value as MedioPagoCaja)}
-              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none bg-white"
+              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none bg-white"
             >
               <option value="efectivo">Efectivo</option>
               <option value="tarjeta">Tarjeta</option>
@@ -1029,7 +1029,7 @@ function ModalMovimiento({
             value={obs}
             onChange={(e) => setObs(e.target.value)}
             rows={2}
-            className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none resize-none"
+            className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none resize-none"
           />
         </div>
         {err && (
@@ -1049,7 +1049,7 @@ function ModalMovimiento({
         <button
           onClick={submit}
           disabled={busy}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] disabled:opacity-50 text-white text-sm font-bold px-5 py-2 transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white text-sm font-bold px-5 py-2 transition-colors"
         >
           {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
           Registrar
@@ -1080,7 +1080,7 @@ function Row({
       <span
         className={`tabular-nums ${
           bold ? "font-bold" : ""
-        } ${highlightTurquesa ? "text-[#3F8E91] text-sm" : subtle ? "text-slate-400" : "text-slate-700"}`}
+        } ${highlightTurquesa ? "text-[#17191C] text-sm" : subtle ? "text-slate-400" : "text-slate-700"}`}
       >
         {value}
       </span>

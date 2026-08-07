@@ -369,7 +369,7 @@ export default function MobileDashboard({
               onClick={() => setPeriodo(p)}
               className={`shrink-0 px-3 py-2 rounded-full text-xs font-semibold transition-all min-h-[36px] ${
                 periodo === p
-                  ? "bg-[#4FAEB2] text-white shadow-sm"
+                  ? "bg-[#1E2125] text-white shadow-sm"
                   : "bg-white text-slate-600 border border-slate-200"
               }`}
             >
@@ -389,7 +389,7 @@ export default function MobileDashboard({
       {seccion === "ventas" && (
       <>
       {/* ── KPI principal: Total Ventas del periodo (tabla ventas, no facturas) ── */}
-      <div className="bg-gradient-to-br from-[#4FAEB2] to-[#3F8E91] rounded-2xl p-5 text-white shadow-md">
+      <div className="bg-gradient-to-br from-[#1E2125] to-[#17191C] rounded-2xl p-5 text-white shadow-md">
         <p className="text-[10px] font-bold uppercase tracking-widest opacity-90 mb-2">
           Ventas {PERIODO_LABELS[periodo].toLowerCase()}
         </p>
@@ -524,7 +524,7 @@ export default function MobileDashboard({
             </p>
             <Link
               href="/ventas"
-              className="text-[11px] font-medium text-[#4FAEB2] active:underline"
+              className="text-[11px] font-medium text-[#1E2125] active:underline"
             >
               Ver todas →
             </Link>
@@ -563,7 +563,7 @@ export default function MobileDashboard({
           </p>
           <Link
             href="/ventas/nueva"
-            className="inline-flex items-center gap-1 mt-2 text-sm font-medium text-[#4FAEB2] active:underline"
+            className="inline-flex items-center gap-1 mt-2 text-sm font-medium text-[#1E2125] active:underline"
           >
             <Plus className="h-4 w-4" aria-hidden />
             Crear primera venta
@@ -678,7 +678,7 @@ export default function MobileDashboard({
               <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Top deudores (cartera total)
               </p>
-              <Link href="/clientes" className="text-[11px] font-medium text-[#4FAEB2] active:underline">
+              <Link href="/clientes" className="text-[11px] font-medium text-[#1E2125] active:underline">
                 Ver todos →
               </Link>
             </div>
@@ -781,7 +781,7 @@ export default function MobileDashboard({
               <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Necesitan reposición
               </p>
-              <Link href="/inventario" className="text-[11px] font-medium text-[#4FAEB2] active:underline">
+              <Link href="/inventario" className="text-[11px] font-medium text-[#1E2125] active:underline">
                 Ver todos →
               </Link>
             </div>
@@ -910,7 +910,7 @@ function SectionTab({
       onClick={onClick}
       className={`flex flex-col items-center justify-center gap-0.5 py-2 rounded-lg text-[11px] font-semibold transition-all min-h-[44px] ${
         active
-          ? "bg-white text-[#4FAEB2] shadow-sm"
+          ? "bg-white text-[#1E2125] shadow-sm"
           : "text-slate-600 active:bg-slate-200/60"
       }`}
       aria-pressed={active}

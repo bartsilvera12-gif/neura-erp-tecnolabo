@@ -162,8 +162,8 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   .pie .val { flex: 1; }
   .pie .total-final { text-align: right; font-weight: 700; padding-top: 6px; font-size: 13px; }
   .disclaimer { margin-top: 6px; font-style: italic; font-size: 10.5px; text-align: center; color: #555; }
-  .print-btn { position: fixed; top: 12px; right: 12px; background: #4FAEB2; color: #fff; border: 0; padding: 8px 14px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
-  .print-btn:hover { background: #3F8E91; }
+  .print-btn { position: fixed; top: 12px; right: 12px; background: #1E2125; color: #fff; border: 0; padding: 8px 14px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+  .print-btn:hover { background: #17191C; }
   @media print { body { background: #fff; } .hoja { box-shadow: none; margin: 0; width: auto; min-height: auto; padding: 6mm 10mm; } .print-btn { display: none; } }
 </style></head>
 <body>

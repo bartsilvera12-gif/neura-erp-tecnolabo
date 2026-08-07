@@ -32,7 +32,7 @@ type Linea = {
   precio_venta: number;
 };
 
-const inputClass = "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30 bg-white";
+const inputClass = "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30 bg-white";
 
 export default function EditarOrdenCompraPage() {
   const router = useRouter();
@@ -214,7 +214,7 @@ export default function EditarOrdenCompraPage() {
   if (cargando) {
     return (
       <div className="space-y-4">
-        <Link href="/compras/ordenes" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#3F8E91]">
+        <Link href="/compras/ordenes" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#17191C]">
           ← Órdenes de compra
         </Link>
         <p className="rounded-lg border border-slate-200 bg-white p-6 text-sm text-slate-500">Cargando orden…</p>
@@ -225,7 +225,7 @@ export default function EditarOrdenCompraPage() {
   if (err && lineas.length === 0) {
     return (
       <div className="space-y-4">
-        <Link href="/compras/ordenes" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#3F8E91]">
+        <Link href="/compras/ordenes" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#17191C]">
           ← Órdenes de compra
         </Link>
         <p className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">{err}</p>
@@ -235,7 +235,7 @@ export default function EditarOrdenCompraPage() {
 
   return (
     <div className="space-y-6">
-      <Link href={`/compras/ordenes/${encodeURIComponent(numeroOc)}`} className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#3F8E91]">
+      <Link href={`/compras/ordenes/${encodeURIComponent(numeroOc)}`} className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#17191C]">
         ← Volver a {numeroOc}
       </Link>
       <div>
@@ -291,17 +291,17 @@ export default function EditarOrdenCompraPage() {
 
         {/* Buscador de productos */}
         <div ref={searchBoxRef} className="relative">
-          <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#4FAEB2]" />
+          <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#1E2125]" />
           <input
             value={q}
             onChange={(e) => { setQ(e.target.value); setSearchOpen(true); }}
             onFocus={() => setSearchOpen(true)}
             placeholder="Agregar más productos…"
-            className="h-14 w-full rounded-2xl border-2 border-[#4FAEB2]/25 bg-white pl-12 pr-4 text-base outline-none focus:border-[#4FAEB2] focus:ring-4 focus:ring-[#4FAEB2]/15"
+            className="h-14 w-full rounded-2xl border-2 border-[#1E2125]/25 bg-white pl-12 pr-4 text-base outline-none focus:border-[#1E2125] focus:ring-4 focus:ring-[#1E2125]/15"
             autoComplete="off"
           />
           {searchOpen && q.trim().length >= 2 && (
-            <div className="absolute left-0 right-0 top-full z-30 mt-2 max-h-[50vh] overflow-y-auto rounded-2xl border-2 border-[#4FAEB2]/20 bg-white shadow-[0_16px_40px_-12px_rgba(15,23,42,0.28)]">
+            <div className="absolute left-0 right-0 top-full z-30 mt-2 max-h-[50vh] overflow-y-auto rounded-2xl border-2 border-[#1E2125]/20 bg-white shadow-[0_16px_40px_-12px_rgba(15,23,42,0.28)]">
               {resultados.length === 0 ? (
                 <div className="px-4 py-6 text-center text-sm text-slate-400">Sin resultados para &quot;{q}&quot;</div>
               ) : (
@@ -309,12 +309,12 @@ export default function EditarOrdenCompraPage() {
                   {resultados.map((p) => (
                     <li key={String(p.id)}>
                       <button type="button" onClick={() => addProducto(p)}
-                        className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-[#4FAEB2]/8">
+                        className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-[#1E2125]/8">
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-semibold text-slate-800">{p.nombre}</p>
                           <p className="text-xs font-mono text-slate-500">{p.sku}</p>
                         </div>
-                        <span className="inline-flex items-center gap-1 rounded-lg bg-[#4FAEB2]/10 px-2.5 py-1 text-xs font-bold text-[#3F8E91]">
+                        <span className="inline-flex items-center gap-1 rounded-lg bg-[#1E2125]/10 px-2.5 py-1 text-xs font-bold text-[#17191C]">
                           <Plus className="h-3.5 w-3.5" strokeWidth={2.5} /> Agregar
                         </span>
                       </button>
@@ -345,7 +345,7 @@ export default function EditarOrdenCompraPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {lineas.map((l) => (
-                    <tr key={l.producto_id} className="hover:bg-[#4FAEB2]/5">
+                    <tr key={l.producto_id} className="hover:bg-[#1E2125]/5">
                       <td className="px-4 py-3">
                         <p className="font-semibold text-slate-900">{l.producto_nombre}</p>
                         <p className="font-mono text-[11px] text-slate-500">{l.sku}</p>
@@ -367,7 +367,7 @@ export default function EditarOrdenCompraPage() {
                             const sel = l.iva_tipo === iva;
                             return (
                               <button key={iva} type="button" onClick={() => updateLinea(l.producto_id, { iva_tipo: iva })}
-                                className={`px-2 py-1.5 text-[11px] font-semibold transition-colors ${sel ? "bg-[#4FAEB2] text-white" : "bg-white text-slate-600 hover:bg-slate-100"}`}>
+                                className={`px-2 py-1.5 text-[11px] font-semibold transition-colors ${sel ? "bg-[#1E2125] text-white" : "bg-white text-slate-600 hover:bg-slate-100"}`}>
                                 {iva === "exenta" ? "Ex" : `${iva}%`}
                               </button>
                             );
@@ -398,7 +398,7 @@ export default function EditarOrdenCompraPage() {
             <p className="text-2xl font-bold tabular-nums text-slate-900">{fmtGs(totalOc)}</p>
           </div>
           <button type="submit" disabled={enviando}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#4FAEB2] px-6 py-3 text-sm font-bold text-white shadow-md shadow-[#4FAEB2]/30 hover:bg-[#3F8E91] disabled:opacity-50">
+            className="inline-flex items-center gap-2 rounded-xl bg-[#1E2125] px-6 py-3 text-sm font-bold text-white shadow-md shadow-[#1E2125]/30 hover:bg-[#17191C] disabled:opacity-50">
             {enviando && <Loader2 className="h-4 w-4 animate-spin" />}
             Guardar cambios
           </button>

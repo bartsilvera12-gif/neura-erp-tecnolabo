@@ -377,7 +377,7 @@ export default function EditarRecetaPage() {
 
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <ChefHat className="h-7 w-7 text-[#4FAEB2]" />
+          <ChefHat className="h-7 w-7 text-[#1E2125]" />
           <h1 className="text-2xl font-semibold">
             {receta.nombre?.trim() || (receta.producto_nombre ? `Receta: ${receta.producto_nombre}` : "Receta")}
           </h1>
@@ -385,7 +385,7 @@ export default function EditarRecetaPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={openFabricar}
-            className="inline-flex items-center gap-1.5 rounded-md bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white hover:bg-[#3F8E91]"
+            className="inline-flex items-center gap-1.5 rounded-md bg-[#1E2125] px-4 py-2 text-sm font-medium text-white hover:bg-[#17191C]"
           >
             <Factory className="h-4 w-4" /> Fabricar
           </button>
@@ -674,7 +674,7 @@ export default function EditarRecetaPage() {
               <button
                 onClick={addItem}
                 disabled={addingItem || !newInsumoId || newCantidad <= 0}
-                className="md:col-span-5 inline-flex items-center justify-center gap-1 rounded-md bg-[#4FAEB2] px-3 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50"
+                className="md:col-span-5 inline-flex items-center justify-center gap-1 rounded-md bg-[#1E2125] px-3 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50"
               >
                 <Plus className="h-4 w-4" /> {addingItem ? "Agregando…" : "Agregar insumo"}
               </button>
@@ -695,7 +695,7 @@ export default function EditarRecetaPage() {
         <button
           onClick={saveHeader}
           disabled={savingHeader}
-          className="inline-flex items-center justify-center gap-1.5 rounded-md bg-[#4FAEB2] px-5 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50"
+          className="inline-flex items-center justify-center gap-1.5 rounded-md bg-[#1E2125] px-5 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50"
         >
           <Save className="h-4 w-4" /> {savingHeader ? "Guardando…" : "Guardar receta"}
         </button>
@@ -707,7 +707,7 @@ export default function EditarRecetaPage() {
           <div className="bg-white w-full sm:max-w-2xl sm:rounded-xl rounded-t-2xl shadow-xl max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 sticky top-0 bg-white">
               <div className="flex items-center gap-2">
-                <Factory className="h-5 w-5 text-[#4FAEB2]" />
+                <Factory className="h-5 w-5 text-[#1E2125]" />
                 <h3 className="text-base font-semibold text-gray-900">
                   Fabricar {receta.producto_nombre ?? "producto"}
                 </h3>
@@ -843,7 +843,7 @@ export default function EditarRecetaPage() {
                 <button
                   onClick={() => submitFabricar(false)}
                   disabled={fabSubmitting || fabLoadingPreview || !fabPreview || !(fabCantidad > 0)}
-                  className="inline-flex items-center justify-center gap-1.5 rounded-md bg-[#4FAEB2] px-5 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-md bg-[#1E2125] px-5 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50"
                 >
                   <Factory className="h-4 w-4" /> {fabSubmitting ? "Fabricando…" : "Confirmar fabricación"}
                 </button>

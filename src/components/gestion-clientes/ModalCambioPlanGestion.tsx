@@ -283,7 +283,7 @@ export function ModalCambioPlanGestion({
                 !ctx.modos_permitidos.includes(modo) ||
                 ctx.caso === "sin_suscripcion"
               }
-              className="rounded-lg bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#3F8E91] disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#17191C] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {submitting ? "Aplicando…" : "Confirmar cambio"}
             </button>

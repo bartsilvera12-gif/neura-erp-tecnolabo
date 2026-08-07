@@ -21,7 +21,7 @@ const TIPOS = ["deposito", "salon", "pasillo", "gondola", "estante", "zona", "ot
 
 type TipoMeta = { label: string; badge: string; icon: React.ComponentType<{ className?: string }> };
 const TIPO_META: Record<string, TipoMeta> = {
-  deposito: { label: "Depósito", badge: "bg-[#4FAEB2]/12 text-[#3F8E91] border-[#4FAEB2]/30", icon: Warehouse },
+  deposito: { label: "Depósito", badge: "bg-[#1E2125]/12 text-[#17191C] border-[#1E2125]/30", icon: Warehouse },
   salon: { label: "Salón", badge: "bg-indigo-50 text-indigo-700 border-indigo-200", icon: Store },
   pasillo: { label: "Pasillo", badge: "bg-amber-50 text-amber-700 border-amber-200", icon: Rows3 },
   gondola: { label: "Góndola", badge: "bg-violet-50 text-violet-700 border-violet-200", icon: LayoutGrid },
@@ -32,7 +32,7 @@ const TIPO_META: Record<string, TipoMeta> = {
 const tipoMeta = (t: string): TipoMeta => TIPO_META[t] ?? TIPO_META.otro;
 
 const inputClass =
-  "w-full h-10 rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 shadow-sm outline-none transition-all placeholder:text-slate-400 hover:border-[#4FAEB2]/60 focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20";
+  "w-full h-10 rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 shadow-sm outline-none transition-all placeholder:text-slate-400 hover:border-[#1E2125]/60 focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20";
 
 export default function UbicacionesPage() {
   const { isAdmin } = useIsAdmin();
@@ -117,8 +117,8 @@ export default function UbicacionesPage() {
       {/* Header */}
       <header className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#4FAEB2]/8 border border-[#4FAEB2]/30 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#3F8E91] mb-3">
-            <Warehouse className="h-3 w-3 text-[#4FAEB2]" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#1E2125]/8 border border-[#1E2125]/30 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#17191C] mb-3">
+            <Warehouse className="h-3 w-3 text-[#1E2125]" />
             Inventario · Ubicaciones
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 tracking-tight leading-tight">
@@ -141,7 +141,7 @@ export default function UbicacionesPage() {
           />
           <Link
             href="/inventario"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-[#4FAEB2] hover:text-[#3F8E91] transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-[#1E2125] hover:text-[#17191C] transition-colors"
           >
             ← Volver a Inventario
           </Link>
@@ -149,10 +149,10 @@ export default function UbicacionesPage() {
       </header>
 
       {/* Nueva ubicación — sin overflow-hidden para que el menú del FancySelect no se corte */}
-      <section className="bg-white rounded-2xl border-2 border-[#4FAEB2]/20 shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)]">
-        <div className="rounded-t-[14px] px-5 py-4 border-b border-[#4FAEB2]/15 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent">
+      <section className="bg-white rounded-2xl border-2 border-[#1E2125]/20 shadow-[0_2px_10px_-2px_rgba(30,33,37,0.12)]">
+        <div className="rounded-t-[14px] px-5 py-4 border-b border-[#1E2125]/15 bg-gradient-to-r from-[#1E2125]/5 to-transparent">
           <h2 className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-wider text-slate-700">
-            <span className="inline-block h-3.5 w-1 rounded-full bg-[#4FAEB2]" />
+            <span className="inline-block h-3.5 w-1 rounded-full bg-[#E23B3B]" />
             Nueva ubicación
           </h2>
         </div>
@@ -204,7 +204,7 @@ export default function UbicacionesPage() {
             <button
               type="submit"
               disabled={creating || !nombre.trim()}
-              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] text-white text-sm font-bold px-5 h-10 transition-colors shadow-sm shadow-[#4FAEB2]/30 disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
+              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-bold px-5 h-10 transition-colors shadow-sm shadow-[#1E2125]/30 disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
             >
               {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" strokeWidth={2.5} />}
               {creating ? "Creando…" : "Crear ubicación"}
@@ -217,16 +217,16 @@ export default function UbicacionesPage() {
       </section>
 
       {/* Listado */}
-      <section className="bg-white rounded-2xl border-2 border-[#4FAEB2]/20 shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)] overflow-hidden">
-        <div className="px-5 py-4 border-b border-[#4FAEB2]/15 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent flex items-center justify-between gap-3">
+      <section className="bg-white rounded-2xl border-2 border-[#1E2125]/20 shadow-[0_2px_10px_-2px_rgba(30,33,37,0.12)] overflow-hidden">
+        <div className="px-5 py-4 border-b border-[#1E2125]/15 bg-gradient-to-r from-[#1E2125]/5 to-transparent flex items-center justify-between gap-3">
           <h2 className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-wider text-slate-700">
-            <span className="inline-block h-3.5 w-1 rounded-full bg-[#4FAEB2]" />
+            <span className="inline-block h-3.5 w-1 rounded-full bg-[#E23B3B]" />
             Ubicaciones
           </h2>
           {!loading && items.length > 0 && (
             <span className="text-xs text-slate-500">
               <span className="font-bold text-slate-700">{items.length}</span> total ·{" "}
-              <span className="font-bold text-[#3F8E91]">{activas}</span> activas
+              <span className="font-bold text-[#17191C]">{activas}</span> activas
             </span>
           )}
         </div>
@@ -235,8 +235,8 @@ export default function UbicacionesPage() {
           <p className="px-5 py-12 text-center text-sm text-slate-400 animate-pulse">Cargando…</p>
         ) : items.length === 0 ? (
           <div className="px-5 py-14 text-center">
-            <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-[#4FAEB2]/8 border border-[#4FAEB2]/20 mb-3">
-              <Package className="h-6 w-6 text-[#4FAEB2]" />
+            <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-[#1E2125]/8 border border-[#1E2125]/20 mb-3">
+              <Package className="h-6 w-6 text-[#1E2125]" />
             </div>
             <p className="text-sm font-semibold text-slate-700">Todavía no cargaste ubicaciones</p>
             <p className="mt-1 text-xs text-slate-400">Creá tu primer depósito o ubicación con el formulario de arriba.</p>
@@ -260,7 +260,7 @@ export default function UbicacionesPage() {
                   const meta = tipoMeta(u.tipo);
                   const Icon = meta.icon;
                   return (
-                    <tr key={u.id} className="hover:bg-[#4FAEB2]/[0.04] transition-colors">
+                    <tr key={u.id} className="hover:bg-[#1E2125]/[0.04] transition-colors">
                       <td className="px-5 py-3">
                         <span className={`font-semibold ${u.activo ? "text-slate-800" : "text-slate-400"}`}>{u.nombre}</span>
                       </td>
@@ -285,7 +285,7 @@ export default function UbicacionesPage() {
                           className={`rounded-md border px-2.5 py-1 text-xs font-semibold transition-colors ${
                             u.activo
                               ? "border-slate-200 bg-white text-slate-600 hover:border-amber-300 hover:text-amber-700"
-                              : "border-[#4FAEB2]/40 bg-white text-[#3F8E91] hover:bg-[#4FAEB2]/10"
+                              : "border-[#1E2125]/40 bg-white text-[#17191C] hover:bg-[#1E2125]/10"
                           }`}
                         >
                           {u.activo ? "Desactivar" : "Activar"}

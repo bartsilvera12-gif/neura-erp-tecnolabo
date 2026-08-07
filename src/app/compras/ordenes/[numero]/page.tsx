@@ -72,7 +72,7 @@ export default function OrdenCompraDetallePage() {
   if (!cab) {
     return (
       <div className="space-y-4">
-        <Link href="/compras/ordenes" className="text-sm text-slate-500 hover:text-[#3F8E91]">← Órdenes de compra</Link>
+        <Link href="/compras/ordenes" className="text-sm text-slate-500 hover:text-[#17191C]">← Órdenes de compra</Link>
         <p className="text-slate-500">Orden de compra no encontrada.</p>
       </div>
     );
@@ -80,7 +80,7 @@ export default function OrdenCompraDetallePage() {
 
   return (
     <div className="space-y-6">
-      <Link href="/compras/ordenes" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#3F8E91]">
+      <Link href="/compras/ordenes" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#17191C]">
         ← Órdenes de compra
       </Link>
 
@@ -111,7 +111,7 @@ export default function OrdenCompraDetallePage() {
           )}
           {puedeRecibir && (
             <Link href={`/compras/desde-orden/${encodeURIComponent(cab.numero_oc)}`}
-              className="rounded-lg bg-[#4FAEB2] px-4 py-2 text-sm font-bold text-white shadow-sm shadow-[#4FAEB2]/30 hover:bg-[#3F8E91]">
+              className="rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-bold text-white shadow-sm shadow-[#1E2125]/30 hover:bg-[#17191C]">
               {cab.estado === "recibida_parcial" ? "Recibir el resto" : "Registrar compra (recibir)"}
             </Link>
           )}
@@ -122,7 +122,7 @@ export default function OrdenCompraDetallePage() {
       {err && <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{err}</p>}
 
       {(cab.estado === "recibida_parcial" || cab.estado === "recibida_total") && cab.compra_numero_control && (
-        <p className="rounded-lg border border-[#4FAEB2]/30 bg-[#E5F4F4] px-3 py-2 text-sm text-[#3F8E91]">
+        <p className="rounded-lg border border-[#1E2125]/30 bg-[#EEF0F2] px-3 py-2 text-sm text-[#17191C]">
           Última compra registrada: <span className="font-mono font-bold">{cab.compra_numero_control}</span>
           {cab.estado === "recibida_total" ? ` (recibida completa el ${fmtFecha(cab.recibida_at)})` : " — recepción parcial, puede haber más de una compra asociada."}{" "}
           <Link href="/compras" className="font-semibold underline">Ver en Compras</Link>
@@ -137,10 +137,10 @@ export default function OrdenCompraDetallePage() {
       {/* Ítems */}
       <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
         <table className="w-full min-w-[880px] text-sm">
-          <thead className="border-b-2 border-[#4FAEB2]/40 bg-[#E5F4F4]">
+          <thead className="border-b-2 border-[#1E2125]/40 bg-[#EEF0F2]">
             <tr>
               {["Producto", "Pedida", "Recibida", "Pendiente", "Costo unit.", "IVA", "Subtotal", "Total"].map((h, i) => (
-                <th key={h} className={`px-4 py-3 text-xs font-bold uppercase tracking-wide text-[#3F8E91] ${i === 0 ? "text-left" : i === 5 ? "text-center" : "text-right"}`}>{h}</th>
+                <th key={h} className={`px-4 py-3 text-xs font-bold uppercase tracking-wide text-[#17191C] ${i === 0 ? "text-left" : i === 5 ? "text-center" : "text-right"}`}>{h}</th>
               ))}
             </tr>
           </thead>

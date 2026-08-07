@@ -80,7 +80,7 @@ export default function ComisionesPage() {
     return `${desde} → ${hasta} · ${e.porcentaje}%`;
   }, []);
 
-  const inputC = "rounded-md border border-slate-200 px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30";
+  const inputC = "rounded-md border border-slate-200 px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30";
 
   const explicacion = useMemo(() => (
     <ul className="ml-4 mt-1 list-disc space-y-0.5 text-xs text-slate-500">
@@ -113,7 +113,7 @@ export default function ComisionesPage() {
             <input type="date" value={rango.hasta} onChange={(e) => setRango((r) => ({ ...r, hasta: e.target.value }))} className={inputC} />
           </div>
           <button onClick={() => setRango(ymdInicioFinMes(new Date()))} className="rounded-md border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50">Mes actual</button>
-          <button onClick={() => void cargar()} disabled={cargando} className="inline-flex items-center gap-1 rounded-md bg-[#4FAEB2] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#3F8E91] disabled:opacity-50">
+          <button onClick={() => void cargar()} disabled={cargando} className="inline-flex items-center gap-1 rounded-md bg-[#1E2125] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#17191C] disabled:opacity-50">
             <RefreshCw className={`h-3.5 w-3.5 ${cargando ? "animate-spin" : ""}`} /> Actualizar
           </button>
         </div>
@@ -185,9 +185,9 @@ export default function ComisionesPage() {
 
 function StatCard({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className={`rounded-xl border p-4 ${highlight ? "border-[#4FAEB2]/30 bg-[#4FAEB2]/[0.06]" : "border-slate-200 bg-white"}`}>
+    <div className={`rounded-xl border p-4 ${highlight ? "border-[#1E2125]/30 bg-[#1E2125]/[0.06]" : "border-slate-200 bg-white"}`}>
       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{label}</p>
-      <p className={`mt-1 text-lg font-bold tabular-nums ${highlight ? "text-[#3F8E91]" : "text-slate-800"}`}>{value}</p>
+      <p className={`mt-1 text-lg font-bold tabular-nums ${highlight ? "text-[#17191C]" : "text-slate-800"}`}>{value}</p>
     </div>
   );
 }

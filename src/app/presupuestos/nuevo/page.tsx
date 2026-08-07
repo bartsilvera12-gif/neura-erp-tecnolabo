@@ -288,7 +288,7 @@ export default function NuevoPresupuestoPage() {
       </Link>
 
       <div className="flex items-center gap-3">
-        <FileText className="h-7 w-7 text-[#4FAEB2]" />
+        <FileText className="h-7 w-7 text-[#1E2125]" />
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Nuevo presupuesto</h1>
       </div>
 
@@ -350,7 +350,7 @@ export default function NuevoPresupuestoPage() {
                 .map((p) => ({ id: p.id, label: p.nombre, sublabel: p.sku || undefined }))}
             />
           </div>
-          <button type="button" onClick={agregarProducto} disabled={!selProd} className="inline-flex items-center gap-1 rounded-md bg-[#4FAEB2] px-3 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50">
+          <button type="button" onClick={agregarProducto} disabled={!selProd} className="inline-flex items-center gap-1 rounded-md bg-[#1E2125] px-3 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50">
             <Plus className="h-4 w-4" /> Agregar
           </button>
           <button type="button" onClick={agregarManual} className="inline-flex items-center gap-1 rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">
@@ -388,7 +388,7 @@ export default function NuevoPresupuestoPage() {
                           <button
                             type="button"
                             onClick={() => setExpandido((p) => ({ ...p, [i]: !p[i] }))}
-                            className={`shrink-0 rounded p-1 hover:bg-slate-100 ${tieneDetalle ? "text-[#4FAEB2]" : "text-slate-400"}`}
+                            className={`shrink-0 rounded p-1 hover:bg-slate-100 ${tieneDetalle ? "text-[#1E2125]" : "text-slate-400"}`}
                             aria-label="Detalle comercial"
                             title="Imagen y especificaciones técnicas"
                           >
@@ -460,7 +460,7 @@ export default function NuevoPresupuestoPage() {
             <div className="flex justify-between"><span className="text-gray-500">Subtotal (sin IVA)</span><span className="tabular-nums">{fmtGs(totales.subtotal)}</span></div>
             <div className="flex justify-between"><span className="text-gray-500">IVA</span><span className="tabular-nums">{fmtGs(totales.iva)}</span></div>
             {totales.desc > 0 && <div className="flex justify-between"><span className="text-gray-500">Descuentos</span><span className="tabular-nums">- {fmtGs(totales.desc)}</span></div>}
-            <div className="flex justify-between border-t border-slate-200 pt-1 font-semibold text-base"><span>Total</span><span className="tabular-nums text-[#4FAEB2]">{fmtGs(totales.total)}</span></div>
+            <div className="flex justify-between border-t border-slate-200 pt-1 font-semibold text-base"><span>Total</span><span className="tabular-nums text-[#1E2125]">{fmtGs(totales.total)}</span></div>
           </div>
         )}
       </div>
@@ -512,7 +512,7 @@ export default function NuevoPresupuestoPage() {
         <button onClick={() => guardar("borrador")} disabled={!valido || guardando} className="inline-flex items-center justify-center gap-1.5 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-50">
           Guardar borrador
         </button>
-        <button onClick={() => guardar("creado")} disabled={!valido || guardando} className="inline-flex items-center justify-center gap-1.5 rounded-md bg-[#4FAEB2] px-5 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50">
+        <button onClick={() => guardar("creado")} disabled={!valido || guardando} className="inline-flex items-center justify-center gap-1.5 rounded-md bg-[#1E2125] px-5 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50">
           {guardando ? <><Loader2 className="h-4 w-4 animate-spin" /> Guardando…</> : "Guardar presupuesto"}
         </button>
       </div>

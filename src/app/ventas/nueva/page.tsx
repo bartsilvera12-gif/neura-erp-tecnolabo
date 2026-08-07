@@ -946,15 +946,15 @@ export default function NuevaVentaPage() {
             ⚠ No hay caja abierta — abrí una caja
           </a>
         ) : (
-          <div className="flex items-center gap-2 rounded-lg border border-[#4FAEB2]/30 bg-[#4FAEB2]/[0.06] px-3 py-2">
-            <span className="text-xs font-semibold text-[#3F8E91]">Caja activa</span>
+          <div className="flex items-center gap-2 rounded-lg border border-[#1E2125]/30 bg-[#1E2125]/[0.06] px-3 py-2">
+            <span className="text-xs font-semibold text-[#17191C]">Caja activa</span>
             {cajasAbiertas.length === 1 ? (
               <span className="text-sm font-bold text-slate-800">Caja {cajasAbiertas[0].numero_caja}</span>
             ) : (
               <select
                 value={cajaActivaId}
                 onChange={(e) => setCajaActivaId(e.target.value)}
-                className="rounded-md border border-slate-200 bg-white px-2 py-1 text-sm font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-[#4FAEB2]/30"
+                className="rounded-md border border-slate-200 bg-white px-2 py-1 text-sm font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-[#1E2125]/30"
               >
                 <option value="">— Elegí caja —</option>
                 {cajasAbiertas.map((c) => (
@@ -967,22 +967,22 @@ export default function NuevaVentaPage() {
       </div>
 
       {pedidoId && (
-        <div className="rounded-lg border border-[#4FAEB2]/40 bg-[#4FAEB2]/[0.08] px-4 py-3 text-sm text-slate-700">
-          <span className="font-semibold text-[#3F8E91]">Estás facturando un pedido{pedidoNumero ? ` (${pedidoNumero})` : ""}.</span>{" "}
+        <div className="rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.08] px-4 py-3 text-sm text-slate-700">
+          <span className="font-semibold text-[#17191C]">Estás facturando un pedido{pedidoNumero ? ` (${pedidoNumero})` : ""}.</span>{" "}
           La venta se generará al confirmar y el pedido quedará marcado como facturado. Podés ajustar items, precios y método de pago.
         </div>
       )}
 
       {presupuestoId && (
-        <div className="rounded-lg border border-[#4FAEB2]/40 bg-[#4FAEB2]/[0.08] px-4 py-3 text-sm text-slate-700">
-          <span className="font-semibold text-[#3F8E91]">Cobrando presupuesto{presupuestoNumero ? ` ${presupuestoNumero}` : ""}.</span>{" "}
+        <div className="rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.08] px-4 py-3 text-sm text-slate-700">
+          <span className="font-semibold text-[#17191C]">Cobrando presupuesto{presupuestoNumero ? ` ${presupuestoNumero}` : ""}.</span>{" "}
           Los productos y el cliente se cargaron automáticamente. Al confirmar la venta, el presupuesto queda marcado como convertido.
         </div>
       )}
 
       {pedidoCajaId && (
-        <div className="rounded-lg border border-[#4FAEB2]/40 bg-[#4FAEB2]/[0.08] px-4 py-3 text-sm text-slate-700">
-          <span className="font-semibold text-[#3F8E91]">
+        <div className="rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.08] px-4 py-3 text-sm text-slate-700">
+          <span className="font-semibold text-[#17191C]">
             Cobrando pedido de Consulta{pedidoCajaTitulo ? ` (${pedidoCajaTitulo})` : ""}.
           </span>{" "}
           Al confirmar, el pedido quedará marcado como facturado. Podés ajustar items, precios y método de pago.
@@ -1120,7 +1120,7 @@ export default function NuevaVentaPage() {
               <button
                 type="button"
                 onClick={() => setShowCrearCliente(true)}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] px-4 py-2 text-sm font-bold text-white shadow-sm shadow-[#4FAEB2]/30 transition-colors hover:bg-[#3F8E91]"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-bold text-white shadow-sm shadow-[#1E2125]/30 transition-colors hover:bg-[#17191C]"
               >
                 <Plus className="h-4 w-4" />
                 Crear cliente
@@ -1660,7 +1660,7 @@ export default function NuevaVentaPage() {
                 href={`/api/ventas/${postVenta.id}/factura?auto=1`}
                 target="_blank"
                 rel="noopener"
-                className="rounded-lg border border-[#4FAEB2]/40 bg-[#4FAEB2]/[0.08] px-4 py-2.5 text-sm font-medium text-[#3F8E91] hover:bg-[#4FAEB2]/[0.16]"
+                className="rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.08] px-4 py-2.5 text-sm font-medium text-[#17191C] hover:bg-[#1E2125]/[0.16]"
               >
                 Imprimir factura
               </a>
@@ -1682,7 +1682,7 @@ export default function NuevaVentaPage() {
                     const r = await generarYAbrirRecibo({ origen: "venta_contado", venta_id: postVenta.id });
                     if (!r.ok) setErrorVenta(r.error ?? "No se pudo generar el recibo.");
                   }}
-                  className="rounded-lg border border-[#4FAEB2]/40 bg-[#4FAEB2]/[0.08] px-4 py-2.5 text-sm font-medium text-[#3F8E91] hover:bg-[#4FAEB2]/[0.16]"
+                  className="rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.08] px-4 py-2.5 text-sm font-medium text-[#17191C] hover:bg-[#1E2125]/[0.16]"
                 >
                   Generar recibo de dinero
                 </button>
@@ -1952,8 +1952,8 @@ function CategoriaCombo({
         onClick={() => setOpen((v) => !v)}
         className={`flex h-12 w-full items-center justify-between gap-2 rounded-xl border-2 bg-white px-3 text-sm outline-none transition-all ${
           open || selected
-            ? "border-[#4FAEB2] text-slate-800 ring-4 ring-[#4FAEB2]/15"
-            : "border-[#0EA5E9]/30 text-slate-700 hover:border-[#4FAEB2]/60"
+            ? "border-[#1E2125] text-slate-800 ring-4 ring-[#1E2125]/15"
+            : "border-[#0EA5E9]/30 text-slate-700 hover:border-[#1E2125]/60"
         }`}
       >
         <span className="truncate">
@@ -1964,16 +1964,16 @@ function CategoriaCombo({
         />
       </button>
       {open && (
-        <div className="absolute right-0 top-full z-40 mt-2 w-full min-w-[16rem] overflow-hidden rounded-xl border-2 border-[#4FAEB2]/25 bg-white shadow-[0_16px_40px_-12px_rgba(15,23,42,0.28)]">
+        <div className="absolute right-0 top-full z-40 mt-2 w-full min-w-[16rem] overflow-hidden rounded-xl border-2 border-[#1E2125]/25 bg-white shadow-[0_16px_40px_-12px_rgba(15,23,42,0.28)]">
           <div className="relative border-b border-slate-100 p-2">
-            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#4FAEB2]" />
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1E2125]" />
             <input
               ref={inputRef}
               type="text"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Buscar categoría…"
-              className="h-9 w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-800 outline-none focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/15"
+              className="h-9 w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-800 outline-none focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/15"
             />
           </div>
           <ul className="max-h-72 overflow-y-auto py-1">
@@ -1982,7 +1982,7 @@ function CategoriaCombo({
                 type="button"
                 onClick={() => { onChange(""); setOpen(false); setQ(""); }}
                 className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors ${
-                  !value ? "bg-[#4FAEB2]/10 font-semibold text-[#3F8E91]" : "text-slate-700 hover:bg-slate-50"
+                  !value ? "bg-[#1E2125]/10 font-semibold text-[#17191C]" : "text-slate-700 hover:bg-slate-50"
                 }`}
               >
                 Todas las categorías
@@ -1998,7 +1998,7 @@ function CategoriaCombo({
                     onClick={() => { onChange(c.id); setOpen(false); setQ(""); }}
                     className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors ${
                       value === c.id
-                        ? "bg-[#4FAEB2]/10 font-semibold text-[#3F8E91]"
+                        ? "bg-[#1E2125]/10 font-semibold text-[#17191C]"
                         : "text-slate-700 hover:bg-slate-50"
                     }`}
                   >

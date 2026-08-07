@@ -79,7 +79,7 @@ export default function RotacionAbcPage() {
                 onClick={() => setMeses(p.meses)}
                 className={`rounded-lg border px-3 py-2 text-xs font-semibold transition-colors ${
                   meses === p.meses
-                    ? "border-[#4FAEB2] bg-[#4FAEB2] text-white"
+                    ? "border-[#1E2125] bg-[#1E2125] text-white"
                     : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
                 }`}
               >
@@ -101,13 +101,13 @@ export default function RotacionAbcPage() {
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             {/* Productos (total) + distribución A/B/C */}
             <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <span className="absolute inset-x-0 top-0 h-1 bg-[#4FAEB2]" />
+              <span className="absolute inset-x-0 top-0 h-1 bg-[#1E2125]" />
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-400">Productos</p>
-                  <p className="mt-1 text-3xl font-bold tabular-nums text-[#3F8E91]">{fmtNum(t.total)}</p>
+                  <p className="mt-1 text-3xl font-bold tabular-nums text-[#17191C]">{fmtNum(t.total)}</p>
                 </div>
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#4FAEB2]/12 text-[#3F8E91]">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1E2125]/12 text-[#17191C]">
                   <Boxes className="h-5 w-5" />
                 </span>
               </div>
@@ -144,19 +144,19 @@ export default function RotacionAbcPage() {
             ))}
           </div>
 
-          <div className="rounded-2xl border border-[#4FAEB2]/30 bg-white p-6 shadow-sm ring-1 ring-[#4FAEB2]/10">
+          <div className="rounded-2xl border border-[#1E2125]/30 bg-white p-6 shadow-sm ring-1 ring-[#1E2125]/10">
             <div className="mb-4 flex flex-wrap items-center gap-3">
               <input
                 type="text"
                 placeholder="Buscar por nombre o SKU…"
                 value={busquedaDraft}
                 onChange={(e) => setBusquedaDraft(e.target.value)}
-                className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30 sm:min-w-72"
+                className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30 sm:min-w-72"
               />
               <select
                 value={rango}
                 onChange={(e) => setRango(e.target.value as RangoABC | "")}
-                className="w-40 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30"
+                className="w-40 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30"
               >
                 <option value="">Todos los rangos</option>
                 <option value="A">Rango A</option>
@@ -166,7 +166,7 @@ export default function RotacionAbcPage() {
               <select
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
-                className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30"
+                className="w-28 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30"
                 title="Ítems por página"
               >
                 {PAGE_SIZES.map((n) => (
@@ -180,22 +180,22 @@ export default function RotacionAbcPage() {
 
             <div className="overflow-x-auto rounded-xl border border-slate-200">
               <table className="w-full min-w-[880px] text-sm">
-                <thead className="border-b-2 border-[#4FAEB2]/40 bg-[#E5F4F4]">
+                <thead className="border-b-2 border-[#1E2125]/40 bg-[#EEF0F2]">
                   <tr>
-                    <th className="px-3 py-3 text-left text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Producto</th>
-                    <th className="px-3 py-3 text-left text-xs font-bold uppercase tracking-wide text-[#3F8E91]">SKU</th>
-                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Stock</th>
-                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Stock mín.</th>
-                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Cant. vendida</th>
-                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Importe vendido</th>
-                    <th className="px-3 py-3 text-center text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Rango</th>
+                    <th className="px-3 py-3 text-left text-xs font-bold uppercase tracking-wide text-[#17191C]">Producto</th>
+                    <th className="px-3 py-3 text-left text-xs font-bold uppercase tracking-wide text-[#17191C]">SKU</th>
+                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#17191C]">Stock</th>
+                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#17191C]">Stock mín.</th>
+                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#17191C]">Cant. vendida</th>
+                    <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wide text-[#17191C]">Importe vendido</th>
+                    <th className="px-3 py-3 text-center text-xs font-bold uppercase tracking-wide text-[#17191C]">Rango</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {data.productos.length === 0 ? (
                     <tr><td colSpan={7} className="py-8 text-center text-sm text-slate-400">Sin productos para el filtro.</td></tr>
                   ) : data.productos.map((p) => (
-                    <tr key={p.producto_id} className="transition-colors hover:bg-[#4FAEB2]/5">
+                    <tr key={p.producto_id} className="transition-colors hover:bg-[#1E2125]/5">
                       <td className="px-3 py-2.5 text-xs font-semibold text-slate-900">{p.nombre}</td>
                       <td className="px-3 py-2.5 font-mono text-xs text-slate-500">{p.sku ?? "—"}</td>
                       <td className={`px-3 py-2.5 text-right text-xs tabular-nums font-medium ${p.stock_actual <= p.stock_minimo ? "text-red-600" : "text-slate-700"}`}>{fmtNum(p.stock_actual)}</td>

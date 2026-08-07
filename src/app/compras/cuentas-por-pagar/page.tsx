@@ -120,7 +120,7 @@ export default function CuentasPorPagarPage() {
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <Wallet className="h-7 w-7 text-[#4FAEB2]" />
+          <Wallet className="h-7 w-7 text-[#1E2125]" />
           <div>
             <h1 className="text-2xl font-bold text-gray-800">Cuentas por pagar</h1>
             <p className="text-sm text-gray-500">Saldo total pendiente: <span className="font-semibold tabular-nums">{fmt(totalSaldo, "PYG")}</span></p>
@@ -164,7 +164,7 @@ export default function CuentasPorPagarPage() {
                     <td className="py-2.5 px-4 text-gray-800">{c.proveedor_nombre ?? "—"}</td>
                     <td className="py-2.5 px-4">
                       {c.compra_numero_control ? (
-                        <Link href={`/compras/${encodeURIComponent(c.compra_numero_control)}/recepciones`} className="text-[#3F8E91] hover:underline">
+                        <Link href={`/compras/${encodeURIComponent(c.compra_numero_control)}/recepciones`} className="text-[#17191C] hover:underline">
                           {c.compra_numero_control}
                         </Link>
                       ) : "—"}
@@ -178,7 +178,7 @@ export default function CuentasPorPagarPage() {
                     </td>
                     <td className="py-2.5 px-4 text-right">
                       {c.estado !== "pagado" && c.estado !== "anulado" && (
-                        <button onClick={() => abrirPago(c)} className="text-xs font-semibold text-[#3F8E91] hover:underline">Registrar pago</button>
+                        <button onClick={() => abrirPago(c)} className="text-xs font-semibold text-[#17191C] hover:underline">Registrar pago</button>
                       )}
                     </td>
                   </tr>
@@ -216,7 +216,7 @@ export default function CuentasPorPagarPage() {
             </div>
             <div className="flex justify-end gap-2">
               <button onClick={() => setPagarCuenta(null)} className="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">Cancelar</button>
-              <button onClick={registrarPago} disabled={busy} className="inline-flex items-center gap-1.5 rounded-md bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50">{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null} Registrar pago</button>
+              <button onClick={registrarPago} disabled={busy} className="inline-flex items-center gap-1.5 rounded-md bg-[#1E2125] px-4 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50">{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null} Registrar pago</button>
             </div>
             {pagos.length > 0 && (
               <div className="border-t border-slate-100 pt-3">

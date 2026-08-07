@@ -876,7 +876,7 @@ export default function Sidebar() {
         {scrollIndicator.visible ? (
           <div className="pointer-events-none absolute inset-y-2.5 right-1.5 w-1 rounded-full bg-white/[0.035]">
             <motion.span
-              className="absolute left-0 top-0 block w-full rounded-full bg-[#4FAEB2]/55 shadow-[0_0_10px_rgba(79,174,178,0.32)]"
+              className="absolute left-0 top-0 block w-full rounded-full bg-[#1E2125]/55 shadow-[0_0_10px_rgba(30,33,37,0.32)]"
               animate={{ height: scrollIndicator.thumbHeight, y: scrollIndicator.thumbTop }}
               transition={{ type: "spring", stiffness: 420, damping: 38, mass: 0.35 }}
             />

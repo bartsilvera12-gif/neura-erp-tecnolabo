@@ -179,11 +179,11 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
           {([1, 2, 3] as const).map((n) => (
             <div key={n} className="flex flex-1 items-center gap-2">
               <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                paso >= n ? "bg-[#4FAEB2] text-white" : "bg-slate-100 text-slate-400"}`}>{n}</span>
+                paso >= n ? "bg-[#1E2125] text-white" : "bg-slate-100 text-slate-400"}`}>{n}</span>
               <span className={`text-xs font-semibold ${paso >= n ? "text-slate-800" : "text-slate-400"}`}>
                 {n === 1 ? "Productos" : n === 2 ? "Resolución" : "Confirmación"}
               </span>
-              {n < 3 && <div className={`h-0.5 flex-1 ${paso > n ? "bg-[#4FAEB2]" : "bg-slate-100"}`} />}
+              {n < 3 && <div className={`h-0.5 flex-1 ${paso > n ? "bg-[#1E2125]" : "bg-slate-100"}`} />}
             </div>
           ))}
         </div>
@@ -206,7 +206,7 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-slate-600">Elegí qué productos vuelven y en qué condición.</p>
-                <button onClick={devolverTodo} className="rounded-lg border border-[#4FAEB2]/40 bg-[#4FAEB2]/[0.08] px-3 py-1.5 text-xs font-semibold text-[#3F8E91] hover:bg-[#4FAEB2]/[0.16]">
+                <button onClick={devolverTodo} className="rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.08] px-3 py-1.5 text-xs font-semibold text-[#17191C] hover:bg-[#1E2125]/[0.16]">
                   Devolver toda la venta
                 </button>
               </div>
@@ -230,7 +230,7 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
                         disabled={agotada}
                         onChange={(e) => setCantidad(l.venta_item_id, Number(e.target.value), l.cantidad_disponible)}
                         placeholder="0"
-                        className="w-24 rounded-lg border border-slate-200 px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30 disabled:bg-slate-100"
+                        className="w-24 rounded-lg border border-slate-200 px-3 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30 disabled:bg-slate-100"
                       />
                     </div>
                     {c > 0 && (
@@ -253,7 +253,7 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
               })}
               <div className="flex justify-between border-t border-slate-100 pt-3 text-sm">
                 <span className="text-slate-500">Total a devolver</span>
-                <span className="text-lg font-bold text-[#3F8E91]">{gs(totalDevuelto)}</span>
+                <span className="text-lg font-bold text-[#17191C]">{gs(totalDevuelto)}</span>
               </div>
             </div>
           ) : paso === 2 ? (
@@ -263,8 +263,8 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
                 {([["cambio", "Cambiar por otro producto"], ["reembolso", "Devolver el dinero"]] as const).map(([val, label]) => (
                   <button key={val} type="button" onClick={() => setResolucion(val)}
                     className={`rounded-xl border-2 p-4 text-left transition-colors ${
-                      resolucion === val ? "border-[#4FAEB2] bg-[#4FAEB2]/[0.08]" : "border-slate-200 hover:bg-slate-50"}`}>
-                    <span className={`text-sm font-bold ${resolucion === val ? "text-[#3F8E91]" : "text-slate-700"}`}>{label}</span>
+                      resolucion === val ? "border-[#1E2125] bg-[#1E2125]/[0.08]" : "border-slate-200 hover:bg-slate-50"}`}>
+                    <span className={`text-sm font-bold ${resolucion === val ? "text-[#17191C]" : "text-slate-700"}`}>{label}</span>
                   </button>
                 ))}
               </div>
@@ -273,9 +273,9 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-slate-600">Producto de reemplazo</label>
                   <div className="relative">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#4FAEB2]" />
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#1E2125]" />
                     <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar producto por nombre o SKU…"
-                      className="h-11 w-full rounded-lg border-2 border-[#4FAEB2]/30 bg-white pl-10 pr-3 text-sm outline-none focus:border-[#4FAEB2]" />
+                      className="h-11 w-full rounded-lg border-2 border-[#1E2125]/30 bg-white pl-10 pr-3 text-sm outline-none focus:border-[#1E2125]" />
                     {q.trim().length >= 2 && (
                       <div className="absolute left-0 right-0 top-full z-10 mt-1 max-h-56 overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-lg">
                         {buscando && hits.length === 0 ? (
@@ -290,7 +290,7 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
                               <p className="text-xs text-slate-400">{h.sku} · stock {h.controla_stock ? h.stock_actual : "s/c"}</p>
                             </div>
                             <span className="text-sm font-bold text-slate-700">{gs(h.precio_venta)}</span>
-                            <Plus className="h-4 w-4 text-[#3F8E91]" />
+                            <Plus className="h-4 w-4 text-[#17191C]" />
                           </button>
                         ))}
                       </div>
@@ -304,7 +304,7 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
                       </div>
                       <input type="number" min={1} step="any" value={c.cantidad}
                         onChange={(e) => setCambios((p) => p.map((x, k) => (k === i ? { ...x, cantidad: Math.max(1, Number(e.target.value) || 1) } : x)))}
-                        className="w-20 rounded-lg border border-slate-200 px-2 py-1 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30" />
+                        className="w-20 rounded-lg border border-slate-200 px-2 py-1 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30" />
                       <span className="w-28 text-right text-sm font-bold text-slate-800">{gs(c.precio * c.cantidad)}</span>
                       <button onClick={() => setCambios((p) => p.filter((_, k) => k !== i))} className="text-red-600 hover:text-red-700" aria-label="Quitar">
                         <Trash2 className="h-4 w-4" />
@@ -321,7 +321,7 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
                   <div className="flex justify-between"><span className="text-slate-500">Valor del nuevo producto</span><span className="tabular-nums font-medium">{gs(totalEntregado)}</span></div>
                 )}
                 <div className={`flex justify-between border-t border-slate-200 pt-1.5 font-bold ${
-                  diferencia > 0 ? "text-amber-700" : diferencia < 0 ? "text-[#3F8E91]" : "text-slate-600"}`}>
+                  diferencia > 0 ? "text-amber-700" : diferencia < 0 ? "text-[#17191C]" : "text-slate-600"}`}>
                   <span>{diferencia > 0 ? "Diferencia a cobrar al cliente" : diferencia < 0 ? "Diferencia a devolver al cliente" : "Sin diferencia"}</span>
                   <span className="tabular-nums">{gs(Math.abs(diferencia))}</span>
                 </div>
@@ -334,7 +334,7 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
                     {(["efectivo", "transferencia", "tarjeta"] as const).map((m) => (
                       <button key={m} type="button" onClick={() => setMetodo(m)}
                         className={`flex-1 rounded-lg border px-3 py-2 text-xs font-semibold capitalize transition-colors ${
-                          metodo === m ? "border-[#4FAEB2] bg-[#4FAEB2]/[0.10] text-[#3F8E91]" : "border-slate-200 text-slate-600 hover:bg-slate-50"}`}>
+                          metodo === m ? "border-[#1E2125] bg-[#1E2125]/[0.10] text-[#17191C]" : "border-slate-200 text-slate-600 hover:bg-slate-50"}`}>
                         {m}
                       </button>
                     ))}
@@ -349,7 +349,7 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
                 <label className="text-xs font-semibold text-slate-600">Motivo</label>
                 <textarea value={motivo} onChange={(e) => setMotivo(e.target.value)} rows={2}
                   placeholder="Ej: producto fallado, el cliente se arrepintió…"
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30" />
+                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30" />
               </div>
             </div>
           ) : (
@@ -402,12 +402,12 @@ export default function DevolucionWizard({ ventaId, onClose, onDone }: Props) {
           </button>
           {paso < 3 ? (
             <button onClick={() => setPaso((p) => (p === 1 ? 2 : 3))} disabled={paso === 1 ? !puedePaso2 : !puedeConfirmar}
-              className="rounded-lg bg-[#4FAEB2] px-5 py-2 text-sm font-bold text-white hover:bg-[#3F8E91] disabled:opacity-50">
+              className="rounded-lg bg-[#1E2125] px-5 py-2 text-sm font-bold text-white hover:bg-[#17191C] disabled:opacity-50">
               Continuar
             </button>
           ) : (
             <button onClick={() => void confirmar()} disabled={guardando || !puedeConfirmar}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#4FAEB2] px-5 py-2 text-sm font-bold text-white hover:bg-[#3F8E91] disabled:opacity-50">
+              className="inline-flex items-center gap-2 rounded-lg bg-[#1E2125] px-5 py-2 text-sm font-bold text-white hover:bg-[#17191C] disabled:opacity-50">
               {guardando ? <><Loader2 className="h-4 w-4 animate-spin" /> Confirmando…</> : <><Check className="h-4 w-4" /> Confirmar devolución</>}
             </button>
           )}

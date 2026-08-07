@@ -69,7 +69,7 @@ export default function DevolucionesPage() {
             <ArrowLeft className="h-4 w-4" /> Volver a ventas
           </Link>
           <h1 className="mt-1 flex items-center gap-2 text-2xl font-bold text-slate-900">
-            <RotateCcw className="h-6 w-6 text-[#4FAEB2]" /> Devoluciones
+            <RotateCcw className="h-6 w-6 text-[#1E2125]" /> Devoluciones
           </h1>
         </div>
       </div>

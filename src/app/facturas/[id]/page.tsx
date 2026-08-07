@@ -184,7 +184,7 @@ function FacturaDetalleInner() {
           {factura.presupuesto_id && (
             <p className="text-sm text-slate-500 mt-0.5">
               Origen:{" "}
-              <Link href={`/presupuestos/${factura.presupuesto_id}`} className="text-[#4FAEB2] font-medium hover:underline">
+              <Link href={`/presupuestos/${factura.presupuesto_id}`} className="text-[#1E2125] font-medium hover:underline">
                 Ver presupuesto de origen
               </Link>
             </p>
@@ -198,7 +198,7 @@ function FacturaDetalleInner() {
           )}
           <Link
             href={`/facturas/${factura.id}/remisiones`}
-            className="text-xs font-semibold px-3 py-2 rounded-lg bg-[#4FAEB2] text-white hover:bg-[#3F8E91]"
+            className="text-xs font-semibold px-3 py-2 rounded-lg bg-[#1E2125] text-white hover:bg-[#17191C]"
           >
             Remisiones / entregas
           </Link>

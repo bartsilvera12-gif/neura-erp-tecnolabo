@@ -203,7 +203,7 @@ export default function PresupuestoDetallePage() {
     return (
       <div className="p-6 space-y-3">
         <div className="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">{error ?? "Presupuesto no encontrado"}</div>
-        <Link href="/presupuestos" className="text-sm text-[#4FAEB2] hover:underline">Volver a presupuestos</Link>
+        <Link href="/presupuestos" className="text-sm text-[#1E2125] hover:underline">Volver a presupuestos</Link>
       </div>
     );
   }
@@ -216,7 +216,7 @@ export default function PresupuestoDetallePage() {
 
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <FileText className="h-7 w-7 text-[#4FAEB2]" />
+          <FileText className="h-7 w-7 text-[#1E2125]" />
           <div>
             <h1 className="text-2xl font-bold text-gray-800">{presu.numero_control}</h1>
             <span className={`inline-block mt-1 rounded-full px-2 py-0.5 text-xs font-semibold ${ESTADO_BADGE[presu.estado]}`}>
@@ -241,7 +241,7 @@ export default function PresupuestoDetallePage() {
             <button
               onClick={convertirFactura}
               disabled={busy}
-              className="inline-flex items-center gap-1.5 rounded-md bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 rounded-md bg-[#1E2125] px-4 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50"
               title="Genera una factura a partir de este presupuesto (idempotente)"
             >
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileCheck2 className="h-4 w-4" />} Convertir a factura
@@ -262,11 +262,11 @@ export default function PresupuestoDetallePage() {
       {ok && <div className="rounded-md bg-emerald-50 border border-emerald-200 p-3 text-sm text-emerald-700">✓ {ok}</div>}
 
       {presu.convertido_factura_id && (
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-[#4FAEB2]/10 border border-[#4FAEB2]/40 p-3 text-sm text-[#2b6d70]">
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-[#1E2125]/10 border border-[#1E2125]/40 p-3 text-sm text-[#2b6d70]">
           <span>Este presupuesto fue convertido en factura.</span>
           <Link
             href={`/facturas/${presu.convertido_factura_id}`}
-            className="inline-flex items-center gap-1.5 rounded-md bg-[#4FAEB2] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#3F8E91]"
+            className="inline-flex items-center gap-1.5 rounded-md bg-[#1E2125] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#17191C]"
           >
             <FileCheck2 className="h-3.5 w-3.5" /> Abrir factura
           </Link>
@@ -362,7 +362,7 @@ export default function PresupuestoDetallePage() {
             <div className="flex justify-between"><span className="text-gray-500">Subtotal (sin IVA)</span><span className="tabular-nums">{fmtGs(presu.subtotal, presu.moneda)}</span></div>
             <div className="flex justify-between"><span className="text-gray-500">IVA</span><span className="tabular-nums">{fmtGs(presu.monto_iva, presu.moneda)}</span></div>
             {Number(presu.descuento_total) > 0 && <div className="flex justify-between"><span className="text-gray-500">Descuentos</span><span className="tabular-nums">- {fmtGs(presu.descuento_total, presu.moneda)}</span></div>}
-            <div className="flex justify-between border-t border-slate-200 pt-1 font-semibold text-base"><span>Total</span><span className="tabular-nums text-[#4FAEB2]">{fmtGs(presu.total, presu.moneda)}</span></div>
+            <div className="flex justify-between border-t border-slate-200 pt-1 font-semibold text-base"><span>Total</span><span className="tabular-nums text-[#1E2125]">{fmtGs(presu.total, presu.moneda)}</span></div>
           </div>
         </div>
       </div>

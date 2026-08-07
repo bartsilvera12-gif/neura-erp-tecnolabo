@@ -153,7 +153,7 @@ export default function PresupuestosPage() {
 
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <FileText className="h-7 w-7 text-[#4FAEB2]" />
+          <FileText className="h-7 w-7 text-[#1E2125]" />
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Presupuestos</h1>
             <p className="text-gray-600">Cotizaciones comerciales. No afectan stock hasta convertirse en pedido.</p>
@@ -161,7 +161,7 @@ export default function PresupuestosPage() {
         </div>
         <Link
           href="/presupuestos/nuevo"
-          className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#3F8E91]"
+          className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#17191C]"
         >
           <Plus className="h-4 w-4" /> Nuevo presupuesto
         </Link>
@@ -173,7 +173,7 @@ export default function PresupuestosPage() {
             key={f.id}
             onClick={() => setFiltro(f.id)}
             className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-              filtro === f.id ? "bg-[#4FAEB2] text-white" : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
+              filtro === f.id ? "bg-[#1E2125] text-white" : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50"
             }`}
           >
             {f.label}
@@ -229,7 +229,7 @@ export default function PresupuestosPage() {
                             value={r.estado}
                             disabled={actualizando.has(r.id)}
                             onChange={(e) => cambiarEstado(r.id, r.estado, e.target.value as EstadoPresupuesto)}
-                            className={`h-8 w-36 cursor-pointer appearance-none rounded-lg pl-7 pr-7 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#4FAEB2]/40 disabled:opacity-60 ${ESTADO_BADGE[r.estado]}`}
+                            className={`h-8 w-36 cursor-pointer appearance-none rounded-lg pl-7 pr-7 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#1E2125]/40 disabled:opacity-60 ${ESTADO_BADGE[r.estado]}`}
                             aria-label={`Estado de ${r.numero_control}`}
                           >
                             {ESTADOS_EDITABLES.map((s) => (
@@ -246,7 +246,7 @@ export default function PresupuestosPage() {
                     </td>
                     <td className="py-3 px-4 text-right">
                       <div className="inline-flex items-center gap-3">
-                        <Link href={`/presupuestos/${r.id}`} className="text-sm font-medium text-[#4FAEB2] hover:underline">
+                        <Link href={`/presupuestos/${r.id}`} className="text-sm font-medium text-[#1E2125] hover:underline">
                           Ver
                         </Link>
                         {r.estado !== "convertido" && (

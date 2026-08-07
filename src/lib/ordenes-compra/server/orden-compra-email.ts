@@ -47,7 +47,7 @@ function buildHtml(rows: OrdenCompraRow[]): { subject: string; html: string } {
   const subject = `Orden de compra ${cab.numero_oc} — ${cab.proveedor_nombre || "Proveedor"}`;
   const html = `
   <div style="font-family:Arial,Helvetica,sans-serif;color:#0f172a;max-width:640px;margin:0 auto">
-    <h2 style="color:#3F8E91;margin:0 0 4px">Orden de compra ${esc(cab.numero_oc)}</h2>
+    <h2 style="color:#17191C;margin:0 0 4px">Orden de compra ${esc(cab.numero_oc)}</h2>
     <p style="margin:0 0 16px;color:#64748b;font-size:13px">${esc(CLIENTE_NOMBRE)} · generada desde el ERP</p>
     <table style="width:100%;font-size:14px;margin-bottom:16px">
       <tr><td style="padding:2px 0;color:#64748b">Proveedor</td><td style="padding:2px 0;text-align:right;font-weight:bold">${esc(cab.proveedor_nombre || "—")}</td></tr>
@@ -55,7 +55,7 @@ function buildHtml(rows: OrdenCompraRow[]): { subject: string; html: string } {
     </table>
     <table style="width:100%;border-collapse:collapse;font-size:13px">
       <thead>
-        <tr style="background:#E5F4F4;color:#3F8E91">
+        <tr style="background:#EEF0F2;color:#17191C">
           <th style="padding:8px 10px;text-align:left">Producto</th>
           <th style="padding:8px 10px;text-align:right">Cantidad</th>
           <th style="padding:8px 10px;text-align:right">Precio unit.</th>

@@ -114,7 +114,7 @@ export default function ProveedoresPage() {
                 </tr>
               ) : (
                 filtradas.map((p) => (
-                  <tr key={p.id} className="border-b border-slate-50 last:border-0 hover:bg-[#4FAEB2]/[0.04] transition-colors">
+                  <tr key={p.id} className="border-b border-slate-50 last:border-0 hover:bg-[#1E2125]/[0.04] transition-colors">
                     <td className="py-3 pr-4">
                       <div className="font-medium text-slate-800">{p.nombre}</div>
                       {p.nombre_comercial && (

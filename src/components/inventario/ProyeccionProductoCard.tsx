@@ -42,10 +42,10 @@ export default function ProyeccionProductoCard({ productoId }: { productoId: str
   }, [productoId, dias]);
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-[#4FAEB2]/10 sm:p-5">
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-[#1E2125]/10 sm:p-5">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h3 className="flex items-center gap-2 text-sm font-bold text-slate-800">
-          <CalendarClock className="h-4 w-4 text-[#4FAEB2]" />
+          <CalendarClock className="h-4 w-4 text-[#1E2125]" />
           Proyección de inventario
         </h3>
         <div className="flex items-center gap-1">
@@ -55,7 +55,7 @@ export default function ProyeccionProductoCard({ productoId }: { productoId: str
               type="button"
               onClick={() => setDias(d)}
               className={`rounded-md border px-2.5 py-1 text-[11px] font-semibold transition-colors ${
-                dias === d ? "border-[#4FAEB2] bg-[#4FAEB2] text-white" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                dias === d ? "border-[#1E2125] bg-[#1E2125] text-white" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
               }`}
             >
               {d}d
@@ -81,7 +81,7 @@ export default function ProyeccionProductoCard({ productoId }: { productoId: str
             </div>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Días de cobertura</p>
-              <p className="mt-0.5 text-lg font-bold tabular-nums text-[#3F8E91]">{data.dias_cobertura == null ? "—" : fmt(data.dias_cobertura, 1)}</p>
+              <p className="mt-0.5 text-lg font-bold tabular-nums text-[#17191C]">{data.dias_cobertura == null ? "—" : fmt(data.dias_cobertura, 1)}</p>
             </div>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Quiebre est.</p>

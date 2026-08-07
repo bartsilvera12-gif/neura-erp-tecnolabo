@@ -107,7 +107,7 @@ export default function UsuariosPage() {
           - Teléfono se oculta en pantallas chicas (ya esta en el bloque del usuario debajo del nombre).
           - Acciones con min-h-[40px] para tap target.
       */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm ring-1 ring-[#4FAEB2]/15 overflow-x-auto">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm ring-1 ring-[#1E2125]/15 overflow-x-auto">
         {filtrados.length === 0 ? (
           <div className="py-16 text-center text-sm text-gray-400">No hay usuarios.</div>
         ) : (
@@ -124,7 +124,7 @@ export default function UsuariosPage() {
             </thead>
             <tbody className="divide-y divide-slate-200">
               {filtrados.map((usr) => (
-                <tr key={usr.id} className={`hover:bg-[#4FAEB2]/[0.04] transition-colors ${usr.estado === "inactivo" ? "opacity-60" : ""}`}>
+                <tr key={usr.id} className={`hover:bg-[#1E2125]/[0.04] transition-colors ${usr.estado === "inactivo" ? "opacity-60" : ""}`}>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <div

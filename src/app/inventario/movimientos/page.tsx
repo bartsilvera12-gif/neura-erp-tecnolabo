@@ -104,7 +104,7 @@ function formatFecha(iso: string) {
 }
 
 // Paleta turquesa
-const TURQ = "#4FAEB2";
+const TURQ = "#1E2125";
 
 const PAGE_SIZE = 25;
 
@@ -236,15 +236,15 @@ export default function MovimientosPage() {
 
   // Estilo unico para los inputs/selects de filtro
   const inputClass =
-    "h-10 rounded-lg border-2 border-slate-200 bg-white px-3 text-sm outline-none transition-all hover:border-slate-300 focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20";
+    "h-10 rounded-lg border-2 border-slate-200 bg-white px-3 text-sm outline-none transition-all hover:border-slate-300 focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20";
 
   return (
     <div className="w-full py-8 px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#4FAEB2]/8 border border-[#4FAEB2]/30 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#3F8E91] mb-3">
-            <Package className="h-3 w-3 text-[#4FAEB2]" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#1E2125]/8 border border-[#1E2125]/30 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#17191C] mb-3">
+            <Package className="h-3 w-3 text-[#1E2125]" />
             Inventario · Historial
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 tracking-tight leading-tight">
@@ -264,20 +264,20 @@ export default function MovimientosPage() {
           <button
             type="button"
             onClick={() => setExportOpen((o) => !o)}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:border-[#4FAEB2] hover:bg-[#4FAEB2]/5"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:border-[#1E2125] hover:bg-[#1E2125]/5"
           >
             <Download className="h-4 w-4" /> Exportar
           </button>
           <Link
             href="/inventario/movimientos/nuevo"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] text-white text-sm font-bold px-3.5 py-2.5 transition-colors shadow-sm shadow-[#4FAEB2]/30"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-bold px-3.5 py-2.5 transition-colors shadow-sm shadow-[#1E2125]/30"
           >
             <Plus className="h-4 w-4" strokeWidth={2.5} />
             Nuevo movimiento
           </Link>
           <Link
             href="/inventario"
-            className="group inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:border-[#4FAEB2] hover:bg-[#4FAEB2]/5 hover:text-[#3F8E91]"
+            className="group inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:border-[#1E2125] hover:bg-[#1E2125]/5 hover:text-[#17191C]"
           >
             <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
             <span>Inventario</span>
@@ -287,7 +287,7 @@ export default function MovimientosPage() {
 
       {/* Panel de exportación con columnas + vistas personales */}
       {exportOpen && (
-        <div className="mb-6 rounded-2xl border-2 border-[#4FAEB2]/25 bg-white p-5 shadow-sm">
+        <div className="mb-6 rounded-2xl border-2 border-[#1E2125]/25 bg-white p-5 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
             <h2 className="text-sm font-bold text-slate-700">Exportar movimientos (PDF)</h2>
             <div className="flex items-center gap-2">
@@ -304,14 +304,14 @@ export default function MovimientosPage() {
                 </select>
               )}
               <button type="button" onClick={() => setExportCols(DEFAULT_EXPORT_COLS)} className="text-xs font-semibold text-slate-500 hover:underline">Restaurar</button>
-              <button type="button" onClick={guardarVista} className="text-xs font-semibold text-[#3F8E91] hover:underline">Guardar vista</button>
+              <button type="button" onClick={guardarVista} className="text-xs font-semibold text-[#17191C] hover:underline">Guardar vista</button>
             </div>
           </div>
           <p className="text-xs text-slate-500 mb-2">Elegí las columnas. Se respetan los filtros activos.</p>
           <div className="flex flex-wrap gap-2 mb-3">
             {EXPORT_COLS.map((c) => (
-              <label key={c.key} className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium cursor-pointer ${exportCols.includes(c.key) ? "border-[#4FAEB2] bg-[#4FAEB2]/8 text-[#3F8E91]" : "border-slate-200 text-slate-600"}`}>
-                <input type="checkbox" checked={exportCols.includes(c.key)} onChange={() => toggleExportCol(c.key)} className="accent-[#4FAEB2]" />
+              <label key={c.key} className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium cursor-pointer ${exportCols.includes(c.key) ? "border-[#1E2125] bg-[#1E2125]/8 text-[#17191C]" : "border-slate-200 text-slate-600"}`}>
+                <input type="checkbox" checked={exportCols.includes(c.key)} onChange={() => toggleExportCol(c.key)} className="accent-[#1E2125]" />
                 {c.label}
               </label>
             ))}
@@ -327,7 +327,7 @@ export default function MovimientosPage() {
             </div>
           )}
           <div className="flex justify-end">
-            <button type="button" onClick={exportarPDF} disabled={exportCols.length === 0} className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] px-4 py-2 text-sm font-bold text-white hover:bg-[#3F8E91] disabled:opacity-50">
+            <button type="button" onClick={exportarPDF} disabled={exportCols.length === 0} className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-bold text-white hover:bg-[#17191C] disabled:opacity-50">
               <Download className="h-4 w-4" /> Exportar PDF
             </button>
           </div>
@@ -335,21 +335,21 @@ export default function MovimientosPage() {
       )}
 
       {/* Card principal */}
-      <section className="bg-white rounded-2xl border-2 border-[#4FAEB2]/20 shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)] overflow-hidden">
+      <section className="bg-white rounded-2xl border-2 border-[#1E2125]/20 shadow-[0_2px_10px_-2px_rgba(30,33,37,0.12)] overflow-hidden">
         {/* Toolbar superior */}
-        <div className="px-5 py-4 border-b border-[#4FAEB2]/15 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent flex items-center justify-between gap-3 flex-wrap">
+        <div className="px-5 py-4 border-b border-[#1E2125]/15 bg-gradient-to-r from-[#1E2125]/5 to-transparent flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-2">
             <h2 className="text-[15px] font-bold text-slate-800 leading-none">
               Historial
             </h2>
-            <span className="inline-flex items-center justify-center px-2 h-[22px] rounded-full bg-[#4FAEB2] text-white text-[11px] font-bold tabular-nums">
+            <span className="inline-flex items-center justify-center px-2 h-[22px] rounded-full bg-[#1E2125] text-white text-[11px] font-bold tabular-nums">
               {total} {total === 1 ? "registro" : "registros"}
             </span>
           </div>
           <p className="text-[11.5px] text-slate-500">
             Los movimientos se generan automáticamente desde{" "}
-            <span className="font-semibold text-[#3F8E91]">Compras</span> y{" "}
-            <span className="font-semibold text-[#3F8E91]">Caja</span>.
+            <span className="font-semibold text-[#17191C]">Compras</span> y{" "}
+            <span className="font-semibold text-[#17191C]">Caja</span>.
           </p>
         </div>
 
@@ -427,7 +427,7 @@ export default function MovimientosPage() {
               {hayFiltros && (
                 <button
                   onClick={clearFiltros}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-[#3F8E91] hover:bg-[#4FAEB2]/8 rounded-lg px-3 py-2 transition-colors"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-[#17191C] hover:bg-[#1E2125]/8 rounded-lg px-3 py-2 transition-colors"
                 >
                   <X className="h-3.5 w-3.5" />
                   Limpiar filtros
@@ -464,8 +464,8 @@ export default function MovimientosPage() {
               ) : items.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-16 text-center">
-                    <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-[#4FAEB2]/8 border border-[#4FAEB2]/20 mb-3">
-                      <Package className="h-6 w-6 text-[#4FAEB2]" />
+                    <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-[#1E2125]/8 border border-[#1E2125]/20 mb-3">
+                      <Package className="h-6 w-6 text-[#1E2125]" />
                     </div>
                     <p className="text-sm font-semibold text-slate-700">
                       {hayFiltros
@@ -475,7 +475,7 @@ export default function MovimientosPage() {
                     {hayFiltros && (
                       <button
                         onClick={clearFiltros}
-                        className="mt-2 text-xs font-semibold text-[#3F8E91] hover:underline"
+                        className="mt-2 text-xs font-semibold text-[#17191C] hover:underline"
                       >
                         Limpiar filtros
                       </button>
@@ -501,7 +501,7 @@ export default function MovimientosPage() {
                       : "text-amber-700";
 
                   return (
-                    <tr key={m.id} className="hover:bg-[#4FAEB2]/3 transition-colors">
+                    <tr key={m.id} className="hover:bg-[#1E2125]/3 transition-colors">
                       <td className="px-5 py-3.5 font-semibold text-slate-800">
                         {m.producto_nombre}
                       </td>
@@ -561,7 +561,7 @@ export default function MovimientosPage() {
               <button
                 disabled={page <= 1 || loading}
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
-                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-[#4FAEB2] hover:text-[#3F8E91] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-slate-200 disabled:hover:text-slate-700"
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-[#1E2125] hover:text-[#17191C] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-slate-200 disabled:hover:text-slate-700"
                 style={{ borderColor: page > 1 && !loading ? undefined : undefined }}
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
@@ -573,7 +573,7 @@ export default function MovimientosPage() {
               <button
                 disabled={page >= totalPages || loading}
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-[#4FAEB2] hover:text-[#3F8E91] disabled:opacity-40 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-[#1E2125] hover:text-[#17191C] disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Siguiente
                 <ChevronRight className="h-3.5 w-3.5" />

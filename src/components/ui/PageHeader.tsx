@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
  *
  * Unifica el patrón repetido en cada módulo (eyebrow turquesa + título +
  * descripción + acción principal a la derecha). Base blanca, acento turquesa
- * (#4FAEB2 / var(--primary)).
+ * (#1E2125 / var(--primary)).
  */
 export default function PageHeader({
   eyebrow,
@@ -31,7 +31,7 @@ export default function PageHeader({
       {backHref ? (
         <Link
           href={backHref}
-          className="mb-2 inline-flex items-center gap-1 text-xs font-medium text-slate-500 transition-colors hover:text-[#3F8E91]"
+          className="mb-2 inline-flex items-center gap-1 text-xs font-medium text-slate-500 transition-colors hover:text-[#17191C]"
         >
           <span aria-hidden>←</span> {backLabel}
         </Link>
@@ -42,10 +42,10 @@ export default function PageHeader({
             <div className="flex items-center gap-2">
               <span
                 aria-hidden
-                className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#4FAEB2]"
-                style={{ boxShadow: "0 0 0 3px rgba(79, 174, 178, 0.18)" }}
+                className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#1E2125]"
+                style={{ boxShadow: "0 0 0 3px rgba(30, 33, 37, 0.18)" }}
               />
-              <p className="truncate text-[11px] font-semibold uppercase tracking-[0.18em] text-[#3F8E91]">
+              <p className="truncate text-[11px] font-semibold uppercase tracking-[0.18em] text-[#17191C]">
                 {eyebrow}
               </p>
             </div>

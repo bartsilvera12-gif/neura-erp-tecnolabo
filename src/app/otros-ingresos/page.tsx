@@ -162,15 +162,15 @@ export default function OtrosIngresosPage() {
   }
 
   const inputClass =
-    "h-10 rounded-lg border-2 border-slate-200 bg-white px-3 text-sm outline-none transition-all hover:border-slate-300 focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20";
+    "h-10 rounded-lg border-2 border-slate-200 bg-white px-3 text-sm outline-none transition-all hover:border-slate-300 focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20";
 
   return (
     <div className="w-full py-8 px-4 sm:px-6 lg:px-8 space-y-6">
       {/* Header */}
       <header className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#4FAEB2]/8 border border-[#4FAEB2]/30 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#3F8E91] mb-3">
-            <Wallet className="h-3 w-3 text-[#4FAEB2]" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#1E2125]/8 border border-[#1E2125]/30 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#17191C] mb-3">
+            <Wallet className="h-3 w-3 text-[#1E2125]" />
             Finanzas · Caja
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 tracking-tight leading-tight">
@@ -184,7 +184,7 @@ export default function OtrosIngresosPage() {
         <button
           type="button"
           onClick={() => setCreando(true)}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] text-white text-sm font-bold px-4 py-2.5 transition-colors shadow-sm shadow-[#4FAEB2]/30"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-bold px-4 py-2.5 transition-colors shadow-sm shadow-[#1E2125]/30"
         >
           <Plus className="h-4 w-4" strokeWidth={2.5} />
           Registrar ingreso
@@ -209,9 +209,9 @@ export default function OtrosIngresosPage() {
       )}
 
       {/* Card principal */}
-      <section className="bg-white rounded-2xl border-2 border-[#4FAEB2]/20 shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)] overflow-hidden">
+      <section className="bg-white rounded-2xl border-2 border-[#1E2125]/20 shadow-[0_2px_10px_-2px_rgba(30,33,37,0.12)] overflow-hidden">
         {/* Filtros */}
-        <div className="px-5 py-4 border-b border-[#4FAEB2]/15 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent">
+        <div className="px-5 py-4 border-b border-[#1E2125]/15 bg-gradient-to-r from-[#1E2125]/5 to-transparent">
           {/* Tabs estado */}
           <div className="flex flex-wrap gap-1.5 mb-4">
             {[
@@ -227,7 +227,7 @@ export default function OtrosIngresosPage() {
                   onClick={() => setEstado(e.v as typeof estado)}
                   className={`inline-flex items-center rounded-lg border-2 px-3 py-1.5 text-xs font-bold transition-all ${
                     sel
-                      ? "border-[#4FAEB2] bg-[#4FAEB2] text-white shadow-sm shadow-[#4FAEB2]/30"
+                      ? "border-[#1E2125] bg-[#1E2125] text-white shadow-sm shadow-[#1E2125]/30"
                       : `${e.cls} hover:border-slate-300`
                   }`}
                 >
@@ -291,7 +291,7 @@ export default function OtrosIngresosPage() {
           {hayFiltros && (
             <button
               onClick={clearFiltros}
-              className="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-slate-500 hover:text-[#3F8E91] hover:bg-[#4FAEB2]/8 rounded-lg px-2.5 py-1.5 transition-colors"
+              className="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-slate-500 hover:text-[#17191C] hover:bg-[#1E2125]/8 rounded-lg px-2.5 py-1.5 transition-colors"
             >
               <X className="h-3.5 w-3.5" />
               Limpiar filtros
@@ -323,15 +323,15 @@ export default function OtrosIngresosPage() {
               ) : items.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-16 text-center">
-                    <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-[#4FAEB2]/8 border border-[#4FAEB2]/20 mb-3">
-                      <Wallet className="h-6 w-6 text-[#4FAEB2]" />
+                    <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-[#1E2125]/8 border border-[#1E2125]/20 mb-3">
+                      <Wallet className="h-6 w-6 text-[#1E2125]" />
                     </div>
                     <p className="text-sm font-semibold text-slate-700">
                       No hay ingresos para mostrar
                     </p>
                     <button
                       onClick={() => setCreando(true)}
-                      className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] text-white text-xs font-bold px-3 py-1.5"
+                      className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white text-xs font-bold px-3 py-1.5"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       Registrar el primero
@@ -344,7 +344,7 @@ export default function OtrosIngresosPage() {
                   return (
                     <tr
                       key={i.id}
-                      className={`hover:bg-[#4FAEB2]/3 transition-colors ${
+                      className={`hover:bg-[#1E2125]/3 transition-colors ${
                         isAnulado ? "opacity-60" : ""
                       }`}
                     >
@@ -371,7 +371,7 @@ export default function OtrosIngresosPage() {
                       <td className="px-3 py-3 text-xs text-slate-500">
                         {i.usuario_email ?? <span className="text-slate-300">—</span>}
                       </td>
-                      <td className="px-3 py-3 text-right tabular-nums font-bold text-[#3F8E91]">
+                      <td className="px-3 py-3 text-right tabular-nums font-bold text-[#17191C]">
                         {fmtGs(i.monto)}
                       </td>
                       <td className="px-3 py-3">
@@ -394,7 +394,7 @@ export default function OtrosIngresosPage() {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => setVerDetalle(i)}
-                            className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 hover:border-[#4FAEB2] hover:text-[#3F8E91]"
+                            className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700 hover:border-[#1E2125] hover:text-[#17191C]"
                             title="Ver detalle"
                           >
                             <Eye className="h-3 w-3" />
@@ -422,7 +422,7 @@ export default function OtrosIngresosPage() {
                   <td colSpan={4} className="px-5 py-3 text-right font-bold text-slate-700">
                     Total activos del filtro
                   </td>
-                  <td className="px-3 py-3 text-right font-bold tabular-nums text-lg text-[#3F8E91]">
+                  <td className="px-3 py-3 text-right font-bold tabular-nums text-lg text-[#17191C]">
                     {fmtGs(totalActivos)}
                   </td>
                   <td colSpan={2}></td>
@@ -523,10 +523,10 @@ function CrearIngresoModal({
       onClick={busy ? undefined : onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-md border-2 border-[#4FAEB2]/20 overflow-hidden"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md border-2 border-[#1E2125]/20 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent flex items-start justify-between">
+        <div className="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-[#1E2125]/5 to-transparent flex items-start justify-between">
           <div>
             <h3 className="text-base font-bold text-slate-800">Registrar otro ingreso</h3>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -554,7 +554,7 @@ function CrearIngresoModal({
               placeholder="Ej: Venta de cartones, Alquiler, Servicios"
               maxLength={200}
               autoFocus
-              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none"
+              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none"
             />
           </div>
 
@@ -567,7 +567,7 @@ function CrearIngresoModal({
                 value={monto}
                 onChange={(n) => setMonto(String(n))}
                 decimals={false}
-                className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm font-semibold tabular-nums focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none"
+                className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm font-semibold tabular-nums focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none"
               />
             </div>
             <div>
@@ -577,7 +577,7 @@ function CrearIngresoModal({
               <select
                 value={medio}
                 onChange={(e) => setMedio(e.target.value as typeof medio)}
-                className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm bg-white focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none"
+                className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm bg-white focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none"
               >
                 <option value="efectivo">Efectivo</option>
                 <option value="tarjeta">Tarjeta</option>
@@ -597,7 +597,7 @@ function CrearIngresoModal({
               rows={3}
               maxLength={1000}
               placeholder="Detalle adicional..."
-              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 outline-none resize-none"
+              className="w-full rounded-lg border-2 border-slate-200 px-3 py-2 text-sm focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 outline-none resize-none"
             />
           </div>
 
@@ -624,7 +624,7 @@ function CrearIngresoModal({
           <button
             onClick={submit}
             disabled={busy}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] disabled:opacity-50 text-white text-sm font-bold px-5 py-2 transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white text-sm font-bold px-5 py-2 transition-colors"
           >
             {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             Registrar
@@ -642,10 +642,10 @@ function DetalleModal({ ing, onClose }: { ing: Ingreso; onClose: () => void }) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-md border-2 border-[#4FAEB2]/20"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md border-2 border-[#1E2125]/20"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent flex items-start justify-between">
+        <div className="px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-[#1E2125]/5 to-transparent flex items-start justify-between">
           <div>
             <h3 className="text-base font-bold text-slate-800">Detalle del ingreso</h3>
             <p className="text-xs text-slate-500 mt-0.5 tabular-nums">{fmtFecha(ing.created_at)}</p>
@@ -694,7 +694,7 @@ function Field({
       </span>
       <span
         className={`text-right ${bold ? "font-bold" : ""} ${capitalize ? "capitalize" : ""} ${
-          highlight ? "text-[#3F8E91] text-base" : highlightRed ? "text-red-600" : "text-slate-700"
+          highlight ? "text-[#17191C] text-base" : highlightRed ? "text-red-600" : "text-slate-700"
         }`}
       >
         {value}

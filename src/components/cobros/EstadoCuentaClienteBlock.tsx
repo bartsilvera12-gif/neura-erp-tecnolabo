@@ -144,7 +144,7 @@ export function EstadoCuentaClienteBlock({
           <div className="grid grid-cols-2 gap-2 p-3 sm:grid-cols-3 sm:p-4 lg:grid-cols-6">
             <Card label="Cuentas" value={String(m.cuentas)} />
             <Card label="Monto total" value={fmtGs(m.montoTotal)} />
-            <Card label="Saldo pend." value={fmtGs(m.saldoPend)} valueClass={m.saldoPend > 0 ? "text-amber-600" : "text-emerald-600"} ring="ring-[#4FAEB2]/20" />
+            <Card label="Saldo pend." value={fmtGs(m.saldoPend)} valueClass={m.saldoPend > 0 ? "text-amber-600" : "text-emerald-600"} ring="ring-[#1E2125]/20" />
             <Card label="Vencidas" value={String(m.vencidas)} valueClass={m.vencidas > 0 ? "text-red-600" : "text-slate-800"} ring="ring-red-200/70" />
             <Card label="Pendientes" value={String(m.pendientes)} valueClass="text-amber-600" ring="ring-amber-200/70" />
             <Card label="Pagadas" value={String(m.pagadas)} valueClass="text-emerald-700" ring="ring-emerald-200/70" />
@@ -180,7 +180,7 @@ export function EstadoCuentaClienteBlock({
                     return (
                       <tr key={x.id} className="hover:bg-slate-50">
                         <td className="py-2.5 px-3 sm:px-4">
-                          <span className="inline-flex items-center gap-1.5 text-xs text-slate-600"><span className="h-1.5 w-1.5 rounded-full bg-[#4FAEB2]" /> Crédito</span>
+                          <span className="inline-flex items-center gap-1.5 text-xs text-slate-600"><span className="h-1.5 w-1.5 rounded-full bg-[#1E2125]" /> Crédito</span>
                         </td>
                         <td className="py-2.5 px-3 font-mono font-medium text-gray-800">{x.numero_venta ?? "—"}</td>
                         <td className="py-2.5 px-3 text-gray-600">{fmtFecha(x.fecha_emision)}</td>
@@ -200,7 +200,7 @@ export function EstadoCuentaClienteBlock({
                           ) : (
                             <button
                               onClick={() => setCobrando({ id: x.id, numero_venta: x.numero_venta, saldo: x.saldo })}
-                              className="rounded-lg bg-[#4FAEB2] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#3F8E91]"
+                              className="rounded-lg bg-[#1E2125] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#17191C]"
                             >
                               Cobrar
                             </button>

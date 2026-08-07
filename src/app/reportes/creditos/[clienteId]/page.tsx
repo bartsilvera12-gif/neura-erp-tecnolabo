@@ -54,7 +54,7 @@ export default function ExtractoClientePage() {
   if (error || !data) {
     return (
       <div className="space-y-4">
-        <Link href="/reportes/creditos" className="text-sm text-slate-500 hover:text-[#3F8E91]">← Créditos por cliente</Link>
+        <Link href="/reportes/creditos" className="text-sm text-slate-500 hover:text-[#17191C]">← Créditos por cliente</Link>
         <p className="text-slate-500">{error ?? "Sin datos."}</p>
       </div>
     );
@@ -66,10 +66,10 @@ export default function ExtractoClientePage() {
     <div className="space-y-6">
       {/* Barra de acciones (no se imprime) */}
       <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
-        <Link href="/reportes/creditos" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#3F8E91]">
+        <Link href="/reportes/creditos" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#17191C]">
           <ArrowLeft className="h-4 w-4" /> Créditos por cliente
         </Link>
-        <button onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-lg bg-[#4FAEB2] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-[#3F8E91]">
+        <button onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-[#17191C]">
           <Printer className="h-4 w-4" /> Imprimir / Guardar PDF
         </button>
       </div>
@@ -77,14 +77,14 @@ export default function ExtractoClientePage() {
       {/* Documento */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm print:border-0 print:shadow-none">
         {/* Membrete */}
-        <div className="mb-5 flex items-start justify-between gap-4 border-b-2 border-[#4FAEB2] pb-4">
+        <div className="mb-5 flex items-start justify-between gap-4 border-b-2 border-[#1E2125] pb-4">
           <div>
             <div className="text-lg font-bold text-slate-900">{EMPRESA_DOC.nombre}</div>
             {EMPRESA_DOC.telefono && <div className="text-xs text-slate-500">Tel: {EMPRESA_DOC.telefono}</div>}
             <div className="text-xs text-slate-500">{EMPRESA_DOC.direccion.join(" · ")}</div>
           </div>
           <div className="text-right">
-            <div className="text-sm font-bold uppercase tracking-wide text-[#3F8E91]">Extracto de crédito</div>
+            <div className="text-sm font-bold uppercase tracking-wide text-[#17191C]">Extracto de crédito</div>
             <div className="text-xs text-slate-500">Emitido: {formatFecha(new Date().toISOString())}</div>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function ExtractoClientePage() {
               ))}
             </tbody>
             <tfoot>
-              <tr className="border-t-2 border-[#4FAEB2]/40 bg-[#E5F4F4] font-bold text-[#3F8E91]">
+              <tr className="border-t-2 border-[#1E2125]/40 bg-[#EEF0F2] font-bold text-[#17191C]">
                 <td className="px-3 py-2 text-xs" colSpan={3}>Totales</td>
                 <td className="px-3 py-2 text-right tabular-nums">{formatGs(totales.total)}</td>
                 <td className="px-3 py-2 text-right tabular-nums">{formatGs(totales.cobrado)}</td>
@@ -189,7 +189,7 @@ export default function ExtractoClientePage() {
 }
 
 function Mini({ label, value, tone }: { label: string; value: string; tone?: "emerald" | "turquesa" | "red" }) {
-  const cls = tone === "emerald" ? "text-emerald-700" : tone === "turquesa" ? "text-[#3F8E91]" : tone === "red" ? "text-red-600" : "text-slate-800";
+  const cls = tone === "emerald" ? "text-emerald-700" : tone === "turquesa" ? "text-[#17191C]" : tone === "red" ? "text-red-600" : "text-slate-800";
   return (
     <div className="rounded-xl border border-slate-200 p-2.5">
       <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>

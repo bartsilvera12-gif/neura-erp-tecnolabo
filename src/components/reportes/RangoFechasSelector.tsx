@@ -21,7 +21,7 @@ export default function RangoFechasSelector({
         value={desde}
         max={hasta || undefined}
         onChange={(e) => onChange({ desde: e.target.value, hasta })}
-        className="rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white outline-none focus:ring-2 focus:ring-[#4FAEB2]"
+        className="rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white outline-none focus:ring-2 focus:ring-[#1E2125]"
       />
       <label className="text-xs text-slate-400 whitespace-nowrap">Hasta</label>
       <input
@@ -29,7 +29,7 @@ export default function RangoFechasSelector({
         value={hasta}
         min={desde || undefined}
         onChange={(e) => onChange({ desde, hasta: e.target.value })}
-        className="rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white outline-none focus:ring-2 focus:ring-[#4FAEB2]"
+        className="rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white outline-none focus:ring-2 focus:ring-[#1E2125]"
       />
     </div>
   );

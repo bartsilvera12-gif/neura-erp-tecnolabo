@@ -129,8 +129,8 @@ export default function ProveedoresCostos({ productoId }: { productoId: string }
   return (
     <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="mb-1 flex items-center gap-2">
-        <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#4FAEB2]" style={{ boxShadow: "0 0 0 3px rgba(79,174,178,0.18)" }} />
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4FAEB2]">Zentra · Abastecimiento</p>
+        <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-[#1E2125]" style={{ boxShadow: "0 0 0 3px rgba(30,33,37,0.18)" }} />
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1E2125]">Zentra · Abastecimiento</p>
       </div>
       <h2 className="text-lg font-semibold tracking-tight text-slate-900">Proveedores y costos</h2>
       <p className="mt-0.5 text-xs text-slate-500">Costos históricos derivados de compras reales registradas.</p>
@@ -177,13 +177,13 @@ export default function ProveedoresCostos({ productoId }: { productoId: string }
                                 if (e.key === "Enter") { e.preventDefault(); guardarMarca(p.proveedor_id); }
                                 if (e.key === "Escape") { e.preventDefault(); cancelarEdicion(); }
                               }}
-                              className="rounded-md border border-slate-300 px-2 py-1 text-xs text-slate-800 focus:border-[#4FAEB2] focus:outline-none focus:ring-1 focus:ring-[#4FAEB2]/40"
+                              className="rounded-md border border-slate-300 px-2 py-1 text-xs text-slate-800 focus:border-[#1E2125] focus:outline-none focus:ring-1 focus:ring-[#1E2125]/40"
                             />
                             <button
                               type="button"
                               onClick={() => guardarMarca(p.proveedor_id)}
                               disabled={guardando}
-                              className="rounded-md bg-[#4FAEB2] px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-[#3F8E91] disabled:opacity-60"
+                              className="rounded-md bg-[#1E2125] px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-[#17191C] disabled:opacity-60"
                             >
                               {guardando ? "Guardando…" : "Guardar"}
                             </button>
@@ -201,14 +201,14 @@ export default function ProveedoresCostos({ productoId }: { productoId: string }
                           <div className="mt-1.5 flex items-center gap-2">
                             <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Marca</span>
                             {p.marca ? (
-                              <span className="rounded-full bg-[#4FAEB2]/10 px-2 py-0.5 text-xs font-medium text-[#3F8E91]">{p.marca}</span>
+                              <span className="rounded-full bg-[#1E2125]/10 px-2 py-0.5 text-xs font-medium text-[#17191C]">{p.marca}</span>
                             ) : (
                               <span className="text-xs text-slate-400">Sin marca</span>
                             )}
                             <button
                               type="button"
                               onClick={() => abrirEdicion(p.proveedor_id, p.marca)}
-                              className="text-xs font-medium text-[#4FAEB2] hover:text-[#3F8E91] hover:underline"
+                              className="text-xs font-medium text-[#1E2125] hover:text-[#17191C] hover:underline"
                             >
                               {p.marca ? "Editar" : "Agregar marca"}
                             </button>
@@ -219,7 +219,7 @@ export default function ProveedoresCostos({ productoId }: { productoId: string }
                     <button
                       type="button"
                       onClick={() => toggle(key)}
-                      className="shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-[#3F8E91] transition-colors hover:border-[#4FAEB2]/60 hover:bg-[#4FAEB2]/5"
+                      className="shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-[#17191C] transition-colors hover:border-[#1E2125]/60 hover:bg-[#1E2125]/5"
                     >
                       {abierto ? "Ocultar historial" : "Ver historial"}
                     </button>
@@ -271,7 +271,7 @@ export default function ProveedoresCostos({ productoId }: { productoId: string }
                                     href={`/api/compras/comprobante?numero_control=${encodeURIComponent(h.numero_control)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1 text-xs font-medium text-[#4FAEB2] hover:text-[#3F8E91] hover:underline"
+                                    className="inline-flex items-center gap-1 text-xs font-medium text-[#1E2125] hover:text-[#17191C] hover:underline"
                                   >
                                     📎 Ver comprobante
                                   </a>
@@ -299,7 +299,7 @@ function Metric({ label, value, sub, accent }: { label: string; value: string; s
   return (
     <div className="bg-white px-4 py-3">
       <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">{label}</p>
-      <p className={`mt-0.5 text-sm font-bold tabular-nums ${accent ? "text-[#3F8E91]" : "text-slate-700"}`}>{value}</p>
+      <p className={`mt-0.5 text-sm font-bold tabular-nums ${accent ? "text-[#17191C]" : "text-slate-700"}`}>{value}</p>
       {sub && <p className="text-[11px] text-slate-400">{sub}</p>}
     </div>
   );

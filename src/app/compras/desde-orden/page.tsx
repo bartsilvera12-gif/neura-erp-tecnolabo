@@ -68,9 +68,9 @@ export default function DesdeOrdenListaPage() {
     <div className="space-y-8">
       <div>
         <div className="flex items-center gap-2">
-          <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-[#4FAEB2]"
-            style={{ boxShadow: "0 0 0 3px rgba(79, 174, 178, 0.18)" }} />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4FAEB2]">Zentra · Adquisiciones</p>
+          <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-[#1E2125]"
+            style={{ boxShadow: "0 0 0 3px rgba(30, 33, 37, 0.18)" }} />
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1E2125]">Zentra · Adquisiciones</p>
         </div>
         <h1 className="mt-1 text-lg font-semibold tracking-tight text-slate-900">Compra desde Orden de Compra</h1>
         <p className="mt-0.5 text-xs text-slate-500">
@@ -78,18 +78,18 @@ export default function DesdeOrdenListaPage() {
         </p>
       </div>
 
-      <Link href="/compras" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#3F8E91]">
+      <Link href="/compras" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#17191C]">
         ← Compras
       </Link>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-[#4FAEB2]/15 sm:p-5 lg:p-6">
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-[#1E2125]/15 sm:p-5 lg:p-6">
         <div className="mb-5 flex flex-wrap items-center gap-3 border-b border-slate-100 pb-5">
           <input
             type="text"
             placeholder="Buscar por N° OC o proveedor…"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30 sm:min-w-72"
+            className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30 sm:min-w-72"
           />
           <span className="ml-auto text-sm text-slate-400">{filtrados.length} orden(es) con pendiente</span>
         </div>
@@ -103,17 +103,17 @@ export default function DesdeOrdenListaPage() {
         ) : (
           <div className="overflow-x-auto rounded-xl border border-slate-200">
             <table className="w-full min-w-[680px] text-sm">
-              <thead className="border-b-2 border-[#4FAEB2]/40 bg-[#E5F4F4]">
+              <thead className="border-b-2 border-[#1E2125]/40 bg-[#EEF0F2]">
                 <tr>
                   {["N° OC", "Fecha", "Proveedor", "Ítems", "Estado", "Pendiente (Gs.)", ""].map((h, i) => (
-                    <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#3F8E91] ${i === 3 || i === 5 ? "text-right" : i === 4 || i === 6 ? "text-center" : "text-left"}`}>{h}</th>
+                    <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#17191C] ${i === 3 || i === 5 ? "text-right" : i === 4 || i === 6 ? "text-center" : "text-left"}`}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filtrados.map((g) => (
-                  <tr key={g.numero_oc} className="transition-colors hover:bg-[#4FAEB2]/5">
-                    <td className="px-3 py-2.5 font-mono text-xs font-semibold text-[#3F8E91]">{g.numero_oc}</td>
+                  <tr key={g.numero_oc} className="transition-colors hover:bg-[#1E2125]/5">
+                    <td className="px-3 py-2.5 font-mono text-xs font-semibold text-[#17191C]">{g.numero_oc}</td>
                     <td className="px-3 py-2.5 text-xs tabular-nums text-slate-600">{fmtFecha(g.fecha)}</td>
                     <td className="px-3 py-2.5 text-xs font-medium text-slate-800">{g.proveedor_nombre || "—"}</td>
                     <td className="px-3 py-2.5 text-right text-xs tabular-nums text-slate-600">{g.items}</td>
@@ -125,7 +125,7 @@ export default function DesdeOrdenListaPage() {
                     <td className="px-3 py-2.5 text-right text-xs tabular-nums font-bold text-slate-900">{fmtGs(g.totalPendiente)}</td>
                     <td className="px-3 py-2.5 text-center">
                       <Link href={`/compras/desde-orden/${encodeURIComponent(g.numero_oc)}`}
-                        className="text-xs font-semibold text-[#3F8E91] hover:underline">Recibir →</Link>
+                        className="text-xs font-semibold text-[#17191C] hover:underline">Recibir →</Link>
                     </td>
                   </tr>
                 ))}

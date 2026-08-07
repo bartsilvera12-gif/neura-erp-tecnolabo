@@ -59,7 +59,7 @@ export default function ProveedorFiscalPage() {
         <ArrowLeft className="h-4 w-4" /> Volver a configuración
       </Link>
       <div className="flex items-center gap-3">
-        <Landmark className="h-7 w-7 text-[#4FAEB2]" />
+        <Landmark className="h-7 w-7 text-[#1E2125]" />
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Facturación electrónica por país</h1>
           <p className="text-sm text-gray-500">Elegí el proveedor fiscal. Paraguay usa el módulo SIFEN existente; Bolivia (SIN) queda detrás de un flag hasta completar credenciales y autorización.</p>
@@ -96,14 +96,14 @@ export default function ProveedorFiscalPage() {
               </div>
             </div>
             <label className="inline-flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={habilitado} onChange={(e) => setHabilitado(e.target.checked)} className="accent-[#4FAEB2]" />
+              <input type="checkbox" checked={habilitado} onChange={(e) => setHabilitado(e.target.checked)} className="accent-[#1E2125]" />
               Marcar como configurado (no activa emisión real hasta pruebas + autorización)
             </label>
           </>
         )}
 
         <div className="flex justify-end">
-          <button onClick={guardar} disabled={busy} className="inline-flex items-center gap-1.5 rounded-md bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50">
+          <button onClick={guardar} disabled={busy} className="inline-flex items-center gap-1.5 rounded-md bg-[#1E2125] px-4 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50">
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Guardar
           </button>
         </div>

@@ -68,15 +68,15 @@ const ChartCobradoPorDia = dynamic(
 );
 
 // ── ZENTRA (solo dashboard / esta página) ─────────────────────────────────────
-// Paleta turquesa #4FAEB2 (rediseño 2026). Shell BLANCO con detalles turquesa
+// Paleta turquesa #1E2125 (rediseño 2026). Shell BLANCO con detalles turquesa
 // (paleta dashboard Zentra). Cards blancas con ring turquesa, texto en slate
-// oscuro, acentos en #4FAEB2.
+// oscuro, acentos en #1E2125.
 const Z = {
   bg:       "#F8FAFC",      // app shell background
   surface:  "#FFFFFF",       // card surface
   card:     "#FFFFFF",       // card interior
-  accent:   "#4FAEB2",       // turquesa principal
-  accentHover: "#3F8E91",    // turquesa hover/dark
+  accent:   "#1E2125",       // turquesa principal
+  accentHover: "#17191C",    // turquesa hover/dark
   text:     "#0F172A",       // slate-900 para texto principal
   muted:    "#64748B",       // slate-500 para texto secundario
   success:  "#22C55E",
@@ -86,7 +86,7 @@ const Z = {
 function ZentraMark({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#4FAEB2]/30 bg-white shadow-sm ring-1 ring-[#4FAEB2]/10 ${className}`}
+      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#1E2125]/30 bg-white shadow-sm ring-1 ring-[#1E2125]/10 ${className}`}
     >
       <span className="text-xl font-extrabold leading-none tracking-tight" style={{ color: Z.accent }}>
         Z
@@ -541,7 +541,7 @@ function KpiCard({
         style={{ backgroundColor: Z.card }}
       >
         <div className="flex items-start justify-between gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#4FAEB2]/15 text-[#3F8E91]">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1E2125]/15 text-[#17191C]">
             <IconCmp className="h-5 w-5" strokeWidth={2} />
           </div>
           {variation !== undefined && (
@@ -572,10 +572,10 @@ function KpiCard({
   return (
     <motion.div
       whileHover={{ y: -2 }}
-      className="rounded-2xl border border-[#4FAEB2]/30 bg-white p-6 shadow-sm ring-1 ring-[#4FAEB2]/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+      className="rounded-2xl border border-[#1E2125]/30 bg-white p-6 shadow-sm ring-1 ring-[#1E2125]/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
     >
       <div className="flex items-start justify-between gap-2">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#4FAEB2]/12 text-[#3F8E91]">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1E2125]/12 text-[#17191C]">
           <IconCmp className="h-5 w-5" strokeWidth={2} />
         </div>
         {variation !== undefined && (
@@ -823,7 +823,7 @@ const DashComercial = memo(function DashComercial({
           icon={Target}
           label="Leads nuevos"
           value={String(leadsNuevos)}
-          color="text-[#60A5FA]"
+          color="text-[#3E434B]"
           variation={12}
         />
         <KpiCard variant="zentra" icon={MessageCircle} label="En negociación" value={String(enNegociacion)} color="text-amber-400" />
@@ -832,7 +832,7 @@ const DashComercial = memo(function DashComercial({
           icon={CheckCircle2}
           label="Clientes ganados (CRM)"
           value={String(clientesGanados)}
-          color="text-[#60A5FA]"
+          color="text-[#3E434B]"
           variation={8}
         />
         <KpiCard
@@ -859,7 +859,7 @@ const DashComercial = memo(function DashComercial({
             Clientes ganados por vendedor
           </h3>
           <div className="mt-5">
-            <HBarChart data={rendimiento} color="bg-[#2563EB]" tone="zentra" />
+            <HBarChart data={rendimiento} color="bg-[#17191C]" tone="zentra" />
           </div>
         </motion.div>
       </div>
@@ -901,7 +901,7 @@ const DashComercial = memo(function DashComercial({
       <motion.div
         whileHover={{ y: -3 }}
         className="rounded-2xl border p-6 shadow-xl shadow-black/25 sm:p-10"
-        style={{ backgroundColor: Z.surface, borderColor: "rgba(37,99,235,0.35)" }}
+        style={{ backgroundColor: Z.surface, borderColor: "rgba(23,25,28,0.35)" }}
       >
         <div className="flex flex-col gap-2 border-b border-slate-200 pb-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
@@ -1222,7 +1222,7 @@ const DashFinanciero = memo(function DashFinanciero({
       const key = raw || "__sin__";
       map.set(key, (map.get(key) ?? 0) + 1);
     }
-    const PALETTE = ["#2563EB", "#3B82F6", "#60A5FA", "#22C55E", "#A78BFA", "#F59E0B", "#EC4899", "#38BDF8"];
+    const PALETTE = ["#17191C", "#3B82F6", "#3E434B", "#22C55E", "#A78BFA", "#F59E0B", "#EC4899", "#38BDF8"];
     const entries = [...map.entries()].sort((a, b) => b[1] - a[1]);
     return {
       dimCliente: dim,
@@ -1257,7 +1257,7 @@ const DashFinanciero = memo(function DashFinanciero({
       const slug = byCliente.get(String(f.cliente_id)) ?? "__sin__";
       m.set(slug, (m.get(slug) ?? 0) + s);
     }
-    const pal = ["#2563EB", "#3B82F6", "#60A5FA", "#22C55E", "#A78BFA", "#F59E0B", "#EC4899", "#38BDF8"];
+    const pal = ["#17191C", "#3B82F6", "#3E434B", "#22C55E", "#A78BFA", "#F59E0B", "#EC4899", "#38BDF8"];
     const list = [...m.entries()]
       .map(([k, v]) => ({
         key: k,
@@ -1296,7 +1296,7 @@ const DashFinanciero = memo(function DashFinanciero({
       const slug = byCliente.get(String(factura.cliente_id)) ?? "__sin__";
       m.set(slug, (m.get(slug) ?? 0) + pagoMonto);
     }
-    const pal = ["#2563EB", "#3B82F6", "#60A5FA", "#22C55E", "#A78BFA", "#F59E0B", "#EC4899", "#38BDF8"];
+    const pal = ["#17191C", "#3B82F6", "#3E434B", "#22C55E", "#A78BFA", "#F59E0B", "#EC4899", "#38BDF8"];
     const list = [...m.entries()]
       .map(([k, v]) => ({
         key: k,
@@ -1325,7 +1325,7 @@ const DashFinanciero = memo(function DashFinanciero({
   const finKpiValueWrap =
     "flex min-h-0 w-full min-w-0 flex-1 [container-type:inline-size] items-end";
   const finKpiCard = `${finCard} flex h-full min-h-[9.5rem] flex-col`;
-  const finAccent = "#2563EB";
+  const finAccent = "#17191C";
 
   return (
     <div className="space-y-6 rounded-2xl border border-slate-200/80 bg-gradient-to-b from-slate-50 to-white p-4 sm:space-y-8 sm:p-6 md:p-8">
@@ -1339,7 +1339,7 @@ const DashFinanciero = memo(function DashFinanciero({
         <motion.div whileHover={{ y: -2 }} className={finKpiCard}>
           <p className="shrink-0 text-[11px] font-semibold uppercase tracking-wide text-slate-500">Cobrado del período</p>
           <div className={finKpiValueWrap}>
-            <FinMontoGs kpi monto={recaudadoCohortPeriodo} className="text-[#2563EB]" />
+            <FinMontoGs kpi monto={recaudadoCohortPeriodo} className="text-[#17191C]" />
           </div>
         </motion.div>
         <motion.div whileHover={{ y: -2 }} className={finKpiCard}>
@@ -1380,7 +1380,7 @@ const DashFinanciero = memo(function DashFinanciero({
           </div>
           <div className="flex min-w-0 flex-col gap-0.5 sm:items-end sm:text-right">
             <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Total cobrado</p>
-            <FinMontoGs monto={cobradoRegistradoPeriodo} dense className="text-[#2563EB]" />
+            <FinMontoGs monto={cobradoRegistradoPeriodo} dense className="text-[#17191C]" />
           </div>
         </div>
         {cobradoPorDiaSerie.length === 0 ? (
@@ -1405,7 +1405,7 @@ const DashFinanciero = memo(function DashFinanciero({
           {composicionModalidad.total > 0 ? (
             <>
               <div
-                className="h-full bg-[#2563EB] transition-[width] duration-300"
+                className="h-full bg-[#17191C] transition-[width] duration-300"
                 style={{ width: `${composicionModalidad.pctContado}%`, minWidth: composicionModalidad.contado > 0 ? 4 : 0 }}
                 title={`Contado ${composicionModalidad.pctContado.toFixed(1)}%`}
               />
@@ -1632,20 +1632,20 @@ const DashInventario = memo(function DashInventario({
 
       {/* KPIs */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard icon={Package} label="Productos totales"      value={String(totalProductos)} color="text-[#3F8E91]" variation={4} />
-        <KpiCard icon={Hash} label="Stock total (unidades)" value={formatGs(totalUnidades)} color="text-[#3F8E91]" />
+        <KpiCard icon={Package} label="Productos totales"      value={String(totalProductos)} color="text-[#17191C]" variation={4} />
+        <KpiCard icon={Hash} label="Stock total (unidades)" value={formatGs(totalUnidades)} color="text-[#17191C]" />
         <KpiCard icon={AlertTriangle} label="Bajo stock mínimo"      value={String(bajosStock)}
           sub={bajosStock > 0 ? "requieren reposición" : "todo en orden"}
-          color={bajosStock > 0 ? "text-red-600" : "text-[#3F8E91]"}
+          color={bajosStock > 0 ? "text-red-600" : "text-[#17191C]"}
           variation={bajosStock > 0 ? -2 : undefined} />
-        <KpiCard icon={Gem} label="Valor del inventario"   value={`Gs. ${formatGsFull(valorTotal)}`} color="text-[#3F8E91]" variation={12} />
+        <KpiCard icon={Gem} label="Valor del inventario"   value={`Gs. ${formatGsFull(valorTotal)}`} color="text-[#17191C]" variation={12} />
       </div>
 
       {/* Donut + Críticos */}
       <div className="grid grid-cols-3 gap-4">
-        <motion.div whileHover={{ y: -2 }} className="rounded-2xl border border-[#4FAEB2]/30 bg-white p-6 shadow-sm ring-1 ring-[#4FAEB2]/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        <motion.div whileHover={{ y: -2 }} className="rounded-2xl border border-[#1E2125]/30 bg-white p-6 shadow-sm ring-1 ring-[#1E2125]/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <h3 className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-            <span className="inline-block h-3.5 w-1 rounded-full bg-[#4FAEB2]" />
+            <span className="inline-block h-3.5 w-1 rounded-full bg-[#E23B3B]" />
             Estado del stock
           </h3>
           <DonutChart segments={[
@@ -1654,9 +1654,9 @@ const DashInventario = memo(function DashInventario({
             { label: "Crítico",   value: cntCritico,   color: "#ef4444" },
           ]} centerLabel="productos" />
         </motion.div>
-        <motion.div whileHover={{ y: -2 }} className="col-span-2 rounded-2xl border border-[#4FAEB2]/30 bg-white p-6 shadow-sm ring-1 ring-[#4FAEB2]/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        <motion.div whileHover={{ y: -2 }} className="col-span-2 rounded-2xl border border-[#1E2125]/30 bg-white p-6 shadow-sm ring-1 ring-[#1E2125]/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <h3 className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-            <span className="inline-block h-3.5 w-1 rounded-full bg-[#4FAEB2]" />
+            <span className="inline-block h-3.5 w-1 rounded-full bg-[#E23B3B]" />
             Productos críticos — stock bajo mínimo
           </h3>
           {criticos.length === 0 ? (
@@ -1666,21 +1666,21 @@ const DashInventario = memo(function DashInventario({
           ) : (
             <div className="overflow-x-auto rounded-xl border border-slate-200">
               <table className="w-full text-sm">
-                <thead className="bg-[#E5F4F4] border-b-2 border-[#4FAEB2]/40">
+                <thead className="bg-[#EEF0F2] border-b-2 border-[#1E2125]/40">
                   <tr>
                     <th className="w-10 px-3 py-3">
-                      <input type="checkbox" className="h-4 w-4 rounded border-slate-300 accent-[#4FAEB2]" />
+                      <input type="checkbox" className="h-4 w-4 rounded border-slate-300 accent-[#1E2125]" />
                     </th>
                     {["Producto", "Stock actual", "Stock mín.", "Estado", "Proveedor"].map(h => (
-                      <th key={h} className="text-left text-xs font-bold text-[#3F8E91] px-3 py-3 uppercase tracking-wide">{h}</th>
+                      <th key={h} className="text-left text-xs font-bold text-[#17191C] px-3 py-3 uppercase tracking-wide">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {criticos.map(p => (
-                    <tr key={p.id} className={`${p.stock_actual <= 0 ? "bg-red-50/50" : "bg-amber-50/40"} transition-colors hover:bg-[#4FAEB2]/10`}>
+                    <tr key={p.id} className={`${p.stock_actual <= 0 ? "bg-red-50/50" : "bg-amber-50/40"} transition-colors hover:bg-[#1E2125]/10`}>
                       <td className="px-3 py-2.5">
-                        <input type="checkbox" className="h-4 w-4 rounded border-slate-300 accent-[#4FAEB2]" />
+                        <input type="checkbox" className="h-4 w-4 rounded border-slate-300 accent-[#1E2125]" />
                       </td>
                       <td className="px-3 py-2.5 text-xs font-semibold text-slate-900">{p.nombre}</td>
                       <td className="px-3 py-2.5">
@@ -1707,9 +1707,9 @@ const DashInventario = memo(function DashInventario({
       </div>
 
       {/* Top por valor */}
-      <motion.div whileHover={{ y: -2 }} className="rounded-2xl border border-[#4FAEB2]/30 bg-white p-6 shadow-sm ring-1 ring-[#4FAEB2]/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+      <motion.div whileHover={{ y: -2 }} className="rounded-2xl border border-[#1E2125]/30 bg-white p-6 shadow-sm ring-1 ring-[#1E2125]/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
         <h3 className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-          <span className="inline-block h-3.5 w-1 rounded-full bg-[#4FAEB2]" />
+          <span className="inline-block h-3.5 w-1 rounded-full bg-[#E23B3B]" />
           Top productos por valor de inventario
         </h3>
         {topPorValor.length === 0 ? (
@@ -1717,24 +1717,24 @@ const DashInventario = memo(function DashInventario({
         ) : (
           <div className="overflow-x-auto rounded-xl border border-slate-200">
             <table className="w-full text-sm">
-              <thead className="bg-[#E5F4F4] border-b-2 border-[#4FAEB2]/40">
+              <thead className="bg-[#EEF0F2] border-b-2 border-[#1E2125]/40">
                 <tr>
                   <th className="w-10 px-3 py-3">
-                    <input type="checkbox" className="h-4 w-4 rounded border-slate-300 accent-[#4FAEB2]" />
+                    <input type="checkbox" className="h-4 w-4 rounded border-slate-300 accent-[#1E2125]" />
                   </th>
                   {["Producto", "SKU", "Stock", "Costo promedio", "Valor inventario"].map(h => (
-                    <th key={h} className="text-left text-xs font-bold text-[#3F8E91] px-3 py-3 uppercase tracking-wide">{h}</th>
+                    <th key={h} className="text-left text-xs font-bold text-[#17191C] px-3 py-3 uppercase tracking-wide">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {topPorValor.map(p => (
-                  <tr key={p.id} className="transition-colors hover:bg-[#4FAEB2]/10">
+                  <tr key={p.id} className="transition-colors hover:bg-[#1E2125]/10">
                     <td className="px-3 py-2.5">
-                      <input type="checkbox" className="h-4 w-4 rounded border-slate-300 accent-[#4FAEB2]" />
+                      <input type="checkbox" className="h-4 w-4 rounded border-slate-300 accent-[#1E2125]" />
                     </td>
                     <td className="px-3 py-2.5 text-xs font-semibold text-slate-900">{p.nombre}</td>
-                    <td className="px-3 py-2.5 font-mono text-xs font-medium text-[#3F8E91]">{p.sku}</td>
+                    <td className="px-3 py-2.5 font-mono text-xs font-medium text-[#17191C]">{p.sku}</td>
                     <td className="px-3 py-2.5 text-xs tabular-nums font-medium text-slate-700">{p.stock_actual}</td>
                     <td className="px-3 py-2.5 text-xs tabular-nums text-slate-600">Gs. {formatGs(p.costo_promedio)}</td>
                     <td className="px-3 py-2.5 text-xs tabular-nums font-bold text-slate-900">Gs. {formatGs(p.valor)}</td>
@@ -2117,7 +2117,7 @@ const DashCompras = memo(function DashCompras({
                     <span className="tabular-nums font-semibold text-slate-700">Gs. {Math.round(monto).toLocaleString("es-PY")}</span>
                   </div>
                   <div className="h-2 w-full rounded-full bg-slate-100">
-                    <div className="h-full rounded-full bg-[#4FAEB2]" style={{ width: `${Math.min(100, pct)}%` }} />
+                    <div className="h-full rounded-full bg-[#1E2125]" style={{ width: `${Math.min(100, pct)}%` }} />
                   </div>
                 </li>
               );
@@ -2493,7 +2493,7 @@ export default function DashboardPage() {
                 className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all"
                 style={
                   tab === tid
-                    ? { backgroundColor: Z.accent, color: Z.text, boxShadow: "0 8px 24px rgba(37,99,235,0.35)" }
+                    ? { backgroundColor: Z.accent, color: Z.text, boxShadow: "0 8px 24px rgba(23,25,28,0.35)" }
                     : { color: Z.muted }
                 }
               >

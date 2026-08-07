@@ -95,7 +95,7 @@ export default function PedidosPendientesCaja() {
                 <td className="py-2.5 pr-2 text-right">
                   <Link
                     href={`/ventas/nueva?pedido_id=${p.id}`}
-                    className="inline-flex items-center rounded-lg bg-[#4FAEB2] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#3F8E91]"
+                    className="inline-flex items-center rounded-lg bg-[#1E2125] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#17191C]"
                   >
                     Facturar / Cobrar
                   </Link>

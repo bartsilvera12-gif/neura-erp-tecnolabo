@@ -30,7 +30,7 @@ export type FancySelectProps = {
 };
 
 const TRIGGER_BASE =
-  "group relative flex w-full items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white text-left text-slate-900 shadow-sm transition-all hover:border-[#4FAEB2]/60 focus:border-[#4FAEB2] focus:outline-none focus:ring-2 focus:ring-[#4FAEB2]/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400";
+  "group relative flex w-full items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white text-left text-slate-900 shadow-sm transition-all hover:border-[#1E2125]/60 focus:border-[#1E2125] focus:outline-none focus:ring-2 focus:ring-[#1E2125]/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400";
 
 /**
  * Combobox premium con paleta Zentra. Reemplaza a `<select>` nativo.
@@ -206,7 +206,7 @@ export function FancySelect({
         onClick={toggleMenu}
         onKeyDown={onKeyDown}
         className={`${TRIGGER_BASE} ${sizeClasses} ${
-          open ? "border-[#4FAEB2] ring-2 ring-[#4FAEB2]/20" : ""
+          open ? "border-[#1E2125] ring-2 ring-[#1E2125]/20" : ""
         }`}
       >
         <span
@@ -218,10 +218,10 @@ export function FancySelect({
         </span>
         <span
           aria-hidden="true"
-          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[#4FAEB2] transition-all ${
+          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[#1E2125] transition-all ${
             open
-              ? "rotate-180 bg-[#4FAEB2]/10"
-              : "bg-transparent group-hover:bg-[#4FAEB2]/8"
+              ? "rotate-180 bg-[#1E2125]/10"
+              : "bg-transparent group-hover:bg-[#1E2125]/8"
           }`}
         >
           <svg
@@ -250,7 +250,7 @@ export function FancySelect({
             id={listboxId}
             role="listbox"
             tabIndex={-1}
-            className="max-h-[260px] overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-xl ring-1 ring-[#4FAEB2]/15"
+            className="max-h-[260px] overflow-y-auto rounded-xl border border-slate-200 bg-white p-1 shadow-xl ring-1 ring-[#1E2125]/15"
           >
             {options.length === 0 ? (
               <li className="px-3 py-3 text-center text-xs text-slate-400">
@@ -274,9 +274,9 @@ export function FancySelect({
                         opt.disabled
                           ? "cursor-not-allowed text-slate-300"
                           : isActive
-                            ? "bg-[#4FAEB2]/10 text-[#2F6E71]"
+                            ? "bg-[#1E2125]/10 text-[#2F6E71]"
                             : isSelected
-                              ? "text-[#3F8E91]"
+                              ? "text-[#17191C]"
                               : "text-slate-700 hover:bg-slate-50"
                       }`}
                     >
@@ -303,7 +303,7 @@ export function FancySelect({
                           strokeWidth="2.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          className="h-4 w-4 shrink-0 text-[#4FAEB2]"
+                          className="h-4 w-4 shrink-0 text-[#1E2125]"
                         >
                           <path d="M5 12l5 5L20 7" />
                         </svg>

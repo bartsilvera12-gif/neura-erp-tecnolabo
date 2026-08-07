@@ -149,7 +149,7 @@ export function RegistrarCobroModalCxc({
                   if (!r.ok) setError(r.error ?? "No se pudo generar el recibo.");
                   else onClose();
                 }}
-                className="inline-flex items-center justify-center rounded-md bg-[#4FAEB2] px-5 py-2 text-sm font-medium text-white hover:bg-[#3F8E91]"
+                className="inline-flex items-center justify-center rounded-md bg-[#1E2125] px-5 py-2 text-sm font-medium text-white hover:bg-[#17191C]"
               >
                 Generar recibo de dinero
               </button>
@@ -162,7 +162,7 @@ export function RegistrarCobroModalCxc({
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">Monto a cobrar</label>
                 <input type="number" min="0" step="1" value={monto} onChange={(e) => setMonto(e.target.value)} className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" />
-                <button type="button" onClick={() => setMonto(String(cuenta.saldo))} className="mt-1 text-xs text-[#4FAEB2] hover:underline">Cobrar saldo total</button>
+                <button type="button" onClick={() => setMonto(String(cuenta.saldo))} className="mt-1 text-xs text-[#1E2125] hover:underline">Cobrar saldo total</button>
                 <p className="mt-1 text-[11px] text-slate-500">Si cobrás menos que el saldo, la cuenta sigue pendiente con la diferencia.</p>
               </div>
               <div>
@@ -197,7 +197,7 @@ export function RegistrarCobroModalCxc({
             </div>
             <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 border-t border-slate-200 px-5 py-4">
               <button onClick={onClose} className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">Cancelar</button>
-              <button onClick={registrar} disabled={guardando} className="inline-flex items-center justify-center gap-1.5 rounded-md bg-[#4FAEB2] px-5 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50">
+              <button onClick={registrar} disabled={guardando} className="inline-flex items-center justify-center gap-1.5 rounded-md bg-[#1E2125] px-5 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50">
                 {guardando ? <><Loader2 className="h-4 w-4 animate-spin" /> Guardando…</> : "Confirmar pago"}
               </button>
             </div>

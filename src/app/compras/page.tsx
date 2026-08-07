@@ -151,9 +151,9 @@ export default function ComprasPage() {
 
       <div>
         <div className="flex items-center gap-2">
-          <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-[#4FAEB2]"
-            style={{ boxShadow: "0 0 0 3px rgba(79, 174, 178, 0.18)" }} />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4FAEB2]">Zentra · Adquisiciones</p>
+          <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-[#1E2125]"
+            style={{ boxShadow: "0 0 0 3px rgba(30, 33, 37, 0.18)" }} />
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1E2125]">Zentra · Adquisiciones</p>
         </div>
         <h1 className="mt-1 text-lg font-semibold tracking-tight text-slate-900">Compras</h1>
         <p className="mt-0.5 text-xs text-slate-500">Facturas de proveedor registradas (impactan stock)</p>
@@ -161,29 +161,29 @@ export default function ComprasPage() {
 
       {/* Navegación Compras / Órdenes de compra */}
       <div className="flex items-center gap-1 border-b border-slate-200">
-        <span className="border-b-2 border-[#4FAEB2] px-4 py-2 text-sm font-semibold text-[#3F8E91]">
+        <span className="border-b-2 border-[#1E2125] px-4 py-2 text-sm font-semibold text-[#17191C]">
           Compras
         </span>
         <Link
           href="/compras/ordenes"
-          className="border-b-2 border-transparent px-4 py-2 text-sm font-medium text-slate-500 transition-colors hover:text-[#3F8E91]"
+          className="border-b-2 border-transparent px-4 py-2 text-sm font-medium text-slate-500 transition-colors hover:text-[#17191C]"
         >
           Órdenes de compra
         </Link>
         <Link
           href="/compras/cuentas-por-pagar"
-          className="border-b-2 border-transparent px-4 py-2 text-sm font-medium text-slate-500 transition-colors hover:text-[#3F8E91]"
+          className="border-b-2 border-transparent px-4 py-2 text-sm font-medium text-slate-500 transition-colors hover:text-[#17191C]"
         >
           Cuentas por pagar
         </Link>
       </div>
 
       {/* Órdenes de compra por confirmar (revisar + recibir) */}
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-[#4FAEB2]/15 sm:p-5 lg:p-6">
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-[#1E2125]/15 sm:p-5 lg:p-6">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 className="flex items-center gap-2 text-base font-semibold text-slate-800">
-              <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-[#4FAEB2] px-1.5 text-xs font-bold text-white">
+              <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-[#1E2125] px-1.5 text-xs font-bold text-white">
                 {ordenesPorConfirmar.length}
               </span>
               Órdenes de compra por confirmar
@@ -193,7 +193,7 @@ export default function ComprasPage() {
             </p>
           </div>
           <Link href="/compras/ordenes/nueva"
-            className="rounded-lg border border-[#4FAEB2]/40 bg-[#4FAEB2]/[0.08] px-3 py-1.5 text-xs font-semibold text-[#3F8E91] transition-colors hover:bg-[#4FAEB2]/[0.16] active:scale-95">
+            className="rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.08] px-3 py-1.5 text-xs font-semibold text-[#17191C] transition-colors hover:bg-[#1E2125]/[0.16] active:scale-95">
             + Nueva orden de compra
           </Link>
         </div>
@@ -205,17 +205,17 @@ export default function ComprasPage() {
         ) : (
           <div className="overflow-x-auto rounded-xl border border-slate-200">
             <table className="w-full min-w-[720px] text-sm">
-              <thead className="border-b-2 border-[#4FAEB2]/40 bg-[#E5F4F4]">
+              <thead className="border-b-2 border-[#1E2125]/40 bg-[#EEF0F2]">
                 <tr>
                   {["N° OC", "Fecha", "Proveedor", "Ítems", "Pendiente (Gs.)", "Estado", ""].map((h, i) => (
-                    <th key={h} className={`px-3 py-2.5 text-xs font-bold uppercase tracking-wide text-[#3F8E91] ${i === 3 || i === 4 ? "text-right" : i === 5 || i === 6 ? "text-center" : "text-left"}`}>{h}</th>
+                    <th key={h} className={`px-3 py-2.5 text-xs font-bold uppercase tracking-wide text-[#17191C] ${i === 3 || i === 4 ? "text-right" : i === 5 || i === 6 ? "text-center" : "text-left"}`}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {ordenesPorConfirmar.map((o) => (
-                  <tr key={o.numero_oc} className="transition-colors hover:bg-[#4FAEB2]/5">
-                    <td className="px-3 py-2.5 font-mono text-xs font-semibold text-[#3F8E91]">{o.numero_oc}</td>
+                  <tr key={o.numero_oc} className="transition-colors hover:bg-[#1E2125]/5">
+                    <td className="px-3 py-2.5 font-mono text-xs font-semibold text-[#17191C]">{o.numero_oc}</td>
                     <td className="px-3 py-2.5 text-xs tabular-nums text-slate-600">{formatFecha(o.fecha)}</td>
                     <td className="px-3 py-2.5 text-xs font-medium text-slate-800">{o.proveedor_nombre || "—"}</td>
                     <td className="px-3 py-2.5 text-right text-xs tabular-nums text-slate-600">{o.items}</td>
@@ -227,8 +227,8 @@ export default function ComprasPage() {
                     </td>
                     <td className="px-3 py-2.5 text-center">
                       <div className="inline-flex items-center gap-3">
-                        <Link href={`/compras/ordenes/${encodeURIComponent(o.numero_oc)}`} className="text-xs font-semibold text-slate-500 hover:text-[#3F8E91] hover:underline">Revisar</Link>
-                        <Link href={`/compras/desde-orden/${encodeURIComponent(o.numero_oc)}`} className="rounded-lg bg-[#4FAEB2] px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-[#3F8E91]">Confirmar recepción</Link>
+                        <Link href={`/compras/ordenes/${encodeURIComponent(o.numero_oc)}`} className="text-xs font-semibold text-slate-500 hover:text-[#17191C] hover:underline">Revisar</Link>
+                        <Link href={`/compras/desde-orden/${encodeURIComponent(o.numero_oc)}`} className="rounded-lg bg-[#1E2125] px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-[#17191C]">Confirmar recepción</Link>
                         <button
                           type="button"
                           onClick={() => setAnularTarget({ numero_oc: o.numero_oc, estado: o.estado })}
@@ -247,18 +247,18 @@ export default function ComprasPage() {
         )}
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-[#4FAEB2]/15 sm:p-5 lg:p-6">
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-[#1E2125]/15 sm:p-5 lg:p-6">
 
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-xl font-semibold">Compras registradas</h2>
           <div className="flex items-center gap-3">
             <ExportExcelButton url="/api/compras/export" />
             <Link href="/compras/desde-orden"
-              className="rounded-lg border border-[#4FAEB2]/40 bg-[#4FAEB2]/[0.08] px-3 py-1.5 text-xs font-semibold text-[#3F8E91] transition-colors hover:bg-[#4FAEB2]/[0.16] active:scale-95">
+              className="rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.08] px-3 py-1.5 text-xs font-semibold text-[#17191C] transition-colors hover:bg-[#1E2125]/[0.16] active:scale-95">
               Desde Orden de Compra
             </Link>
             <Link href="/compras/nueva"
-              className="rounded-lg bg-[#4FAEB2] px-3 py-1.5 text-xs font-semibold text-white shadow-sm shadow-[#4FAEB2]/25 transition-colors hover:bg-[#3F8E91] active:scale-95">
+              className="rounded-lg bg-[#1E2125] px-3 py-1.5 text-xs font-semibold text-white shadow-sm shadow-[#1E2125]/25 transition-colors hover:bg-[#17191C] active:scale-95">
               + Nueva compra
             </Link>
           </div>
@@ -316,7 +316,7 @@ export default function ComprasPage() {
                   return (
                     <FragmentRow key={g.numero_control}>
                       <tr
-                        className={`border-b border-slate-200 transition-colors ${g.anulada ? "bg-red-50/40 text-slate-400 line-through hover:bg-red-50/60" : "hover:bg-[#4FAEB2]/[0.04]"} ${multi ? "cursor-pointer" : ""}`}
+                        className={`border-b border-slate-200 transition-colors ${g.anulada ? "bg-red-50/40 text-slate-400 line-through hover:bg-red-50/60" : "hover:bg-[#1E2125]/[0.04]"} ${multi ? "cursor-pointer" : ""}`}
                         onClick={() => multi && toggle(g.numero_control)}
                       >
                         <td className="py-4 pr-4 font-mono text-xs text-gray-500">
@@ -335,7 +335,7 @@ export default function ComprasPage() {
                             <Link
                               href={`/compras/ordenes/${encodeURIComponent(g.orden_compra_numero)}`}
                               onClick={(e) => e.stopPropagation()}
-                              className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-[#E5F4F4] px-2 py-0.5 text-[11px] font-semibold text-[#3F8E91] hover:underline"
+                              className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-[#EEF0F2] px-2 py-0.5 text-[11px] font-semibold text-[#17191C] hover:underline"
                             >
                               {g.orden_compra_numero}
                             </Link>
@@ -346,7 +346,7 @@ export default function ComprasPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => e.stopPropagation()}
-                              className="mt-0.5 inline-flex items-center gap-1 text-xs font-medium text-[#4FAEB2] hover:text-[#3F8E91] hover:underline"
+                              className="mt-0.5 inline-flex items-center gap-1 text-xs font-medium text-[#1E2125] hover:text-[#17191C] hover:underline"
                             >
                               📎 Ver comprobante
                             </a>
@@ -367,7 +367,7 @@ export default function ComprasPage() {
                             <div className="inline-flex items-center gap-3">
                               <Link
                                 href={`/compras/${encodeURIComponent(g.numero_control)}/recepciones`}
-                                className="text-xs font-semibold text-[#3F8E91] hover:underline"
+                                className="text-xs font-semibold text-[#17191C] hover:underline"
                                 title="Registrar y ver recepciones de mercadería"
                               >
                                 Recepciones
@@ -494,7 +494,7 @@ function EditarCompraModal({
     }
   }
 
-  const input = "w-full rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30";
+  const input = "w-full rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4" onClick={onClose}>
@@ -525,7 +525,7 @@ function EditarCompraModal({
         <div className="flex items-center justify-end gap-2 border-t border-slate-100 px-5 py-3">
           <button type="button" onClick={onClose} className="rounded-md border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50">Cancelar</button>
           <button type="button" onClick={submit} disabled={loading}
-            className="rounded-md bg-[#4FAEB2] px-4 py-2 text-sm font-semibold text-white hover:bg-[#3F8E91] disabled:opacity-50">
+            className="rounded-md bg-[#1E2125] px-4 py-2 text-sm font-semibold text-white hover:bg-[#17191C] disabled:opacity-50">
             {loading ? "Guardando…" : "Guardar cambios"}
           </button>
         </div>

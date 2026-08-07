@@ -151,10 +151,10 @@ export default function VentasPage() {
         <div className="flex items-center gap-2">
           <span
             aria-hidden="true"
-            className="inline-block h-1.5 w-1.5 rounded-full bg-[#4FAEB2]"
-            style={{ boxShadow: "0 0 0 3px rgba(79, 174, 178, 0.18)" }}
+            className="inline-block h-1.5 w-1.5 rounded-full bg-[#1E2125]"
+            style={{ boxShadow: "0 0 0 3px rgba(30, 33, 37, 0.18)" }}
           />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4FAEB2]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1E2125]">
             Zentra · Operaciones
           </p>
         </div>
@@ -181,7 +181,7 @@ export default function VentasPage() {
 
 
       {/* ── Tabla de ventas ───────────────────────────────────────────────────── */}
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-[#4FAEB2]/15 sm:p-5 lg:p-6">
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-[#1E2125]/15 sm:p-5 lg:p-6">
 
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-xl font-semibold">Órdenes de venta</h2>
@@ -232,7 +232,7 @@ export default function VentasPage() {
               type="checkbox"
               checked={mostrarAnuladas}
               onChange={(e) => setMostrarAnuladas(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-[#4FAEB2] focus:ring-[#4FAEB2]"
+              className="h-4 w-4 rounded border-slate-300 text-[#1E2125] focus:ring-[#1E2125]"
             />
             Ver anuladas
           </label>
@@ -286,7 +286,7 @@ export default function VentasPage() {
                       key={v.id}
                       onClick={() => setDetalle(v)}
                       className={`border-b border-slate-200 last:border-0 transition-colors cursor-pointer ${
-                        isAnulada ? "bg-red-50/40 text-slate-400 line-through hover:bg-red-50/60" : "hover:bg-[#4FAEB2]/[0.04]"
+                        isAnulada ? "bg-red-50/40 text-slate-400 line-through hover:bg-red-50/60" : "hover:bg-[#1E2125]/[0.04]"
                       }`}
                     >
                       <td className="py-4 pr-4 font-mono text-xs text-gray-500 align-middle">
@@ -542,13 +542,13 @@ function VentaDetalleModal({ venta, onClose }: { venta: Venta; onClose: () => vo
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl overflow-hidden rounded-2xl border-2 border-[#4FAEB2]/20 bg-white shadow-2xl"
+        className="w-full max-w-2xl overflow-hidden rounded-2xl border-2 border-[#1E2125]/20 bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 border-b border-slate-100 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent px-5 py-4">
+        <div className="flex items-start justify-between gap-3 border-b border-slate-100 bg-gradient-to-r from-[#1E2125]/5 to-transparent px-5 py-4">
           <div>
-            <h3 className="font-mono text-sm font-bold text-[#3F8E91]">{venta.numero_control}</h3>
+            <h3 className="font-mono text-sm font-bold text-[#17191C]">{venta.numero_control}</h3>
             <p className="mt-0.5 text-xs text-slate-500">Detalle de la venta</p>
           </div>
           <button

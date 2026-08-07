@@ -104,7 +104,7 @@ export default function NotificacionesBell() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="relative rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-50 hover:text-[#3F8E91]"
+        className="relative rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-50 hover:text-[#17191C]"
         aria-label="Notificaciones"
       >
         <Bell className="h-5 w-5" />
@@ -116,11 +116,11 @@ export default function NotificacionesBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl ring-1 ring-[#4FAEB2]/15">
+        <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl ring-1 ring-[#1E2125]/15">
           <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
             <p className="text-sm font-semibold text-slate-900">Notificaciones</p>
             {items.some((x) => !x.leida) && (
-              <button onClick={marcarTodas} className="text-xs font-medium text-[#3F8E91] hover:underline">
+              <button onClick={marcarTodas} className="text-xs font-medium text-[#17191C] hover:underline">
                 Marcar todas
               </button>
             )}
@@ -138,7 +138,7 @@ export default function NotificacionesBell() {
                     <button
                       type="button"
                       onClick={() => abrirNotif(n)}
-                      className={`flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50 ${n.leida ? "" : "bg-[#4FAEB2]/5"}`}
+                      className={`flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50 ${n.leida ? "" : "bg-[#1E2125]/5"}`}
                     >
                       <span className={`mt-0.5 shrink-0 rounded-lg p-1.5 ${n.leida ? "bg-slate-100 text-slate-400" : "bg-red-50 text-red-600"}`}>
                         <PackageX className="h-4 w-4" />

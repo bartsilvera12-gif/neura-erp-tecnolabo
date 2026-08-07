@@ -413,12 +413,12 @@ export default function EditarPedidoPage({
   }
 
   const inputClass =
-    "h-10 rounded-lg border-2 border-slate-200 bg-white px-3 text-sm outline-none transition-all hover:border-slate-300 focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20";
+    "h-10 rounded-lg border-2 border-slate-200 bg-white px-3 text-sm outline-none transition-all hover:border-slate-300 focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20";
 
   if (loadingPedido) {
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
-        <Loader2 className="h-7 w-7 animate-spin text-[#4FAEB2]" />
+        <Loader2 className="h-7 w-7 animate-spin text-[#1E2125]" />
       </div>
     );
   }
@@ -430,7 +430,7 @@ export default function EditarPedidoPage({
           <p className="text-sm font-bold text-red-700">{pedidoError}</p>
           <Link
             href="/pedidos"
-            className="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-[#3F8E91] hover:underline"
+            className="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-[#17191C] hover:underline"
           >
             ← Volver al listado
           </Link>
@@ -443,8 +443,8 @@ export default function EditarPedidoPage({
     <div className="w-full py-8 px-4 sm:px-6 lg:px-8 space-y-6">
       <header className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#4FAEB2]/8 border border-[#4FAEB2]/30 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#3F8E91] mb-3">
-            <Receipt className="h-3 w-3 text-[#4FAEB2]" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#1E2125]/8 border border-[#1E2125]/30 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#17191C] mb-3">
+            <Receipt className="h-3 w-3 text-[#1E2125]" />
             Pedidos · Editar
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 tracking-tight leading-tight">
@@ -458,7 +458,7 @@ export default function EditarPedidoPage({
         </div>
         <Link
           href="/pedidos"
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-[#4FAEB2] hover:text-[#3F8E91]"
+          className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:border-[#1E2125] hover:text-[#17191C]"
         >
           ← Cancelar
         </Link>
@@ -467,7 +467,7 @@ export default function EditarPedidoPage({
       <div className="grid gap-6 lg:grid-cols-[1fr_400px]">
         {/* Buscador + resultados */}
         <div className="space-y-4">
-          <div className="bg-white rounded-2xl border-2 border-[#4FAEB2]/20 shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)] p-4">
+          <div className="bg-white rounded-2xl border-2 border-[#1E2125]/20 shadow-[0_2px_10px_-2px_rgba(30,33,37,0.12)] p-4">
             <div className="relative">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <input
@@ -488,7 +488,7 @@ export default function EditarPedidoPage({
                 </button>
               )}
               {buscando && (
-                <Loader2 className="absolute right-9 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-[#4FAEB2]" />
+                <Loader2 className="absolute right-9 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-[#1E2125]" />
               )}
             </div>
           </div>
@@ -500,7 +500,7 @@ export default function EditarPedidoPage({
                 return (
                   <li
                     key={p.id}
-                    className="rounded-xl border-2 border-slate-100 bg-white p-3.5 hover:border-[#4FAEB2]/40 transition-all"
+                    className="rounded-xl border-2 border-slate-100 bg-white p-3.5 hover:border-[#1E2125]/40 transition-all"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
@@ -513,7 +513,7 @@ export default function EditarPedidoPage({
                         type="button"
                         onClick={() => addToCart(p)}
                         disabled={yaEnCarrito}
-                        className="inline-flex items-center gap-1 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] disabled:opacity-50 text-white text-xs font-bold px-3 py-1.5"
+                        className="inline-flex items-center gap-1 rounded-lg bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white text-xs font-bold px-3 py-1.5"
                       >
                         <Plus className="h-3 w-3" />
                         {yaEnCarrito ? "En pedido" : "Agregar"}
@@ -527,10 +527,10 @@ export default function EditarPedidoPage({
         </div>
 
         {/* Carrito */}
-        <aside className="bg-white rounded-2xl border-2 border-[#4FAEB2]/20 shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)] overflow-hidden h-fit lg:sticky lg:top-4">
-          <div className="px-5 py-4 border-b border-[#4FAEB2]/15 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent">
+        <aside className="bg-white rounded-2xl border-2 border-[#1E2125]/20 shadow-[0_2px_10px_-2px_rgba(30,33,37,0.12)] overflow-hidden h-fit lg:sticky lg:top-4">
+          <div className="px-5 py-4 border-b border-[#1E2125]/15 bg-gradient-to-r from-[#1E2125]/5 to-transparent">
             <h2 className="text-[15px] font-bold text-slate-800 flex items-center gap-2">
-              <Receipt className="h-4 w-4 text-[#4FAEB2]" />
+              <Receipt className="h-4 w-4 text-[#1E2125]" />
               {cart.length} {cart.length === 1 ? "producto" : "productos"}
             </h2>
           </div>
@@ -606,7 +606,7 @@ export default function EditarPedidoPage({
                                 onClick={() => changeTipoPrecio(it.producto_id, t)}
                                 className={`rounded-md py-1 text-[10.5px] font-semibold border transition-colors ${
                                   sel
-                                    ? "border-[#4FAEB2] bg-[#4FAEB2] text-white"
+                                    ? "border-[#1E2125] bg-[#1E2125] text-white"
                                     : "border-slate-200 bg-white text-slate-600 hover:bg-slate-100"
                                 }`}
                               >
@@ -630,7 +630,7 @@ export default function EditarPedidoPage({
                                 onClick={() => updateCart(it.producto_id, { tipo_iva: iva })}
                                 className={`rounded-md py-1 text-[10.5px] font-semibold border transition-colors ${
                                   sel
-                                    ? "border-[#4FAEB2] bg-[#4FAEB2] text-white"
+                                    ? "border-[#1E2125] bg-[#1E2125] text-white"
                                     : "border-slate-200 bg-white text-slate-600 hover:bg-slate-100"
                                 }`}
                               >
@@ -693,7 +693,7 @@ export default function EditarPedidoPage({
                         <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
                           Subtotal
                         </p>
-                        <p className="text-sm font-bold text-[#3F8E91] tabular-nums">
+                        <p className="text-sm font-bold text-[#17191C] tabular-nums">
                           {fmtGs(it.cantidad * it.precio_venta)}
                         </p>
                       </div>
@@ -751,7 +751,7 @@ export default function EditarPedidoPage({
               type="button"
               onClick={guardar}
               disabled={guardando || cart.length === 0}
-              className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#4FAEB2] hover:bg-[#3F8E91] disabled:opacity-50 text-white text-sm font-bold py-3 transition-colors shadow-md shadow-[#4FAEB2]/30"
+              className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white text-sm font-bold py-3 transition-colors shadow-md shadow-[#1E2125]/30"
             >
               {guardando ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

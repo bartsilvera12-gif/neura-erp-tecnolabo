@@ -70,7 +70,7 @@ export default function CajasReportePage() {
               <select
                 value={filtroCaja}
                 onChange={(e) => setFiltroCaja(e.target.value === "" ? "" : Number(e.target.value))}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30"
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30"
                 aria-label="Filtrar por caja"
               >
                 <option value="">Todas las cajas</option>
@@ -97,9 +97,9 @@ export default function CajasReportePage() {
             <StatCard compact label="Faltantes / Sobrantes" value={`${formatGs(t.faltantes)} / ${formatGs(t.sobrantes)}`} hint="faltante / sobrante acumulado" />
           </div>
 
-          <div className="rounded-2xl border border-[#4FAEB2]/30 bg-white p-6 shadow-sm ring-1 ring-[#4FAEB2]/10">
+          <div className="rounded-2xl border border-[#1E2125]/30 bg-white p-6 shadow-sm ring-1 ring-[#1E2125]/10">
             <h2 className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-              <span className="inline-block h-3.5 w-1 rounded-full bg-[#4FAEB2]" />
+              <span className="inline-block h-3.5 w-1 rounded-full bg-[#E23B3B]" />
               Detalle de turnos
             </h2>
             {data.cajas.length === 0 ? (
@@ -107,12 +107,12 @@ export default function CajasReportePage() {
             ) : (
               <div className="overflow-x-auto rounded-xl border border-slate-200">
                 <table className="w-full min-w-[1100px] text-sm">
-                  <thead className="border-b-2 border-[#4FAEB2]/40 bg-[#E5F4F4]">
+                  <thead className="border-b-2 border-[#1E2125]/40 bg-[#EEF0F2]">
                     <tr>
                       {["Caja", "Apertura", "Cierre", "Estado", "Abrió / Cerró", "Apertura Gs.", "Ventas", "Vendido", "Efectivo", "Esperado", "Contado", "Diferencia"].map((h, i) => (
-                        <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#3F8E91] ${i >= 5 ? "text-right" : "text-left"}`}>{h}</th>
+                        <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#17191C] ${i >= 5 ? "text-right" : "text-left"}`}>{h}</th>
                       ))}
-                      <th className="px-3 py-3 text-center text-xs font-bold uppercase tracking-wide text-[#3F8E91]">Detalle</th>
+                      <th className="px-3 py-3 text-center text-xs font-bold uppercase tracking-wide text-[#17191C]">Detalle</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -122,8 +122,8 @@ export default function CajasReportePage() {
                       const estadoLbl = c.estado === "cerrada" ? "Cerrada" : c.estado === "en_cierre" ? "En cierre" : "Abierta";
                       const estadoCls = c.estado === "cerrada" ? "bg-[var(--badge-success-bg)] text-[var(--badge-success-text)]" : "bg-[var(--badge-warning-bg)] text-[var(--badge-warning-text)]";
                       return (
-                        <tr key={c.id} className="transition-colors hover:bg-[#4FAEB2]/10">
-                          <td className="px-3 py-2.5 text-xs font-bold text-[#3F8E91]">Caja {c.numero_caja}</td>
+                        <tr key={c.id} className="transition-colors hover:bg-[#1E2125]/10">
+                          <td className="px-3 py-2.5 text-xs font-bold text-[#17191C]">Caja {c.numero_caja}</td>
                           <td className="px-3 py-2.5 text-xs tabular-nums text-slate-700">{formatFechaHora(c.fecha_apertura)}</td>
                           <td className="px-3 py-2.5 text-xs tabular-nums text-slate-700">{formatFechaHora(c.fecha_cierre)}</td>
                           <td className="px-3 py-2.5">
@@ -149,7 +149,7 @@ export default function CajasReportePage() {
                           <td className="px-3 py-2.5 text-center">
                             <Link
                               href={`/reportes/cajas/${c.id}`}
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-[#4FAEB2]/40 bg-white px-2.5 py-1.5 text-xs font-semibold text-[#3F8E91] transition-colors hover:bg-[#4FAEB2]/10"
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-[#1E2125]/40 bg-white px-2.5 py-1.5 text-xs font-semibold text-[#17191C] transition-colors hover:bg-[#1E2125]/10"
                             >
                               <Eye className="h-3.5 w-3.5" />
                               Ver

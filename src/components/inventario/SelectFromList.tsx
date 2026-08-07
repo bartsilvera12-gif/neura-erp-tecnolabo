@@ -140,7 +140,7 @@ export default function SelectFromList({
         disabled={isEmpty}
         onClick={() => setOpen((v) => !v)}
         className={
-          "flex w-full items-center justify-between gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-left text-sm outline-none transition-all hover:border-slate-300 focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
+          "flex w-full items-center justify-between gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-left text-sm outline-none transition-all hover:border-slate-300 focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
         }
       >
         <span className="min-w-0 truncate">
@@ -178,7 +178,7 @@ export default function SelectFromList({
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={onKeyDown}
                 placeholder="Buscar..."
-                className="w-full rounded-md border border-slate-200 bg-white py-1.5 pl-8 pr-7 text-sm outline-none focus:border-[#4FAEB2] focus:ring-2 focus:ring-[#4FAEB2]/20"
+                className="w-full rounded-md border border-slate-200 bg-white py-1.5 pl-8 pr-7 text-sm outline-none focus:border-[#1E2125] focus:ring-2 focus:ring-[#1E2125]/20"
               />
               {query && (
                 <button
@@ -204,11 +204,11 @@ export default function SelectFromList({
               onMouseEnter={() => setHighlight(0)}
               onClick={() => pick(null)}
               className={`flex w-full items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-left text-sm transition-colors ${
-                highlight === 0 ? "bg-[#4FAEB2]/8 text-slate-800" : "text-slate-500 hover:bg-slate-50"
+                highlight === 0 ? "bg-[#1E2125]/8 text-slate-800" : "text-slate-500 hover:bg-slate-50"
               }`}
             >
               <span className="italic">{placeholder}</span>
-              {value === null && <Check className="h-3.5 w-3.5 text-[#4FAEB2]" />}
+              {value === null && <Check className="h-3.5 w-3.5 text-[#1E2125]" />}
             </button>
 
             {filtered.length === 0 ? (
@@ -229,7 +229,7 @@ export default function SelectFromList({
                     onClick={() => pick(o.id)}
                     className={`flex w-full items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-left text-sm transition-colors ${
                       isHi
-                        ? "bg-[#4FAEB2]/10 text-slate-800"
+                        ? "bg-[#1E2125]/10 text-slate-800"
                         : "text-slate-700 hover:bg-slate-50"
                     }`}
                   >
@@ -239,7 +239,7 @@ export default function SelectFromList({
                         <span className="text-slate-400"> — {o.sublabel}</span>
                       )}
                     </span>
-                    {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-[#4FAEB2]" />}
+                    {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-[#1E2125]" />}
                   </button>
                 );
               })

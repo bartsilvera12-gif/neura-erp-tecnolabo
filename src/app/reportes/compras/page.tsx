@@ -142,14 +142,14 @@ export default function ComprasReportePage() {
         <button
           type="button"
           onClick={() => cambiarVista("compras")}
-          className={`px-4 py-2 text-sm font-semibold border-b-2 transition-colors ${vista === "compras" ? "border-[#4FAEB2] text-[#3F8E91]" : "border-transparent text-slate-500 hover:text-[#3F8E91]"}`}
+          className={`px-4 py-2 text-sm font-semibold border-b-2 transition-colors ${vista === "compras" ? "border-[#1E2125] text-[#17191C]" : "border-transparent text-slate-500 hover:text-[#17191C]"}`}
         >
           Todas las compras{data ? ` (${data.compras.length})` : ""}
         </button>
         <button
           type="button"
           onClick={() => cambiarVista("pendientes")}
-          className={`px-4 py-2 text-sm font-semibold border-b-2 transition-colors ${vista === "pendientes" ? "border-[#4FAEB2] text-[#3F8E91]" : "border-transparent text-slate-500 hover:text-[#3F8E91]"}`}
+          className={`px-4 py-2 text-sm font-semibold border-b-2 transition-colors ${vista === "pendientes" ? "border-[#1E2125] text-[#17191C]" : "border-transparent text-slate-500 hover:text-[#17191C]"}`}
         >
           Ordenados no comprados{data ? ` (${data.pendientes.length})` : ""}
         </button>
@@ -162,18 +162,18 @@ export default function ComprasReportePage() {
           placeholder={vista === "compras" ? "Buscar por N° compra, factura o proveedor…" : "Buscar por N° OC, producto, SKU o proveedor…"}
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
-          className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30 sm:min-w-72"
+          className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30 sm:min-w-72"
         />
         {proveedores.length > 1 && (
           <select value={filtroProveedor} onChange={(e) => setFiltroProveedor(e.target.value)}
-            className="w-52 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30">
+            className="w-52 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30">
             <option value="">Todos los proveedores</option>
             {proveedores.map((p) => <option key={p} value={p}>{p}</option>)}
           </select>
         )}
         {vista === "pendientes" && (
           <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}
-            className="w-44 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30">
+            className="w-44 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30">
             <option value="">Pendiente + parcial</option>
             <option value="pendiente">Solo pendientes</option>
             <option value="recibida_parcial">Solo parciales</option>
@@ -225,10 +225,10 @@ function CompraDetalleModal({
   const ivaLbl: Record<string, string> = { exenta: "Exenta", "5": "5%", "10": "10%" };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm" onClick={onClose}>
-      <div className="w-full max-w-2xl overflow-hidden rounded-2xl border-2 border-[#4FAEB2]/20 bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-start justify-between gap-3 border-b border-slate-100 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent px-5 py-4">
+      <div className="w-full max-w-2xl overflow-hidden rounded-2xl border-2 border-[#1E2125]/20 bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start justify-between gap-3 border-b border-slate-100 bg-gradient-to-r from-[#1E2125]/5 to-transparent px-5 py-4">
           <div>
-            <h3 className="font-mono text-sm font-bold text-[#3F8E91]">{compra.numero_control}</h3>
+            <h3 className="font-mono text-sm font-bold text-[#17191C]">{compra.numero_control}</h3>
             <p className="mt-0.5 text-xs text-slate-500">Detalle de la compra</p>
           </div>
           <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700" aria-label="Cerrar">✕</button>
@@ -294,26 +294,26 @@ function Meta({ label, value }: { label: string; value: string }) {
 
 function VistaCompras({ filas, onVer }: { filas: ComprasPanel["compras"]; onVer: (c: ComprasPanel["compras"][number]) => void }) {
   return (
-    <div className="rounded-2xl border border-[#4FAEB2]/30 bg-white p-6 shadow-sm ring-1 ring-[#4FAEB2]/10">
+    <div className="rounded-2xl border border-[#1E2125]/30 bg-white p-6 shadow-sm ring-1 ring-[#1E2125]/10">
       {filas.length === 0 ? (
         <p className="py-6 text-center text-sm text-slate-400">No hay compras en el período seleccionado.</p>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-slate-200">
           <table className="w-full min-w-[880px] text-sm">
-            <thead className="border-b-2 border-[#4FAEB2]/40 bg-[#E5F4F4]">
+            <thead className="border-b-2 border-[#1E2125]/40 bg-[#EEF0F2]">
               <tr>
                 {["Fecha", "N° Compra", "N° Factura", "Proveedor", "Ítems", "Total", "Estado", "Detalle"].map((h, i) => (
-                  <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#3F8E91] ${i === 4 || i === 5 ? "text-right" : i === 7 ? "text-center" : "text-left"}`}>{h}</th>
+                  <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#17191C] ${i === 4 || i === 5 ? "text-right" : i === 7 ? "text-center" : "text-left"}`}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filas.map((c) => (
-                <tr key={c.numero_control} className="transition-colors hover:bg-[#4FAEB2]/5">
+                <tr key={c.numero_control} className="transition-colors hover:bg-[#1E2125]/5">
                   <td className="px-3 py-2.5 text-xs tabular-nums text-slate-600">{formatFecha(c.fecha)}</td>
-                  <td className="px-3 py-2.5 font-mono text-xs font-semibold text-[#3F8E91]">
+                  <td className="px-3 py-2.5 font-mono text-xs font-semibold text-[#17191C]">
                     {c.numero_control}
-                    {c.orden_compra_numero && <span className="ml-1 rounded bg-[#E5F4F4] px-1 text-[10px] text-[#3F8E91]">{c.orden_compra_numero}</span>}
+                    {c.orden_compra_numero && <span className="ml-1 rounded bg-[#EEF0F2] px-1 text-[10px] text-[#17191C]">{c.orden_compra_numero}</span>}
                   </td>
                   <td className="px-3 py-2.5 font-mono text-xs text-slate-500">{c.numero_factura || "—"}</td>
                   <td className="px-3 py-2.5 text-xs font-medium text-slate-800">{c.proveedor_nombre}</td>
@@ -325,7 +325,7 @@ function VistaCompras({ filas, onVer }: { filas: ComprasPanel["compras"]; onVer:
                     </span>
                   </td>
                   <td className="px-3 py-2.5 text-center">
-                    <button type="button" onClick={() => onVer(c)} className="text-xs font-semibold text-[#3F8E91] hover:underline">Ver</button>
+                    <button type="button" onClick={() => onVer(c)} className="text-xs font-semibold text-[#17191C] hover:underline">Ver</button>
                   </td>
                 </tr>
               ))}
@@ -339,7 +339,7 @@ function VistaCompras({ filas, onVer }: { filas: ComprasPanel["compras"]; onVer:
 
 function VistaPendientes({ filas }: { filas: ComprasPanel["pendientes"] }) {
   return (
-    <div className="rounded-2xl border border-[#4FAEB2]/30 bg-white p-6 shadow-sm ring-1 ring-[#4FAEB2]/10">
+    <div className="rounded-2xl border border-[#1E2125]/30 bg-white p-6 shadow-sm ring-1 ring-[#1E2125]/10">
       {filas.length === 0 ? (
         <p className="py-6 text-center text-sm text-slate-400">
           No hay productos ordenados pendientes de recibir en el período seleccionado.
@@ -347,10 +347,10 @@ function VistaPendientes({ filas }: { filas: ComprasPanel["pendientes"] }) {
       ) : (
         <div className="overflow-x-auto rounded-xl border border-slate-200">
           <table className="w-full min-w-[1080px] text-sm">
-            <thead className="border-b-2 border-[#4FAEB2]/40 bg-[#E5F4F4]">
+            <thead className="border-b-2 border-[#1E2125]/40 bg-[#EEF0F2]">
               <tr>
                 {["Fecha OC", "N° OC", "Proveedor", "Producto", "SKU", "Ordenada", "Recibida", "Pendiente", "Precio", "Subtotal pend.", "Estado", ""].map((h, i) => (
-                  <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#3F8E91] ${i >= 5 && i <= 9 ? "text-right" : i === 10 || i === 11 ? "text-center" : "text-left"}`}>{h}</th>
+                  <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#17191C] ${i >= 5 && i <= 9 ? "text-right" : i === 10 || i === 11 ? "text-center" : "text-left"}`}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -358,9 +358,9 @@ function VistaPendientes({ filas }: { filas: ComprasPanel["pendientes"] }) {
               {filas.map((p) => {
                 const est = ESTADO_OC[p.estado] ?? { lbl: p.estado, cls: "bg-slate-100 text-slate-500" };
                 return (
-                  <tr key={p.orden_item_id} className="transition-colors hover:bg-[#4FAEB2]/5">
+                  <tr key={p.orden_item_id} className="transition-colors hover:bg-[#1E2125]/5">
                     <td className="px-3 py-2.5 text-xs tabular-nums text-slate-600">{formatFecha(p.fecha)}</td>
-                    <td className="px-3 py-2.5 font-mono text-xs font-semibold text-[#3F8E91]">{p.numero_oc}</td>
+                    <td className="px-3 py-2.5 font-mono text-xs font-semibold text-[#17191C]">{p.numero_oc}</td>
                     <td className="px-3 py-2.5 text-xs font-medium text-slate-800">{p.proveedor_nombre}</td>
                     <td className="px-3 py-2.5 text-xs text-slate-700">{p.producto_nombre}</td>
                     <td className="px-3 py-2.5 font-mono text-[11px] text-slate-400">{p.sku || "—"}</td>

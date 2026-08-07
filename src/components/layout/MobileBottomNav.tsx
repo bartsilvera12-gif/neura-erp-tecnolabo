@@ -62,11 +62,11 @@ export default function MobileBottomNav() {
               key={item.href}
               href={item.href}
               className={`flex min-h-[56px] flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors active:bg-slate-100 sm:min-h-[64px] sm:text-[11px] ${
-                active ? "text-[#4FAEB2]" : "text-slate-500 hover:text-slate-800"
+                active ? "text-[#1E2125]" : "text-slate-500 hover:text-slate-800"
               }`}
               aria-current={active ? "page" : undefined}
             >
-              <Icon className={`h-5 w-5 ${active ? "text-[#4FAEB2]" : "text-slate-500"}`} aria-hidden />
+              <Icon className={`h-5 w-5 ${active ? "text-[#1E2125]" : "text-slate-500"}`} aria-hidden />
               <span className="leading-none">{item.label}</span>
             </Link>
           );

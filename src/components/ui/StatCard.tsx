@@ -26,16 +26,16 @@ export default function StatCard({
 }) {
   return (
     <div
-      className={`rounded-xl border border-slate-200 bg-white shadow-sm ring-1 ring-[#4FAEB2]/10 ${compact ? "p-3.5" : "p-5"} ${className ?? ""}`}
+      className={`rounded-xl border border-slate-200 bg-white shadow-sm ring-1 ring-[#1E2125]/10 ${compact ? "p-3.5" : "p-5"} ${className ?? ""}`}
     >
       <div className="flex items-start justify-between gap-3">
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400 truncate">
           {label}
         </p>
-        {icon ? <span className="text-base leading-none text-[#4FAEB2]">{icon}</span> : null}
+        {icon ? <span className="text-base leading-none text-[#1E2125]">{icon}</span> : null}
       </div>
       <p
-        className={`mt-1 font-bold tracking-tight ${compact ? "text-base truncate" : "mt-2 text-2xl"} ${accent ? "text-[#3F8E91]" : "text-slate-900"}`}
+        className={`mt-1 font-bold tracking-tight ${compact ? "text-base truncate" : "mt-2 text-2xl"} ${accent ? "text-[#17191C]" : "text-slate-900"}`}
         title={compact && typeof value === "string" ? value : undefined}
       >
         {value}

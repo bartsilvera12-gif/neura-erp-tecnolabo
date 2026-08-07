@@ -397,10 +397,10 @@ export default function ClientesPage() {
           <div className="flex items-center gap-2">
             <span
               aria-hidden="true"
-              className="inline-block h-1.5 w-1.5 rounded-full bg-[#4FAEB2]"
-              style={{ boxShadow: "0 0 0 3px rgba(79, 174, 178, 0.18)" }}
+              className="inline-block h-1.5 w-1.5 rounded-full bg-[#1E2125]"
+              style={{ boxShadow: "0 0 0 3px rgba(30, 33, 37, 0.18)" }}
             />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#4FAEB2]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1E2125]">
               Zentra · Base
             </p>
           </div>
@@ -409,7 +409,7 @@ export default function ClientesPage() {
         </div>
         <Link
           href="/clientes/nuevo"
-          className="flex shrink-0 items-center gap-1.5 rounded-lg bg-[#4FAEB2] px-3 py-1.5 text-xs font-semibold text-white shadow-sm shadow-[#4FAEB2]/25 transition-colors hover:bg-[#3F8E91] active:scale-95"
+          className="flex shrink-0 items-center gap-1.5 rounded-lg bg-[#1E2125] px-3 py-1.5 text-xs font-semibold text-white shadow-sm shadow-[#1E2125]/25 transition-colors hover:bg-[#17191C] active:scale-95"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
             <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
@@ -419,7 +419,7 @@ export default function ClientesPage() {
       </div>
 
       {/* Filtros */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm ring-1 ring-[#4FAEB2]/15 p-4 flex flex-wrap gap-3 items-center">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm ring-1 ring-[#1E2125]/15 p-4 flex flex-wrap gap-3 items-center">
         <input
           type="text"
           placeholder="Buscar por nombre, código, email, RUC..."
@@ -558,7 +558,7 @@ export default function ClientesPage() {
       </div>
 
       {/* Tabla */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm ring-1 ring-[#4FAEB2]/15">
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm ring-1 ring-[#1E2125]/15">
         {cargando ? (
           <div className="py-16 text-center text-gray-400 text-sm animate-pulse">Cargando clientes…</div>
         ) : filtrados.length === 0 ? (
@@ -589,7 +589,7 @@ export default function ClientesPage() {
                 {filtrados.map((c) => (
                   <tr
                     key={c.id}
-                    className="border-b border-slate-200 hover:bg-[#4FAEB2]/[0.04] transition-colors cursor-pointer group"
+                    className="border-b border-slate-200 hover:bg-[#1E2125]/[0.04] transition-colors cursor-pointer group"
                     onClick={() => window.location.href = `/clientes/${c.id}`}
                   >
                     {visibleColumns.map((col) => (

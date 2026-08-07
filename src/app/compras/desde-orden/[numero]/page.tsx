@@ -21,7 +21,7 @@ function fmtFecha(iso: string | null | undefined) {
   }
 }
 const inputClass =
-  "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30";
+  "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30";
 const labelClass = "mb-1 block text-xs font-semibold text-slate-600";
 
 interface RecepcionLinea {
@@ -161,7 +161,7 @@ export default function DesdeOrdenRecepcionPage() {
   if (!cab) {
     return (
       <div className="space-y-4">
-        <Link href="/compras/desde-orden" className="text-sm text-slate-500 hover:text-[#3F8E91]">← Desde Orden de Compra</Link>
+        <Link href="/compras/desde-orden" className="text-sm text-slate-500 hover:text-[#17191C]">← Desde Orden de Compra</Link>
         <p className="text-slate-500">Orden de compra no encontrada.</p>
       </div>
     );
@@ -169,7 +169,7 @@ export default function DesdeOrdenRecepcionPage() {
   if (cab.estado === "cancelada" || cab.estado === "recibida_total") {
     return (
       <div className="space-y-4">
-        <Link href="/compras/desde-orden" className="text-sm text-slate-500 hover:text-[#3F8E91]">← Desde Orden de Compra</Link>
+        <Link href="/compras/desde-orden" className="text-sm text-slate-500 hover:text-[#17191C]">← Desde Orden de Compra</Link>
         <p className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
           Esta orden ya no tiene nada pendiente de recibir ({cab.estado === "cancelada" ? "cancelada" : "recibida por completo"}).
         </p>
@@ -179,7 +179,7 @@ export default function DesdeOrdenRecepcionPage() {
 
   return (
     <div className="space-y-6">
-      <Link href="/compras/desde-orden" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#3F8E91]">
+      <Link href="/compras/desde-orden" className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-[#17191C]">
         ← Desde Orden de Compra
       </Link>
 
@@ -211,10 +211,10 @@ export default function DesdeOrdenRecepcionPage() {
       {/* Tabla de recepción producto por producto */}
       <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
         <table className="w-full min-w-[980px] text-sm">
-          <thead className="border-b-2 border-[#4FAEB2]/40 bg-[#E5F4F4]">
+          <thead className="border-b-2 border-[#1E2125]/40 bg-[#EEF0F2]">
             <tr>
               {["Llegó", "Producto", "Pedida", "Ya recibida", "Pendiente", "Recibida ahora", "Precio", "Subtotal recibido", "Observación"].map((h, i) => (
-                <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#3F8E91] ${i <= 1 ? "text-left" : i === 8 ? "text-left" : "text-right"}`}>{h}</th>
+                <th key={h} className={`px-3 py-3 text-xs font-bold uppercase tracking-wide text-[#17191C] ${i <= 1 ? "text-left" : i === 8 ? "text-left" : "text-right"}`}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -254,7 +254,7 @@ export default function DesdeOrdenRecepcionPage() {
                         disabled={!r.llego}
                         value={r.cantidad}
                         onChange={(e) => setLinea(l.id, { cantidad: e.target.value })}
-                        className={`w-24 rounded-lg border px-2 py-1.5 text-right text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30 disabled:bg-slate-100 disabled:text-slate-400 ${excede ? "border-amber-400" : "border-slate-200"}`}
+                        className={`w-24 rounded-lg border px-2 py-1.5 text-right text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30 disabled:bg-slate-100 disabled:text-slate-400 ${excede ? "border-amber-400" : "border-slate-200"}`}
                       />
                     )}
                     {excede && <p className="mt-0.5 text-[10px] font-semibold text-amber-600">Excede lo pendiente</p>}
@@ -270,7 +270,7 @@ export default function DesdeOrdenRecepcionPage() {
                         placeholder="opcional"
                         value={r.observacion}
                         onChange={(e) => setLinea(l.id, { observacion: e.target.value })}
-                        className="w-full rounded-lg border border-slate-200 px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-[#4FAEB2]/30"
+                        className="w-full rounded-lg border border-slate-200 px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-[#1E2125]/30"
                       />
                     )}
                   </td>
@@ -334,7 +334,7 @@ export default function DesdeOrdenRecepcionPage() {
             <label className={labelClass}>Comprobante / factura <span className="font-normal text-slate-400">(opcional)</span></label>
             <input type="file" accept="image/jpeg,image/png,image/webp,application/pdf"
               onChange={(e) => setComprobanteFile(e.target.files?.[0] ?? null)}
-              className="block w-full text-xs text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-[#4FAEB2] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-white hover:file:bg-[#3F8E91]" />
+              className="block w-full text-xs text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-[#1E2125] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-white hover:file:bg-[#17191C]" />
           </div>
         </div>
 
@@ -344,7 +344,7 @@ export default function DesdeOrdenRecepcionPage() {
             Cancelar
           </Link>
           <button type="button" onClick={() => enviar(false)} disabled={procesando}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#4FAEB2] px-4 py-2 text-sm font-bold text-white hover:bg-[#3F8E91] disabled:opacity-50">
+            className="inline-flex items-center gap-2 rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-bold text-white hover:bg-[#17191C] disabled:opacity-50">
             {procesando && <Loader2 className="h-4 w-4 animate-spin" />}
             Confirmar compra y recepción
           </button>

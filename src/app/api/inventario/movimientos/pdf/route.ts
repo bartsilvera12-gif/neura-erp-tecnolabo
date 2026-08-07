@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
 <title>Movimientos de inventario</title>
 <style>
   body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; color: #1f2937; margin: 0; padding: 24px; font-size: 12px; }
-  .head { display: flex; justify-content: space-between; border-bottom: 3px solid #4FAEB2; padding-bottom: 10px; margin-bottom: 12px; }
+  .head { display: flex; justify-content: space-between; border-bottom: 3px solid #1E2125; padding-bottom: 10px; margin-bottom: 12px; }
   h1 { font-size: 18px; margin: 0; }
   .muted { color: #6b7280; font-size: 11px; }
   table { width: 100%; border-collapse: collapse; }
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
   @media print { body { padding: 0; } }
 </style></head><body>
   <div class="head">
-    <div><div style="font-size:15px;font-weight:700;color:#4FAEB2">${esc(negocio)}</div><div class="muted">Movimientos de inventario</div></div>
+    <div><div style="font-size:15px;font-weight:700;color:#1E2125">${esc(negocio)}</div><div class="muted">Movimientos de inventario</div></div>
     <div class="muted" style="text-align:right">${rows.length} movimiento(s)${rows.length >= 2000 ? " (máx. 2000)" : ""}</div>
   </div>
   <table><thead><tr>${thead}</tr></thead><tbody>${tbody || `<tr><td colspan="${columnas.length}">Sin movimientos</td></tr>`}</tbody></table>

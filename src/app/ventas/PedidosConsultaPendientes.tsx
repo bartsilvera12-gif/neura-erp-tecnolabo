@@ -98,17 +98,17 @@ export default function PedidosConsultaPendientes() {
   }, []);
 
   return (
-    <div className="rounded-2xl border-2 border-[#4FAEB2]/25 bg-white shadow-[0_2px_10px_-2px_rgba(79,174,178,0.12)] overflow-hidden">
-      <div className="px-5 py-4 border-b border-[#4FAEB2]/15 bg-gradient-to-r from-[#4FAEB2]/5 to-transparent flex items-center justify-between gap-3 flex-wrap">
+    <div className="rounded-2xl border-2 border-[#1E2125]/25 bg-white shadow-[0_2px_10px_-2px_rgba(30,33,37,0.12)] overflow-hidden">
+      <div className="px-5 py-4 border-b border-[#1E2125]/15 bg-gradient-to-r from-[#1E2125]/5 to-transparent flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-[#4FAEB2] flex items-center justify-center shadow-sm shadow-[#4FAEB2]/30">
+          <div className="h-10 w-10 rounded-xl bg-[#1E2125] flex items-center justify-center shadow-sm shadow-[#1E2125]/30">
             <Receipt className="h-4.5 w-4.5 text-white" />
           </div>
           <div>
             <h2 className="text-[15px] font-bold text-slate-800 leading-none flex items-center gap-2">
               Pedidos por cobrar
               {pedidos.length > 0 && (
-                <span className="inline-flex items-center justify-center min-w-[28px] h-[22px] px-2 rounded-full bg-[#4FAEB2] text-white text-[11px] font-bold tabular-nums">
+                <span className="inline-flex items-center justify-center min-w-[28px] h-[22px] px-2 rounded-full bg-[#1E2125] text-white text-[11px] font-bold tabular-nums">
                   {pedidos.length}
                 </span>
               )}
@@ -118,15 +118,15 @@ export default function PedidosConsultaPendientes() {
             </p>
           </div>
         </div>
-        {loading && <Loader2 className="h-4 w-4 animate-spin text-[#4FAEB2]" />}
+        {loading && <Loader2 className="h-4 w-4 animate-spin text-[#1E2125]" />}
       </div>
 
       {loading ? (
         <p className="px-5 py-8 text-center text-sm text-slate-400">Cargando…</p>
       ) : pedidos.length === 0 ? (
         <div className="px-5 py-10 text-center">
-          <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-[#4FAEB2]/8 border border-[#4FAEB2]/20 mb-2">
-            <Receipt className="h-5 w-5 text-[#4FAEB2]" />
+          <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-[#1E2125]/8 border border-[#1E2125]/20 mb-2">
+            <Receipt className="h-5 w-5 text-[#1E2125]" />
           </div>
           <p className="text-sm font-semibold text-slate-600">No hay pedidos por cobrar</p>
           <p className="mt-1 text-xs text-slate-400">
@@ -150,7 +150,7 @@ export default function PedidosConsultaPendientes() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {pedidos.map((p) => (
-                <tr key={p.id} className="hover:bg-[#4FAEB2]/3 transition-colors">
+                <tr key={p.id} className="hover:bg-[#1E2125]/3 transition-colors">
                   <td className="px-5 py-3 font-semibold text-slate-800">{p.numero ?? p.titulo}</td>
                   <td className="px-3 py-3 text-slate-600">
                     {p.cliente_nombre ?? <span className="text-slate-300">— Sin cliente</span>}
@@ -159,7 +159,7 @@ export default function PedidosConsultaPendientes() {
                     {p.armado_por_email ?? <span className="text-slate-300">—</span>}
                   </td>
                   <td className="px-3 py-3 text-right tabular-nums text-slate-700">{p.items_count}</td>
-                  <td className="px-3 py-3 text-right tabular-nums font-bold text-[#3F8E91]">{fmtGs(p.total_estimado)}</td>
+                  <td className="px-3 py-3 text-right tabular-nums font-bold text-[#17191C]">{fmtGs(p.total_estimado)}</td>
                   <td className="px-3 py-3">
                     {p.estado === "en_caja" ? (
                       <span
@@ -180,7 +180,7 @@ export default function PedidosConsultaPendientes() {
                   <td className="px-3 py-3 text-right">
                     <Link
                       href={`/ventas/nueva?pedido_caja_id=${p.id}`}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-[#4FAEB2] hover:bg-[#3F8E91] text-white text-xs font-bold px-3 py-1.5 transition-colors shadow-sm shadow-[#4FAEB2]/30"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white text-xs font-bold px-3 py-1.5 transition-colors shadow-sm shadow-[#1E2125]/30"
                     >
                       Cobrar
                       <ArrowRight className="h-3.5 w-3.5" />

@@ -59,7 +59,7 @@ export default function ClienteBuscador({
     );
   }, [clientes, query]);
 
-  const inputC = "w-full rounded-lg border border-slate-200 bg-white pl-9 pr-9 py-2 text-sm outline-none focus:ring-2 focus:ring-[#4FAEB2]/30";
+  const inputC = "w-full rounded-lg border border-slate-200 bg-white pl-9 pr-9 py-2 text-sm outline-none focus:ring-2 focus:ring-[#1E2125]/30";
 
   return (
     <div ref={ref} className={`relative ${className}`}>
@@ -104,7 +104,7 @@ export default function ClienteBuscador({
                 key={c.id}
                 type="button"
                 onClick={() => { onSelect(c); setQuery(""); setOpen(false); }}
-                className="flex w-full items-start gap-2 border-b border-slate-50 px-3 py-2 text-left text-sm hover:bg-[#4FAEB2]/8 last:border-b-0"
+                className="flex w-full items-start gap-2 border-b border-slate-50 px-3 py-2 text-left text-sm hover:bg-[#1E2125]/8 last:border-b-0"
               >
                 <div className="min-w-0 flex-1">
                   <div className="truncate font-medium text-slate-800">{c.nombre}</div>

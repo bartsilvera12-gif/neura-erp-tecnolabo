@@ -385,7 +385,7 @@ export default function ProyectoDetalleInner({
   const panelCls = "rounded-xl border border-slate-200 bg-white p-4 shadow-sm";
   const labelCls = "text-slate-500";
   const inputCls =
-    "mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-[#4FAEB2] focus:outline-none focus:ring-2 focus:ring-[#4FAEB2]/25";
+    "mt-1 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-[#1E2125] focus:outline-none focus:ring-2 focus:ring-[#1E2125]/25";
 
   return (
     <div
@@ -397,7 +397,7 @@ export default function ProyectoDetalleInner({
     >
       {variant === "page" ? (
         <div className="flex flex-wrap items-center gap-3">
-          <Link href="/dashboard/proyectos" className="text-sm text-[#3F8E91] hover:text-[#2F6E71] hover:underline">
+          <Link href="/dashboard/proyectos" className="text-sm text-[#17191C] hover:text-[#2F6E71] hover:underline">
             ← Kanban
           </Link>
         </div>
@@ -437,7 +437,7 @@ export default function ProyectoDetalleInner({
               type="button"
               onClick={() => void enviarACaja()}
               disabled={enviandoCaja}
-              className="rounded-lg bg-[#4FAEB2] px-3 py-2 text-sm font-medium text-white hover:bg-[#3F8E91] disabled:opacity-50"
+              className="rounded-lg bg-[#1E2125] px-3 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50"
             >
               {enviandoCaja ? "Enviando…" : "Enviar a Caja"}
             </button>
@@ -483,7 +483,7 @@ export default function ProyectoDetalleInner({
             onClick={() => setTab(t)}
             className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
               tab === t
-                ? "border border-[#4FAEB2]/30 bg-[#E5F4F4] text-[#2F6E71]"
+                ? "border border-[#1E2125]/30 bg-[#EEF0F2] text-[#2F6E71]"
                 : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
             }`}
           >
@@ -664,7 +664,7 @@ export default function ProyectoDetalleInner({
               </div>
               <button
                 type="button"
-                className="rounded-lg bg-[#4FAEB2] px-4 py-2 text-xs font-medium text-white shadow-sm transition-colors hover:bg-[#3F8E91] disabled:opacity-50"
+                className="rounded-lg bg-[#1E2125] px-4 py-2 text-xs font-medium text-white shadow-sm transition-colors hover:bg-[#17191C] disabled:opacity-50"
                 disabled={!datosDirty}
                 onClick={() => void guardarDatos()}
               >
@@ -720,7 +720,7 @@ export default function ProyectoDetalleInner({
                     <label key={f.key} className="flex items-center gap-2 text-sm text-slate-700">
                       <input
                         type="checkbox"
-                        className="rounded border-slate-300 bg-white accent-[#4FAEB2]"
+                        className="rounded border-slate-300 bg-white accent-[#1E2125]"
                         checked={briefForm[f.key] === "1"}
                         onChange={(e) =>
                           setBriefForm((b) => ({ ...b, [f.key]: e.target.checked ? "1" : "" }))
@@ -805,7 +805,7 @@ export default function ProyectoDetalleInner({
               />
               <button
                 type="submit"
-                className="rounded-lg bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#3F8E91]"
+                className="rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#17191C]"
               >
                 Agregar
               </button>
@@ -846,7 +846,7 @@ export default function ProyectoDetalleInner({
               />
               <button
                 type="submit"
-                className="rounded-lg bg-[#4FAEB2] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#3F8E91]"
+                className="rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#17191C]"
               >
                 Publicar
               </button>

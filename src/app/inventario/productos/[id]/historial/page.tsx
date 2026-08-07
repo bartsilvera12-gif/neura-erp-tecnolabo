@@ -30,7 +30,7 @@ function Sparkline({ data }: { data: number[] }) {
   const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / rango) * (h - 8) - 4}`).join(" ");
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full max-w-[260px] h-12">
-      <polyline points={pts} fill="none" stroke="#4FAEB2" strokeWidth="2" />
+      <polyline points={pts} fill="none" stroke="#1E2125" strokeWidth="2" />
     </svg>
   );
 }
@@ -62,7 +62,7 @@ export default function HistorialProductoPage() {
   useEffect(() => { void cargar(); }, [cargar]);
 
   if (loading) return <div className="p-6 flex items-center gap-2 text-sm text-gray-500"><Loader2 className="h-4 w-4 animate-spin" /> Cargando…</div>;
-  if (!h) return <div className="p-6 space-y-3"><div className="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">{error ?? "No encontrado"}</div><Link href="/inventario" className="text-sm text-[#4FAEB2] hover:underline">Volver</Link></div>;
+  if (!h) return <div className="p-6 space-y-3"><div className="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">{error ?? "No encontrado"}</div><Link href="/inventario" className="text-sm text-[#1E2125] hover:underline">Volver</Link></div>;
 
   const p = h.producto;
   return (
@@ -95,7 +95,7 @@ export default function HistorialProductoPage() {
       {/* Evolución de costos */}
       {h.evolucion_costos.length >= 2 && (
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-          <h2 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5"><TrendingUp className="h-4 w-4 text-[#4FAEB2]" /> Evolución de costos</h2>
+          <h2 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5"><TrendingUp className="h-4 w-4 text-[#1E2125]" /> Evolución de costos</h2>
           <Sparkline data={h.evolucion_costos.map((e) => e.costo_unitario)} />
           <div className="mt-1 flex justify-between text-xs text-gray-500">
             <span>{fmtF(h.evolucion_costos[0].fecha)} · {fmtG(h.evolucion_costos[0].costo_unitario)}</span>
@@ -122,7 +122,7 @@ export default function HistorialProductoPage() {
                     <td className="py-2 px-4 text-gray-800">{c.proveedor_nombre ?? "—"}</td>
                     <td className="py-2 px-4 text-right tabular-nums">{fmtN(c.cantidad)}</td>
                     <td className="py-2 px-4 text-right tabular-nums">{fmtG(c.costo_unitario)}</td>
-                    <td className="py-2 px-4"><Link href={`/compras/${encodeURIComponent(c.numero_control)}/recepciones`} className="text-[#3F8E91] hover:underline">{c.numero_control}</Link></td>
+                    <td className="py-2 px-4"><Link href={`/compras/${encodeURIComponent(c.numero_control)}/recepciones`} className="text-[#17191C] hover:underline">{c.numero_control}</Link></td>
                   </tr>
                 ))}
               </tbody>

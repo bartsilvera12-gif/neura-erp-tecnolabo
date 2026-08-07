@@ -48,14 +48,14 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   *{box-sizing:border-box} html,body{margin:0;padding:0}
   body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1f2937;background:#f3f4f6}
   .page{width:210mm;min-height:148mm;margin:0 auto;background:#fff;padding:16mm 16mm}
-  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #4FAEB2;padding-bottom:12px}
+  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #1E2125;padding-bottom:12px}
   .negocio{font-size:20px;font-weight:800}
-  .tag{display:inline-block;margin-top:4px;background:#4FAEB2;color:#fff;font-size:13px;font-weight:700;letter-spacing:.06em;padding:4px 12px;border-radius:6px}
+  .tag{display:inline-block;margin-top:4px;background:#1E2125;color:#fff;font-size:13px;font-weight:700;letter-spacing:.06em;padding:4px 12px;border-radius:6px}
   .meta{text-align:right;font-size:13px}
-  .meta .num{font-size:18px;font-weight:800;color:#4FAEB2}
+  .meta .num{font-size:18px;font-weight:800;color:#1E2125}
   .row{display:flex;gap:24px;margin-top:16px;font-size:13px}
   .row .l{color:#6b7280;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
-  .montobox{margin-top:18px;border:2px solid #4FAEB2;border-radius:10px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+  .montobox{margin-top:18px;border:2px solid #1E2125;border-radius:10px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
   .montobox .lbl{font-size:12px;text-transform:uppercase;color:#6b7280}
   .montobox .val{font-size:26px;font-weight:800;color:#1f2937}
   .det{margin-top:16px;font-size:13px;line-height:1.7}
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   .firma .linea{width:240px;border-top:1px solid #9ca3af;text-align:center;padding-top:6px;font-size:12px;color:#6b7280}
   .legal{margin-top:26px;padding-top:12px;border-top:1px dashed #d1d5db;font-size:11px;color:#6b7280;text-align:center}
   .toolbar{position:sticky;top:0;background:#111827;padding:10px;text-align:center}
-  .toolbar button{background:#4FAEB2;color:#fff;border:0;padding:8px 16px;border-radius:6px;font-size:14px;cursor:pointer}
+  .toolbar button{background:#1E2125;color:#fff;border:0;padding:8px 16px;border-radius:6px;font-size:14px;cursor:pointer}
   .corte{display:none}
   @media print{
     body{background:#fff}.toolbar{display:none}
