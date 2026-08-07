@@ -373,7 +373,7 @@ export default function SorteosCuponesManualClient() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-[#0EA5E9] text-white font-medium px-4 py-2 rounded-lg hover:bg-sky-600 disabled:opacity-60"
+                  className="bg-[#1E2125] text-white font-medium px-4 py-2 rounded-lg hover:bg-[#1E2125] disabled:opacity-60"
                 >
                   {loading ? "Guardando…" : "Guardar venta"}
                 </button>

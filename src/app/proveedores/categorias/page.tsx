@@ -10,7 +10,7 @@ import {
 import type { ProveedorCategoria } from "@/lib/proveedores/types";
 
 const inputClass =
-  "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0EA5E9]";
+  "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#1E2125]";
 
 export default function ProveedorCategoriasPage() {
   const [lista, setLista] = useState<ProveedorCategoria[]>([]);
@@ -79,7 +79,7 @@ export default function ProveedorCategoriasPage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <Link href="/proveedores" className="text-sm text-sky-600 hover:underline">
+          <Link href="/proveedores" className="text-sm text-[#1E2125] hover:underline">
             ← Proveedores
           </Link>
           <h1 className="mt-2 text-3xl font-bold text-gray-800">Rubros de proveedor</h1>
@@ -111,7 +111,7 @@ export default function ProveedorCategoriasPage() {
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit"
-          className="rounded-lg bg-[#0EA5E9] px-4 py-2 text-sm font-medium text-white hover:bg-[#0284C7]"
+          className="rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-medium text-white hover:bg-[#17191C]"
         >
           Crear
         </button>
@@ -165,7 +165,7 @@ export default function ProveedorCategoriasPage() {
                       <button
                         type="button"
                         onClick={() => void saveEdit()}
-                        className="text-sky-600 font-medium hover:underline"
+                        className="text-[#1E2125] font-medium hover:underline"
                       >
                         Guardar
                       </button>
@@ -181,7 +181,7 @@ export default function ProveedorCategoriasPage() {
                     <button
                       type="button"
                       onClick={() => startEdit(c)}
-                      className="text-sky-600 font-medium hover:underline"
+                      className="text-[#1E2125] font-medium hover:underline"
                     >
                       Editar
                     </button>

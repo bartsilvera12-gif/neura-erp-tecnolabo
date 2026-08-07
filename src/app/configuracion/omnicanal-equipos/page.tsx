@@ -159,7 +159,7 @@ export default function OmnicanalEquiposPage() {
         <p className="text-xs text-slate-500 leading-relaxed">
           Supervisores: solo usuarios con perfil <strong className="text-slate-700">Supervisor</strong> en el ERP.
           Agentes: solo perfil <strong className="text-slate-700">Usuario</strong> y asignados a al menos una cola en{" "}
-          <Link href="/configuracion/colas" className="font-semibold text-[#0EA5E9] hover:underline">
+          <Link href="/configuracion/colas" className="font-semibold text-[#1E2125] hover:underline">
             Colas y enrutamiento
           </Link>
           .
@@ -226,7 +226,7 @@ export default function OmnicanalEquiposPage() {
               !supervisorId ||
               !agentId
             }
-            className="rounded-xl bg-[#0EA5E9] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#0284C7] disabled:opacity-50"
+            className="rounded-xl bg-[#1E2125] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#17191C] disabled:opacity-50"
           >
             {saving ? "Guardando…" : "Asignar agente al supervisor"}
           </button>

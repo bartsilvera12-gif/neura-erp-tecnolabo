@@ -313,7 +313,7 @@ export default function CategoriasProductosPage() {
             <button
               type="submit"
               disabled={creating || !nombre.trim()}
-              className="inline-flex items-center gap-2 bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm px-4 py-2 rounded-lg disabled:opacity-50"
+              className="inline-flex items-center gap-2 bg-[#1E2125] hover:bg-[#17191C] text-white text-sm px-4 py-2 rounded-lg disabled:opacity-50"
             >
               <Plus className="w-4 h-4" />
               {creating ? "Creando..." : "Crear categoría"}
@@ -392,7 +392,7 @@ export default function CategoriasProductosPage() {
                         <button
                           onClick={() => openEdit(c)}
                           title="Editar categoría"
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-700 hover:text-white hover:bg-sky-600 border border-sky-200 hover:border-sky-600 px-2.5 py-1.5 rounded-lg transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-700 hover:text-white hover:bg-[#1E2125] border border-sky-200 hover:border-sky-600 px-2.5 py-1.5 rounded-lg transition-colors"
                         >
                           <Pencil className="w-3.5 h-3.5" />
                           Editar
@@ -485,7 +485,7 @@ export default function CategoriasProductosPage() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="w-full inline-flex items-center justify-center gap-2 text-sm font-semibold text-sky-700 hover:text-white hover:bg-sky-600 border border-sky-200 hover:border-sky-600 px-3 py-2 rounded-lg transition-colors"
+                      className="w-full inline-flex items-center justify-center gap-2 text-sm font-semibold text-sky-700 hover:text-white hover:bg-[#1E2125] border border-sky-200 hover:border-sky-600 px-3 py-2 rounded-lg transition-colors"
                     >
                       <Upload className="w-4 h-4" />
                       {modalCurrentImage ? "Cambiar imagen" : "Subir imagen"}
@@ -580,7 +580,7 @@ export default function CategoriasProductosPage() {
               <button
                 onClick={saveEdit}
                 disabled={eSaving || eUploading || !eNombre.trim()}
-                className="bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
+                className="bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors"
               >
                 {eUploading
                   ? "Subiendo imagen..."

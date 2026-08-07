@@ -70,7 +70,7 @@ function normalizeColor(value: unknown): string | undefined {
   const s = normalizeString(value);
   if (!s) return undefined;
   if (!/^#[0-9a-fA-F]{6}$/.test(s)) {
-    throw new Error("El color debe tener formato hexadecimal, por ejemplo #0EA5E9.");
+    throw new Error("El color debe tener formato hexadecimal, por ejemplo #1E2125.");
   }
   return s;
 }

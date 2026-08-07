@@ -637,7 +637,7 @@ export default function PhysicalCouponsPrintClient({
           <div className="no-print flex flex-wrap gap-2">
             <Link
               href={`/sorteos/${encodeURIComponent(sorteoId)}/imprimir-cupones`}
-              className="text-sm font-medium text-[#0EA5E9] hover:underline"
+              className="text-sm font-medium text-[#1E2125] hover:underline"
             >
               Ver todos los cupones del sorteo (sin filtrar por orden)
             </Link>
@@ -666,7 +666,7 @@ export default function PhysicalCouponsPrintClient({
             type="button"
             onClick={handlePrint}
             disabled={rows.length === 0}
-            className="rounded-lg bg-[#0EA5E9] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#0284C7] disabled:opacity-50 disabled:pointer-events-none"
+            className="rounded-lg bg-[#1E2125] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#17191C] disabled:opacity-50 disabled:pointer-events-none"
           >
             Imprimir cupones
           </button>

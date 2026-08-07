@@ -672,7 +672,7 @@ export default function ConfiguracionComisionesPage() {
                 type="button"
                 onClick={() => void handleGuardar()}
                 disabled={guardando}
-                className="rounded-lg bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow hover:bg-sky-700 disabled:opacity-60"
+                className="rounded-lg bg-[#1E2125] px-5 py-2.5 text-sm font-semibold text-white shadow hover:bg-[#17191C] disabled:opacity-60"
               >
                 {guardando ? "Guardando…" : "Guardar política"}
               </button>

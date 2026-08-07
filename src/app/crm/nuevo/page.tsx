@@ -15,7 +15,7 @@ import type { Plan } from "@/lib/planes/types";
 // ── Estilos ────────────────────────────────────────────────────────────────────
 
 const inputClass =
-  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#0EA5E9] focus:outline-none bg-white text-sm";
+  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#1E2125] focus:outline-none bg-white text-sm";
 const labelClass = "block text-sm font-medium text-slate-700 mb-1.5";
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
@@ -261,7 +261,7 @@ export default function NuevoProspectoPage() {
                   </p>
                   <Link
                     href="/planes/nuevo"
-                    className="mt-3 inline-flex items-center gap-1.5 text-[#0EA5E9] hover:text-[#0284C7] font-medium"
+                    className="mt-3 inline-flex items-center gap-1.5 text-[#1E2125] hover:text-[#17191C] font-medium"
                   >
                     Ir a crear plan →
                   </Link>
@@ -375,7 +375,7 @@ export default function NuevoProspectoPage() {
           <div className="flex gap-4 pt-2">
             <button
               type="submit"
-              className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors shadow-sm active:scale-95"
+              className="bg-[#1E2125] hover:bg-[#17191C] text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors shadow-sm active:scale-95"
             >
               Guardar prospecto
             </button>

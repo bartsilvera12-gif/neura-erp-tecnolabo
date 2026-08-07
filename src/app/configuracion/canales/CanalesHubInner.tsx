@@ -182,7 +182,7 @@ export function CanalesHubInner() {
           </Link>
           <Link
             href="/configuracion/canales/nuevo?tipo=whatsapp"
-            className="inline-flex items-center justify-center shrink-0 rounded-xl bg-[#0EA5E9] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#0284C7] transition-colors"
+            className="inline-flex items-center justify-center shrink-0 rounded-xl bg-[#1E2125] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#17191C] transition-colors"
           >
             Conectar canal
           </Link>
@@ -228,7 +228,7 @@ export function CanalesHubInner() {
               </div>
               <Link
                 href="/configuracion/canales/nuevo?tipo=whatsapp"
-                className="inline-flex items-center justify-center shrink-0 rounded-xl bg-[#0EA5E9] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#0284C7]"
+                className="inline-flex items-center justify-center shrink-0 rounded-xl bg-[#1E2125] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#17191C]"
               >
                 Agregar WhatsApp
               </Link>
@@ -279,7 +279,7 @@ export function CanalesHubInner() {
                     </label>
                     <Link
                       href={`/configuracion/canales/${r.id}`}
-                      className="shrink-0 text-sm font-semibold text-[#0EA5E9] hover:underline"
+                      className="shrink-0 text-sm font-semibold text-[#1E2125] hover:underline"
                     >
                       Editar
                     </Link>
@@ -297,7 +297,7 @@ export function CanalesHubInner() {
             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wide">
               Conexiones {channelTypeLabel(tipoFiltro)}
             </h2>
-            <Link href="/configuracion/canales" className="text-xs font-semibold text-[#0EA5E9] hover:underline">
+            <Link href="/configuracion/canales" className="text-xs font-semibold text-[#1E2125] hover:underline">
               Ver todos los canales
             </Link>
           </div>
@@ -313,7 +313,7 @@ export function CanalesHubInner() {
                 </div>
                 <Link
                   href={`/configuracion/canales/${r.id}`}
-                  className="shrink-0 text-sm font-semibold text-[#0EA5E9] hover:underline"
+                  className="shrink-0 text-sm font-semibold text-[#1E2125] hover:underline"
                 >
                   Editar
                 </Link>

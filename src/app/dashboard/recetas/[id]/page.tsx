@@ -668,7 +668,7 @@ export default function EditarRecetaPage() {
                   return ins?.unidad_medida ? <> Este insumo se controla en <b>{formatUnidad(ins.unidad_medida)}</b>.</> : null;
                 })()}
               </p>
-              <p className="md:col-span-5 -mt-2 text-[11px] text-sky-600">
+              <p className="md:col-span-5 -mt-2 text-[11px] text-[#1E2125]">
                 El sistema convierte automáticamente Kg↔Grs y Lts↔Ml para calcular el costo y descontar stock.
               </p>
               <button

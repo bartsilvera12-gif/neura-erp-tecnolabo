@@ -35,7 +35,7 @@ export interface EmpresaSifenConfigDTO {
   /**
    * Branding opcional KuDE/PDF por empresa. NO afecta XML/firma/SET/CDC.
    * Si `kude_logo_path` es null → renderer usa logo Neura por defecto.
-   * Si `kude_color_primario` es null → renderer usa color Neura #0EA5E9.
+   * Si `kude_color_primario` es null → renderer usa color Neura #1E2125.
    * Si `kude_color_primario_fill` es null pero hay primario → derivado en runtime.
    */
   kude_logo_path: string | null;

@@ -81,7 +81,7 @@ export default function MonitoreoPage() {
           </Link>
           <Link
             href="/dashboard/conversaciones"
-            className="inline-flex items-center rounded-xl bg-[#0EA5E9] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#0284C7]"
+            className="inline-flex items-center rounded-xl bg-[#1E2125] px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#17191C]"
           >
             Ir al inbox
           </Link>
@@ -134,7 +134,7 @@ export default function MonitoreoPage() {
           <button
             type="button"
             onClick={() => void load()}
-            className="text-xs font-semibold text-[#0EA5E9] hover:underline shrink-0"
+            className="text-xs font-semibold text-[#1E2125] hover:underline shrink-0"
           >
             Actualizar
           </button>
@@ -186,7 +186,7 @@ export default function MonitoreoPage() {
                         <Link
                           href={buildMonitoreoInboxHref(r, {})}
                           title="Abrir en inbox"
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-[#0EA5E9] hover:text-[#0284C7]"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-[#1E2125] hover:text-[#17191C]"
                         >
                           <Eye className="h-4 w-4" aria-hidden />
                           <span className="sr-only">Ver en inbox</span>
@@ -194,7 +194,7 @@ export default function MonitoreoPage() {
                         <Link
                           href={buildMonitoreoInboxHref(r, { transferir: true })}
                           title="Transferir…"
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-[#0EA5E9] hover:text-[#0284C7]"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-[#1E2125] hover:text-[#17191C]"
                         >
                           <ArrowLeftRight className="h-4 w-4" aria-hidden />
                           <span className="sr-only">Transferir conversación</span>
@@ -223,7 +223,7 @@ export default function MonitoreoPage() {
           <button
             type="button"
             onClick={() => void load()}
-            className="text-xs font-semibold text-[#0EA5E9] hover:underline shrink-0"
+            className="text-xs font-semibold text-[#1E2125] hover:underline shrink-0"
           >
             Actualizar
           </button>
@@ -267,7 +267,7 @@ export default function MonitoreoPage() {
                           <div className="min-w-0">
                             <Link
                               href={`/dashboard/conversaciones?conversationId=${encodeURIComponent(it.conversation_id)}`}
-                              className="font-medium text-[#0EA5E9] hover:underline truncate block"
+                              className="font-medium text-[#1E2125] hover:underline truncate block"
                             >
                               {it.contact_name?.trim() || "Sin nombre"}
                             </Link>
@@ -306,12 +306,12 @@ export default function MonitoreoPage() {
                 No tenés agentes asignados en{" "}
                 <Link
                   href="/configuracion/omnicanal-equipos"
-                  className="text-[#0EA5E9] font-semibold hover:underline"
+                  className="text-[#1E2125] font-semibold hover:underline"
                 >
                   Equipos y supervisión
                 </Link>
                 , o aún no tienen perfil en{" "}
-                <Link href="/configuracion/colas" className="text-[#0EA5E9] font-semibold hover:underline">
+                <Link href="/configuracion/colas" className="text-[#1E2125] font-semibold hover:underline">
                   Colas
                 </Link>
                 .
@@ -320,7 +320,7 @@ export default function MonitoreoPage() {
               <>
                 No hay filas en <code className="text-xs bg-slate-100 px-1 rounded">chat_agents</code>. Asigná usuarios
                 desde{" "}
-                <Link href="/configuracion/colas" className="text-[#0EA5E9] font-semibold hover:underline">
+                <Link href="/configuracion/colas" className="text-[#1E2125] font-semibold hover:underline">
                   Colas
                 </Link>
                 .

@@ -587,7 +587,7 @@ export function WhatsAppChannelForm({
           <button
             type="submit"
             disabled={saving}
-            className="bg-[#0EA5E9] hover:bg-[#0284C7] disabled:opacity-50 text-white px-5 py-2.5 rounded-lg text-sm font-medium"
+            className="bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white px-5 py-2.5 rounded-lg text-sm font-medium"
           >
             {saving ? "Guardando…" : mode === "edit" ? submitLabelEdit : submitLabelCreate}
           </button>

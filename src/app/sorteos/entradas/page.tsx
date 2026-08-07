@@ -114,11 +114,11 @@ export default async function SorteoEntradasPage({
       </div>
 
       <nav className="flex flex-wrap gap-2 text-sm border-b border-slate-200 pb-3">
-        <Link href="/sorteos" className="text-slate-600 hover:text-[#0EA5E9]">
+        <Link href="/sorteos" className="text-slate-600 hover:text-[#1E2125]">
           Sorteos
         </Link>
-        <span className="font-semibold text-[#0EA5E9]">Entradas</span>
-        <Link href="/sorteos/cupones" className="text-slate-600 hover:text-[#0EA5E9]">
+        <span className="font-semibold text-[#1E2125]">Entradas</span>
+        <Link href="/sorteos/cupones" className="text-slate-600 hover:text-[#1E2125]">
           Cupones
         </Link>
       </nav>
@@ -158,7 +158,7 @@ export default async function SorteoEntradasPage({
         </label>
         <button
           type="submit"
-          className="bg-[#0EA5E9] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-sky-600"
+          className="bg-[#1E2125] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-[#1E2125]"
         >
           Filtrar
         </button>
@@ -267,7 +267,7 @@ export default async function SorteoEntradasPage({
                           href={r.comprobante_url.trim()}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-[#0EA5E9] hover:underline font-medium"
+                          className="text-[#1E2125] hover:underline font-medium"
                         >
                           Abrir
                         </a>

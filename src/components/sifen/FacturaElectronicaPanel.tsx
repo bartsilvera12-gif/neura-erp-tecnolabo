@@ -91,7 +91,7 @@ function ResumenSifenCompacto({ resumen, debugUi }: { resumen: Resumen; debugUi:
         {!resumen.sifen_config_activa ? (
           <a
             href="/configuracion/facturacion-electronica"
-            className="text-xs font-semibold text-[#0EA5E9] hover:underline mt-1 inline-block"
+            className="text-xs font-semibold text-[#1E2125] hover:underline mt-1 inline-block"
           >
             Configuración SIFEN
           </a>
@@ -858,7 +858,7 @@ export function FacturaElectronicaPanel({
                   </summary>
                   <p className="px-2 pb-2 pt-0 flex flex-wrap gap-x-3 gap-y-1">
                     <a
-                      className="text-[#0EA5E9] font-medium hover:underline"
+                      className="text-[#1E2125] font-medium hover:underline"
                       href={`/api/facturas/${facturaId}/sifen/payload`}
                       target="_blank"
                       rel="noreferrer"
@@ -866,7 +866,7 @@ export function FacturaElectronicaPanel({
                       JSON
                     </a>
                     <a
-                      className="text-[#0EA5E9] font-medium hover:underline"
+                      className="text-[#1E2125] font-medium hover:underline"
                       href={`/api/facturas/${facturaId}/sifen/documento`}
                       target="_blank"
                       rel="noreferrer"
@@ -921,7 +921,7 @@ export function FacturaElectronicaPanel({
                 value={motivoCancel}
                 onChange={(e) => setMotivoCancel(e.target.value)}
                 rows={3}
-                className="mt-1 w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9]"
+                className="mt-1 w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125]"
                 placeholder="Ej.: error en datos del cliente acordado verbalmente"
               />
             </label>

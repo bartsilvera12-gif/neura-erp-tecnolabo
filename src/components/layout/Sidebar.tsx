@@ -755,7 +755,7 @@ export default function Sidebar() {
               placeholder="Buscar en el menú…"
               value={menuSearchQuery}
               onChange={(e) => setMenuSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-white/15 bg-white/10 py-2 pl-8 pr-2.5 text-xs text-white outline-none transition-[border-color,box-shadow] placeholder:text-slate-400 focus:border-sky-400/45 focus:ring-2 focus:ring-sky-400/35"
+              className="w-full rounded-lg border border-white/15 bg-white/10 py-2 pl-8 pr-2.5 text-xs text-white outline-none transition-[border-color,box-shadow] placeholder:text-slate-400 focus:border-[#3E434B]/45 focus:ring-2 focus:ring-sky-400/35"
             />
           </div>
         </div>

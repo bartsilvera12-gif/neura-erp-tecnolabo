@@ -15,7 +15,7 @@ const UNIDADES_OPCIONES = [
 ] as const;
 
 const TIPO_SUMMARY: Record<"reventa" | "menu" | "materia", { titulo: string; descripcion: string; Icon: LucideIcon; acento: string }> = {
-  reventa: { titulo: "Producto de reventa", descripcion: "Se compra y se vende tal cual. Controla stock y descuenta al vender.", Icon: ShoppingBag, acento: "text-sky-600" },
+  reventa: { titulo: "Producto de reventa", descripcion: "Se compra y se vende tal cual. Controla stock y descuenta al vender.", Icon: ShoppingBag, acento: "text-[#1E2125]" },
   menu:    { titulo: "Producto del menú",   descripcion: "Se vende en Ventas y genera pedido. No descuenta stock directo.",     Icon: ClipboardList, acento: "text-amber-600" },
   materia: { titulo: "Materia prima / insumo", descripcion: "Se usa para recetas y costeo. No aparece como producto de venta.", Icon: Boxes, acento: "text-emerald-600" },
 };
@@ -413,7 +413,7 @@ export default function NuevoProductoPage() {
   const esPerdida = markupCalc !== null && markupCalc < 0;
 
   const inputClass =
-    "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#0EA5E9] focus:outline-none bg-white text-sm";
+    "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#1E2125] focus:outline-none bg-white text-sm";
   const labelClass = "block text-sm font-medium text-slate-700 mb-2";
 
   // Paso 0: selector inicial de tipo de producto
@@ -430,10 +430,10 @@ export default function NuevoProductoPage() {
               tipo: "reventa" as const,
               titulo: "Producto de reventa",
               Icon: ShoppingBag,
-              iconColor: "text-sky-600",
+              iconColor: "text-[#1E2125]",
               ejemplo: "Gaseosas, agua, jugos, postres comprados",
               descripcion: "Se compra y se vende tal cual. Controla stock y descuenta al vender.",
-              acento: "border-sky-300 bg-sky-50/40 hover:border-sky-500",
+              acento: "border-sky-300 bg-sky-50/40 hover:border-[#1E2125]",
             },
             {
               tipo: "menu" as const,
@@ -584,7 +584,7 @@ export default function NuevoProductoPage() {
                 <select
                   onChange={handleSelectPatron}
                   defaultValue=""
-                  className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-600 outline-none focus:ring-2 focus:ring-[#0EA5E9]"
+                  className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs text-slate-600 outline-none focus:ring-2 focus:ring-[#1E2125]"
                 >
                   <option value="">Usar patrón existente…</option>
                   {skuPatrones.map((p) => (
@@ -655,7 +655,7 @@ export default function NuevoProductoPage() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <label className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm px-4 py-2 rounded-lg cursor-pointer transition-colors">
+                  <label className="bg-[#1E2125] hover:bg-[#17191C] text-white text-sm px-4 py-2 rounded-lg cursor-pointer transition-colors">
                     {imagenFile ? "Cambiar imagen" : "Seleccionar imagen"}
                     <input
                       type="file"
@@ -1196,7 +1196,7 @@ export default function NuevoProductoPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-5 py-3 rounded-lg text-sm font-medium transition-colors shadow-sm active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-[#1E2125] hover:bg-[#17191C] text-white px-5 py-3 rounded-lg text-sm font-medium transition-colors shadow-sm active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? "Guardando..." : "Guardar producto"}
             </button>

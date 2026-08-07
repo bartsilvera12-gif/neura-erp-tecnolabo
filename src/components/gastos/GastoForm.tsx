@@ -10,7 +10,7 @@ import { Repeat, Search } from "lucide-react";
 
 const fLabel = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1";
 const fInput =
-  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white";
+  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white";
 
 type Props = {
   gasto?: Gasto | null;
@@ -131,7 +131,7 @@ export default function GastoForm({ gasto, onSuccess }: Props) {
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
           <div className="mb-3 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Repeat className="h-4 w-4 text-[#0EA5E9]" />
+              <Repeat className="h-4 w-4 text-[#1E2125]" />
               <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">
                 Gastos previos ({plantillas.length})
               </h3>
@@ -143,7 +143,7 @@ export default function GastoForm({ gasto, onSuccess }: Props) {
                 value={buscaHist}
                 onChange={(e) => setBuscaHist(e.target.value)}
                 placeholder="Filtrar…"
-                className="w-full rounded-md border border-slate-200 bg-white pl-7 pr-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-[#0EA5E9]/30"
+                className="w-full rounded-md border border-slate-200 bg-white pl-7 pr-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-[#1E2125]/30"
               />
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function GastoForm({ gasto, onSuccess }: Props) {
                 key={g.id}
                 type="button"
                 onClick={() => usarPlantilla(g)}
-                className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-left transition-colors hover:border-[#0EA5E9] hover:bg-[#0EA5E9]/[0.06]"
+                className="rounded-lg border border-slate-200 bg-slate-50/50 px-3 py-2 text-left transition-colors hover:border-[#1E2125] hover:bg-[#1E2125]/[0.06]"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
@@ -242,7 +242,7 @@ export default function GastoForm({ gasto, onSuccess }: Props) {
               name="recurrente"
               checked={form.recurrente}
               onChange={handleChange}
-              className="rounded border-slate-300 text-[#0EA5E9] focus:ring-[#0EA5E9]"
+              className="rounded border-slate-300 text-[#1E2125] focus:ring-[#1E2125]"
             />
             <label htmlFor="recurrente" className="text-sm text-slate-700">
               Gasto recurrente
@@ -298,7 +298,7 @@ export default function GastoForm({ gasto, onSuccess }: Props) {
         <button
           type="submit"
           disabled={guardando}
-          className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {guardando ? "Guardando…" : gasto ? "Guardar cambios" : "Crear gasto"}
         </button>

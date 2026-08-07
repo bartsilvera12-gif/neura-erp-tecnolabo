@@ -16,7 +16,7 @@ import type { Modulo, UsuarioEmpresa } from "@/lib/empresas/actions";
 
 const fLabel = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1";
 const fInput =
-  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white";
+  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white";
 
 function BadgeEstado({ estado }: { estado: string }) {
   const activo = estado === "activo";
@@ -421,7 +421,7 @@ export default function EditarEmpresaPage() {
                 <button
                   type="submit"
                   disabled={guardandoAdmin}
-                  className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                  className="bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
                 >
                   {guardandoAdmin ? "Guardando…" : "Guardar"}
                 </button>
@@ -479,7 +479,7 @@ export default function EditarEmpresaPage() {
                 <button
                   type="button"
                   onClick={() => setEditandoAdmin(true)}
-                  className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                  className="bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
                 >
                   Editar nombre / email
                 </button>
@@ -527,7 +527,7 @@ export default function EditarEmpresaPage() {
                     <button
                       type="submit"
                       disabled={guardandoPassword || nuevaPassword.length < 6}
-                      className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm font-semibold px-4 py-2 rounded-lg disabled:opacity-50 shrink-0"
+                      className="bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-semibold px-4 py-2 rounded-lg disabled:opacity-50 shrink-0"
                     >
                       {guardandoPassword ? "Guardando…" : "Aplicar"}
                     </button>
@@ -621,7 +621,7 @@ export default function EditarEmpresaPage() {
           <button
             type="submit"
             disabled={guardando}
-            className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+            className="bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
           >
             {guardando ? "Guardando…" : "Guardar cambios"}
           </button>

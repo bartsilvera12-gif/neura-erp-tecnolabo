@@ -1611,7 +1611,7 @@ export function ConversacionesClient({
                         setTransferModalOpen(false);
                       })
                     }
-                    className="shrink-0 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-700 disabled:opacity-50 disabled:pointer-events-none"
+                    className="shrink-0 rounded-xl bg-[#1E2125] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#17191C] disabled:opacity-50 disabled:pointer-events-none"
                   >
                     Transferir
                   </button>
@@ -1713,7 +1713,7 @@ export function ConversacionesClient({
             {mode === "historial" ? (
               <>
                 {" · "}
-                <Link href="/dashboard/conversaciones" className="text-[#0EA5E9] hover:underline font-medium">
+                <Link href="/dashboard/conversaciones" className="text-[#1E2125] hover:underline font-medium">
                   Inbox
                 </Link>
               </>
@@ -1728,7 +1728,7 @@ export function ConversacionesClient({
               </span>
               <span className="text-[10px] text-slate-600 leading-snug">
                 Sin puesto en colas ·{" "}
-                <Link href="/configuracion/colas" className="font-semibold text-[#0EA5E9] hover:underline">
+                <Link href="/configuracion/colas" className="font-semibold text-[#1E2125] hover:underline">
                   Colas
                 </Link>
               </span>
@@ -1740,7 +1740,7 @@ export function ConversacionesClient({
               </span>
               <span className="text-[10px] text-slate-600 leading-snug">
                 Sin fila de agente en colas ·{" "}
-                <Link href="/configuracion/colas" className="font-semibold text-[#0EA5E9] hover:underline">
+                <Link href="/configuracion/colas" className="font-semibold text-[#1E2125] hover:underline">
                   Colas
                 </Link>
               </span>
@@ -1765,7 +1765,7 @@ export function ConversacionesClient({
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">Tu turno</span>
                 {opPresenceBusy ? (
-                  <span className="text-[10px] font-medium text-sky-600 animate-pulse">Guardando…</span>
+                  <span className="text-[10px] font-medium text-[#1E2125] animate-pulse">Guardando…</span>
                 ) : null}
               </div>
               <p className="text-[11px] font-bold text-slate-800 tabular-nums">
@@ -2011,7 +2011,7 @@ export function ConversacionesClient({
                   type="button"
                   onClick={() => handleSelect(c.id)}
                   className={`w-full text-left px-2.5 py-2 border-b border-slate-100 hover:bg-white transition-colors ${
-                    selectedId === c.id ? "bg-white border-l-[3px] border-l-[#0EA5E9]" : ""
+                    selectedId === c.id ? "bg-white border-l-[3px] border-l-[#1E2125]" : ""
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -2039,7 +2039,7 @@ export function ConversacionesClient({
                           </span>
                         ) : null}
                         {c.unread_count > 0 && (
-                          <span className="bg-[#0EA5E9] text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                          <span className="bg-[#1E2125] text-white text-xs font-bold px-2 py-0.5 rounded-full">
                             {c.unread_count}
                           </span>
                         )}
@@ -2101,7 +2101,7 @@ export function ConversacionesClient({
                 <button
                   type="button"
                   onClick={() => setListColumnHidden(false)}
-                  className="text-xs font-medium text-[#0EA5E9] hover:underline"
+                  className="text-xs font-medium text-[#1E2125] hover:underline"
                 >
                   Mostrar lista de chats
                 </button>
@@ -2216,7 +2216,7 @@ export function ConversacionesClient({
                             setTransferQueueTarget(selected.queue_id?.trim() ? selected.queue_id : "");
                             setTransferModalOpen(true);
                           }}
-                          className="inline-flex items-center gap-1 rounded-md bg-sky-600 text-white px-2 py-1 text-[11px] font-semibold shadow-sm hover:bg-sky-700 disabled:opacity-50"
+                          className="inline-flex items-center gap-1 rounded-md bg-[#1E2125] text-white px-2 py-1 text-[11px] font-semibold shadow-sm hover:bg-[#17191C] disabled:opacity-50"
                         >
                           <ArrowLeftRight className="w-3.5 h-3.5 shrink-0" aria-hidden />
                           Transferir
@@ -2273,7 +2273,7 @@ export function ConversacionesClient({
                       {selected.contact.cliente_id ? (
                         <Link
                           href={`/clientes/${selected.contact.cliente_id}`}
-                          className="inline-flex items-center rounded-md px-2 py-1 text-[11px] font-semibold text-[#0EA5E9] hover:underline"
+                          className="inline-flex items-center rounded-md px-2 py-1 text-[11px] font-semibold text-[#1E2125] hover:underline"
                         >
                           Cliente
                         </Link>
@@ -2358,7 +2358,7 @@ export function ConversacionesClient({
                                   href={v.comprobante_url}
                                   target="_blank"
                                   rel="noreferrer"
-                                  className="text-[#0EA5E9] hover:underline"
+                                  className="text-[#1E2125] hover:underline"
                                 >
                                   Ver archivo
                                 </a>
@@ -2427,7 +2427,7 @@ export function ConversacionesClient({
                         <div
                           className={`max-w-[88%] rounded-2xl px-2.5 py-1.5 text-sm ${
                             m.from_me
-                              ? "bg-[#0EA5E9] text-white rounded-br-md shadow-md shadow-sky-900/15 ring-1 ring-white/15"
+                              ? "bg-[#1E2125] text-white rounded-br-md shadow-md shadow-sky-900/15 ring-1 ring-white/15"
                               : "bg-white text-slate-800 rounded-bl-md border border-slate-200/95 shadow-sm border-l-[3px] border-l-sky-300/90"
                           }`}
                         >
@@ -2483,7 +2483,7 @@ export function ConversacionesClient({
                                   rel="noreferrer"
                                   className={`flex items-start gap-3 rounded-xl border px-3 py-2.5 no-underline transition-colors ${
                                     m.from_me
-                                      ? "border-white/25 bg-sky-500/20 hover:bg-sky-500/30 text-white"
+                                      ? "border-white/25 bg-[#1E2125]/20 hover:bg-[#1E2125]/30 text-white"
                                       : "border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-900"
                                   }`}
                                 >
@@ -2649,7 +2649,7 @@ export function ConversacionesClient({
                           }}
                           className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border disabled:opacity-50 ${
                             quickReplyOpen
-                              ? "border-sky-400 bg-sky-50 text-sky-800"
+                              ? "border-[#3E434B] bg-sky-50 text-sky-800"
                               : "border-slate-200 text-slate-600 hover:bg-slate-50"
                           }`}
                           title="Respuestas rápidas"
@@ -2663,7 +2663,7 @@ export function ConversacionesClient({
                             <div className="border-b border-slate-100 px-2 py-1.5">
                               <input
                                 type="search"
-                                className="w-full rounded-lg border border-slate-200 px-2 py-1.5 text-xs outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400/30"
+                                className="w-full rounded-lg border border-slate-200 px-2 py-1.5 text-xs outline-none focus:border-[#3E434B] focus:ring-1 focus:ring-sky-400/30"
                                 placeholder="Buscar…"
                                 value={quickReplySearch}
                                 onChange={(e) => setQuickReplySearch(e.target.value)}
@@ -2705,7 +2705,7 @@ export function ConversacionesClient({
                     ) : null}
                   </div>
                   <input
-                    className="flex-1 min-w-0 border border-slate-200 rounded-lg px-2.5 py-2 text-sm min-h-[2.25rem] focus:ring-2 focus:ring-[#0EA5E9]/30 focus:border-[#0EA5E9] outline-none"
+                    className="flex-1 min-w-0 border border-slate-200 rounded-lg px-2.5 py-2 text-sm min-h-[2.25rem] focus:ring-2 focus:ring-[#1E2125]/30 focus:border-[#1E2125] outline-none"
                     placeholder="Escribí un mensaje…"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -2714,7 +2714,7 @@ export function ConversacionesClient({
                   <button
                     type="submit"
                     disabled={sending || !input.trim()}
-                    className="bg-[#0EA5E9] hover:bg-[#0284C7] disabled:opacity-50 text-white px-3 py-2 rounded-lg text-sm font-medium shrink-0 min-h-[2.25rem]"
+                    className="bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white px-3 py-2 rounded-lg text-sm font-medium shrink-0 min-h-[2.25rem]"
                   >
                     {sending ? "…" : "Enviar"}
                   </button>

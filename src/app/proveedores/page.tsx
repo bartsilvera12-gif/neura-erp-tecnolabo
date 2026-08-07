@@ -66,7 +66,7 @@ export default function ProveedoresPage() {
           </Link>
           <Link
             href="/proveedores/nuevo"
-            className="rounded-lg bg-[#0EA5E9] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#0284C7]"
+            className="rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#17191C]"
           >
             + Nuevo proveedor
           </Link>
@@ -80,7 +80,7 @@ export default function ProveedoresPage() {
             placeholder="Buscar por nombre, RUC, email o categoría…"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            className="min-w-[240px] flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#0EA5E9]"
+            className="min-w-[240px] flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-[#1E2125]"
           />
           <span className="text-sm text-slate-400">
             {filtradas.length} de {lista.length}
@@ -156,7 +156,7 @@ export default function ProveedoresPage() {
                     <td className="py-3">
                       <Link
                         href={`/proveedores/${p.id}/editar`}
-                        className="text-sm font-medium text-sky-600 hover:underline"
+                        className="text-sm font-medium text-[#1E2125] hover:underline"
                       >
                         Editar
                       </Link>

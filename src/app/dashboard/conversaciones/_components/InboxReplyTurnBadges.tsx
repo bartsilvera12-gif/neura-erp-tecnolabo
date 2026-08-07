@@ -41,7 +41,7 @@ function InboxReplyTurnBadgesInner({ c, dense }: Props) {
           className={`inline-flex items-center gap-0.5 font-semibold text-sky-950 bg-sky-50 border border-sky-200 rounded ${pad} shrink-0`}
           title="Último mensaje saliente; turno del contacto"
         >
-          <UserRound className={`shrink-0 text-sky-600 ${dense ? "w-3 h-3" : "w-3.5 h-3.5"}`} aria-hidden />
+          <UserRound className={`shrink-0 text-[#1E2125] ${dense ? "w-3 h-3" : "w-3.5 h-3.5"}`} aria-hidden />
           <LiveElapsedLabel sinceIso={clientSince} />
         </span>
       ) : null}

@@ -102,7 +102,7 @@ export default function ConfiguracionColasPage() {
         <span>/</span>
         <span className="text-slate-800 font-medium">Colas y enrutamiento</span>
         <span className="text-slate-300">·</span>
-        <Link href="/configuracion/omnicanal-equipos" className="text-[#0EA5E9] hover:underline font-medium">
+        <Link href="/configuracion/omnicanal-equipos" className="text-[#1E2125] hover:underline font-medium">
           Equipos y supervisión
         </Link>
       </nav>
@@ -117,7 +117,7 @@ export default function ConfiguracionColasPage() {
         <button
           type="button"
           onClick={() => void handleNew()}
-          className="rounded-xl bg-[#0EA5E9] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#0284C7]"
+          className="rounded-xl bg-[#1E2125] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#17191C]"
         >
           Nueva cola
         </button>
@@ -156,7 +156,7 @@ export default function ConfiguracionColasPage() {
                   </span>
                   <Link
                     href={`/configuracion/colas/${encodeURIComponent(String(q.id ?? "").trim())}`}
-                    className="text-sm font-semibold text-[#0EA5E9] hover:underline"
+                    className="text-sm font-semibold text-[#1E2125] hover:underline"
                   >
                     Editar
                   </Link>
@@ -167,7 +167,7 @@ export default function ConfiguracionColasPage() {
         )}
       </div>
       <p className="text-xs text-slate-400">
-        El módulo <Link href="/dashboard/monitoreo" className="text-[#0EA5E9] hover:underline">Monitoreo</Link> resume
+        El módulo <Link href="/dashboard/monitoreo" className="text-[#1E2125] hover:underline">Monitoreo</Link> resume
         carga operativa en tiempo casi real.
       </p>
     </div>

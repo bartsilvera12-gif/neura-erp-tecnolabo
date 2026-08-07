@@ -71,20 +71,20 @@ export default function SorteosListClient({ ventasKpis }: { ventasKpis: SorteosV
         </div>
         <Link
           href="/sorteos/nuevo"
-          className="shrink-0 bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm self-start"
+          className="shrink-0 bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm self-start"
         >
           Nuevo sorteo
         </Link>
       </div>
 
       <nav className="flex flex-wrap gap-4 text-sm border-b border-slate-200 pb-2.5">
-        <span className="font-semibold text-[#0EA5E9] border-b-2 border-[#0EA5E9] -mb-2.5 pb-2.5">
+        <span className="font-semibold text-[#1E2125] border-b-2 border-[#1E2125] -mb-2.5 pb-2.5">
           Sorteos
         </span>
-        <Link href="/sorteos/entradas" className="text-slate-600 hover:text-[#0EA5E9] pb-2">
+        <Link href="/sorteos/entradas" className="text-slate-600 hover:text-[#1E2125] pb-2">
           Entradas
         </Link>
-        <Link href="/sorteos/cupones" className="text-slate-600 hover:text-[#0EA5E9] pb-2">
+        <Link href="/sorteos/cupones" className="text-slate-600 hover:text-[#1E2125] pb-2">
           Cupones
         </Link>
       </nav>
@@ -104,7 +104,7 @@ export default function SorteosListClient({ ventasKpis }: { ventasKpis: SorteosV
         ) : rows.length === 0 ? (
           <div className="py-16 text-center text-gray-400">
             <p className="font-medium text-gray-600">No hay sorteos</p>
-            <Link href="/sorteos/nuevo" className="mt-3 inline-block text-sm text-[#0EA5E9] hover:underline">
+            <Link href="/sorteos/nuevo" className="mt-3 inline-block text-sm text-[#1E2125] hover:underline">
               Crear el primero
             </Link>
           </div>
@@ -137,7 +137,7 @@ export default function SorteosListClient({ ventasKpis }: { ventasKpis: SorteosV
                   <td className="px-5 py-3 text-sm text-right tabular-nums hidden md:table-cell">{s.max_boletos}</td>
                   <td className="px-5 py-3 text-sm text-right tabular-nums">{s.total_boletos_vendidos}</td>
                   <td className="px-5 py-3">
-                    <Link href={`/sorteos/${s.id}/editar`} className="inline-flex items-center min-h-[40px] text-sm text-[#0EA5E9] hover:underline">
+                    <Link href={`/sorteos/${s.id}/editar`} className="inline-flex items-center min-h-[40px] text-sm text-[#1E2125] hover:underline">
                       Editar
                     </Link>
                   </td>

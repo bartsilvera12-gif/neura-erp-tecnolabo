@@ -662,7 +662,7 @@ export default function MobileDashboard({
                 </div>
                 <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-sky-500 rounded-full"
+                    className="h-full bg-[#1E2125] rounded-full"
                     style={{ width: `${financieroMetrics.pctCredito}%` }}
                   />
                 </div>
@@ -710,7 +710,7 @@ export default function MobileDashboard({
       {seccion === "inventario" && (
       <>
         {/* KPI principal: valor total inventario */}
-        <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl p-5 text-white shadow-md">
+        <div className="bg-gradient-to-br from-[#1E2125] to-[#17191C] rounded-2xl p-5 text-white shadow-md">
           <p className="text-[10px] font-bold uppercase tracking-widest opacity-90 mb-2">
             Valor total del inventario
           </p>

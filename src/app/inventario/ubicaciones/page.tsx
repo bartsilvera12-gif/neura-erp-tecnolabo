@@ -22,7 +22,7 @@ const TIPOS = ["deposito", "salon", "pasillo", "gondola", "estante", "zona", "ot
 type TipoMeta = { label: string; badge: string; icon: React.ComponentType<{ className?: string }> };
 const TIPO_META: Record<string, TipoMeta> = {
   deposito: { label: "Depósito", badge: "bg-[#1E2125]/12 text-[#17191C] border-[#1E2125]/30", icon: Warehouse },
-  salon: { label: "Salón", badge: "bg-indigo-50 text-indigo-700 border-indigo-200", icon: Store },
+  salon: { label: "Salón", badge: "bg-indigo-50 text-[#17191C] border-indigo-200", icon: Store },
   pasillo: { label: "Pasillo", badge: "bg-amber-50 text-amber-700 border-amber-200", icon: Rows3 },
   gondola: { label: "Góndola", badge: "bg-violet-50 text-violet-700 border-violet-200", icon: LayoutGrid },
   estante: { label: "Estante", badge: "bg-sky-50 text-sky-700 border-sky-200", icon: Boxes },

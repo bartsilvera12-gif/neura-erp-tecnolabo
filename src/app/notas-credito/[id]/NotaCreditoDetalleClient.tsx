@@ -71,7 +71,7 @@ export default function NotaCreditoDetalleClient() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">{err ?? "Sin datos"}</div>
-        <Link href="/notas-credito" className="inline-block mt-4 text-[#0EA5E9] text-sm font-semibold hover:underline">
+        <Link href="/notas-credito" className="inline-block mt-4 text-[#1E2125] text-sm font-semibold hover:underline">
           ← Volver al listado
         </Link>
       </div>
@@ -86,7 +86,7 @@ export default function NotaCreditoDetalleClient() {
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <Link href="/notas-credito" className="text-xs font-semibold text-[#0EA5E9] hover:underline">
+          <Link href="/notas-credito" className="text-xs font-semibold text-[#1E2125] hover:underline">
             ← Notas de crédito
           </Link>
           <h1 className="text-2xl font-bold text-slate-900 mt-1">Detalle de nota de crédito</h1>
@@ -106,7 +106,7 @@ export default function NotaCreditoDetalleClient() {
           <div>
             <dt className="text-slate-400 text-xs">Cliente</dt>
             <dd className="font-medium">
-              <Link href={`/clientes/${data.cliente.id}`} className="text-[#0EA5E9] hover:underline">
+              <Link href={`/clientes/${data.cliente.id}`} className="text-[#1E2125] hover:underline">
                 {data.cliente.display}
               </Link>
               {data.cliente.ruc ? <span className="text-slate-500 text-xs ml-1">RUC {data.cliente.ruc}</span> : null}
@@ -173,7 +173,7 @@ export default function NotaCreditoDetalleClient() {
             </div>
           </dl>
           <details className="text-xs">
-            <summary className="cursor-pointer text-[#0EA5E9] font-semibold">Respuestas SET (JSON)</summary>
+            <summary className="cursor-pointer text-[#1E2125] font-semibold">Respuestas SET (JSON)</summary>
             <pre className="mt-2 max-h-64 overflow-auto rounded bg-slate-50 p-2 text-[10px]">
               {JSON.stringify(
                 {
@@ -196,7 +196,7 @@ export default function NotaCreditoDetalleClient() {
         ) : (
           <ul className="space-y-4">
             {data.eventos.map((ev: NotaCreditoEventoAuditoriaDTO) => (
-              <li key={ev.id} className="border-l-4 border-sky-400 pl-4 py-1">
+              <li key={ev.id} className="border-l-4 border-[#3E434B] pl-4 py-1">
                 <div className="flex flex-wrap items-baseline gap-2">
                   <span className="text-sm font-bold text-slate-800">{labelTipoEvento(ev.tipo_evento)}</span>
                   <span className="text-xs text-slate-400">

@@ -107,13 +107,13 @@ export default async function SorteoCuponesPage({
       </div>
 
       <nav className="flex flex-wrap gap-2 text-sm border-b border-slate-200 pb-3">
-        <Link href="/sorteos" className="text-slate-600 hover:text-[#0EA5E9]">
+        <Link href="/sorteos" className="text-slate-600 hover:text-[#1E2125]">
           Sorteos
         </Link>
-        <Link href="/sorteos/entradas" className="text-slate-600 hover:text-[#0EA5E9]">
+        <Link href="/sorteos/entradas" className="text-slate-600 hover:text-[#1E2125]">
           Entradas
         </Link>
-        <span className="font-semibold text-[#0EA5E9]">Cupones</span>
+        <span className="font-semibold text-[#1E2125]">Cupones</span>
       </nav>
 
       <form method="get" className="flex flex-wrap gap-2 items-end bg-slate-50 border border-slate-200 rounded-lg p-4">
@@ -138,7 +138,7 @@ export default async function SorteoCuponesPage({
         <SorteoCuponesEstadoPagoFilter />
         <button
           type="submit"
-          className="bg-[#0EA5E9] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-sky-600"
+          className="bg-[#1E2125] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-[#1E2125]"
         >
           Filtrar
         </button>
@@ -233,7 +233,7 @@ export default async function SorteoCuponesPage({
                       {r.chat_conversation_id ? (
                         <Link
                           href={`/dashboard/conversaciones?conversationId=${encodeURIComponent(r.chat_conversation_id)}`}
-                          className="text-[#0EA5E9] hover:underline"
+                          className="text-[#1E2125] hover:underline"
                         >
                           Abrir
                         </Link>

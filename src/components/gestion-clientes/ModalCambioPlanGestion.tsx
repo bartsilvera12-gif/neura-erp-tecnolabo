@@ -229,7 +229,7 @@ export function ModalCambioPlanGestion({
                               !ok
                                 ? "border-slate-100 bg-slate-50 text-slate-400"
                                 : modo === m
-                                  ? "border-sky-500 bg-sky-50/80"
+                                  ? "border-[#1E2125] bg-sky-50/80"
                                   : "border-slate-200 hover:bg-slate-50"
                             }`}
                           >

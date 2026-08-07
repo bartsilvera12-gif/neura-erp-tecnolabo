@@ -6,11 +6,11 @@ import type { AreaUsuario, NivelUsuario, TipoContrato } from "@/lib/usuarios/typ
 export const usuarioFormLabel =
   "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1";
 export const usuarioFormInput =
-  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white";
+  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white";
 export const usuarioFormInputGray =
   "w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900/20 bg-white";
 export const usuarioFormSelect =
-  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white";
+  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white";
 
 export function SectionCard({
   title,

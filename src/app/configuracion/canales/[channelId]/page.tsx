@@ -86,7 +86,7 @@ export default function EditarCanalPage() {
     return (
       <div className="max-w-xl space-y-4">
         <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{loadError}</div>
-        <Link href="/configuracion/canales" className="text-sm font-medium text-[#0EA5E9] hover:underline">
+        <Link href="/configuracion/canales" className="text-sm font-medium text-[#1E2125] hover:underline">
           ← Volver a canales
         </Link>
       </div>
@@ -101,7 +101,7 @@ export default function EditarCanalPage() {
     return (
       <div className="max-w-xl space-y-4">
         <p className="text-slate-700">No encontramos este canal o no pertenece a tu empresa.</p>
-        <Link href="/configuracion/canales" className="text-sm font-medium text-[#0EA5E9] hover:underline">
+        <Link href="/configuracion/canales" className="text-sm font-medium text-[#1E2125] hover:underline">
           ← Volver a canales
         </Link>
       </div>

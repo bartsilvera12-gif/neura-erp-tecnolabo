@@ -32,7 +32,7 @@ import type { EstadoFactura, Factura } from "@/lib/gestion-clientes/types";
 // ── Estilos ────────────────────────────────────────────────────────────────────
 
 const fInputClass =
-  "w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#0EA5E9] focus:outline-none bg-white";
+  "w-full border border-slate-200 rounded-lg px-2.5 py-1.5 text-sm outline-none focus:ring-2 focus:ring-[#1E2125] focus:outline-none bg-white";
 const fLabelClass = "mb-0.5 block text-[11px] font-medium text-slate-500";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -99,7 +99,7 @@ function BadgeFactura({ estado }: { estado: string }) {
 function BadgeTipo({ tipo }: { tipo: string }) {
   const cfg: Record<string, string> = {
     contado:     "bg-gray-50 text-gray-500 border-gray-200",
-    credito:     "bg-blue-50 text-blue-600 border-blue-100",
+    credito:     "bg-blue-50 text-[#1E2125] border-blue-100",
     suscripcion: "bg-violet-50 text-violet-600 border-violet-100",
   };
   return (
@@ -389,7 +389,7 @@ function ModalFacturacion({
                           type="button"
                           disabled={emitiendo === item.mes}
                           onClick={() => handleEmitir(item.mes)}
-                          className="text-xs font-medium text-[#0EA5E9] hover:text-[#0284C7] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="text-xs font-medium text-[#1E2125] hover:text-[#17191C] hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {emitiendo === item.mes ? "Emitiendo..." : "Emitir factura"}
                         </button>
@@ -397,7 +397,7 @@ function ModalFacturacion({
                       {item.factura_id && (
                         <Link
                           href={`/facturas/${item.factura_id}`}
-                          className="text-xs font-medium text-[#0EA5E9] hover:text-[#0284C7] hover:underline"
+                          className="text-xs font-medium text-[#1E2125] hover:text-[#17191C] hover:underline"
                         >
                           Ver factura
                         </Link>
@@ -525,8 +525,8 @@ function ClienteBusquedaGlobal({
 
   const shellClass =
     variant === "landing"
-      ? "w-full rounded-xl border border-slate-200/90 bg-white shadow-sm ring-1 ring-slate-900/[0.04] transition focus-within:border-sky-400/80 focus-within:ring-2 focus-within:ring-sky-200/70"
-      : "w-full min-w-[200px] rounded-lg border border-slate-200 bg-white shadow-lg ring-1 ring-slate-900/5 transition focus-within:border-sky-400/80 focus-within:ring-2 focus-within:ring-sky-200/70";
+      ? "w-full rounded-xl border border-slate-200/90 bg-white shadow-sm ring-1 ring-slate-900/[0.04] transition focus-within:border-[#3E434B]/80 focus-within:ring-2 focus-within:ring-sky-200/70"
+      : "w-full min-w-[200px] rounded-lg border border-slate-200 bg-white shadow-lg ring-1 ring-slate-900/5 transition focus-within:border-[#3E434B]/80 focus-within:ring-2 focus-within:ring-sky-200/70";
 
   return (
     <div
@@ -856,7 +856,7 @@ function GestionClientesPageInner() {
                   <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden />
                   Filtros facturas
                   {filtrosFacturasActivos ? (
-                    <span className="ml-0.5 inline-flex h-1.5 w-1.5 rounded-full bg-sky-500" title="Hay filtros aplicados" />
+                    <span className="ml-0.5 inline-flex h-1.5 w-1.5 rounded-full bg-[#1E2125]" title="Hay filtros aplicados" />
                   ) : null}
                 </button>
               </div>
@@ -1117,7 +1117,7 @@ function GestionClientesPageInner() {
                                 <td className="px-2 py-2 sm:px-3">
                                   <Link
                                     href={`/facturas/${f.id}`}
-                                    className="font-mono text-xs font-semibold text-sky-600 hover:text-sky-800 hover:underline"
+                                    className="font-mono text-xs font-semibold text-[#1E2125] hover:text-sky-800 hover:underline"
                                   >
                                     {f.numero_factura}
                                   </Link>

@@ -7,7 +7,7 @@ import { getClientes } from "@/lib/clientes/storage";
 import type { NotaCreditoGlobalListItemDTO } from "@/lib/nota-credito/types";
 
 const inputClass =
-  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#0EA5E9] text-sm bg-white";
+  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#1E2125] text-sm bg-white";
 const labelClass = "block text-xs font-medium text-slate-500 mb-1";
 
 function badgeErp(e: string) {
@@ -231,7 +231,7 @@ export default function NotasCreditoListClient() {
           <button
             type="button"
             onClick={() => setPage(1)}
-            className="px-4 py-2 rounded-lg bg-[#0EA5E9] text-white text-sm font-semibold hover:bg-sky-600"
+            className="px-4 py-2 rounded-lg bg-[#1E2125] text-white text-sm font-semibold hover:bg-[#1E2125]"
           >
             Aplicar filtros
           </button>
@@ -299,12 +299,12 @@ export default function NotasCreditoListClient() {
                       {new Date(nc.created_at).toLocaleString("es-PY", { dateStyle: "short", timeStyle: "short" })}
                     </td>
                     <td className="px-3 py-2 max-w-[160px]">
-                      <Link href={`/clientes/${nc.cliente_id}`} className="text-[#0EA5E9] font-medium hover:underline truncate block">
+                      <Link href={`/clientes/${nc.cliente_id}`} className="text-[#1E2125] font-medium hover:underline truncate block">
                         {nc.cliente_display}
                       </Link>
                     </td>
                     <td className="px-3 py-2 font-mono text-xs">
-                      <Link href={`/facturas/${nc.factura_id}`} className="text-[#0EA5E9] hover:underline">
+                      <Link href={`/facturas/${nc.factura_id}`} className="text-[#1E2125] hover:underline">
                         {nc.factura_numero ?? nc.factura_id.slice(0, 8) + "…"}
                       </Link>
                     </td>
@@ -328,7 +328,7 @@ export default function NotasCreditoListClient() {
                       {nc.last_error_resumido ?? "—"}
                     </td>
                     <td className="px-3 py-2">
-                      <Link href={`/notas-credito/${nc.id}`} className="text-[#0EA5E9] font-semibold text-xs hover:underline">
+                      <Link href={`/notas-credito/${nc.id}`} className="text-[#1E2125] font-semibold text-xs hover:underline">
                         Ver detalle
                       </Link>
                     </td>

@@ -48,7 +48,7 @@ export default function EditarGastoPage() {
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3">
           Gasto no encontrado
         </div>
-        <Link href="/gastos" className="text-sm text-[#0EA5E9] hover:underline">
+        <Link href="/gastos" className="text-sm text-[#1E2125] hover:underline">
           ← Volver a gastos
         </Link>
       </div>

@@ -34,7 +34,7 @@ export default function MesSelector({
       <select
         value={mes}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white outline-none focus:ring-2 focus:ring-[#0EA5E9]"
+        className="rounded-lg border border-slate-200 px-3 py-2 text-sm bg-white outline-none focus:ring-2 focus:ring-[#1E2125]"
       >
         {opciones.map((m) => (
           <option key={m} value={m}>{etiqueta(m)}</option>

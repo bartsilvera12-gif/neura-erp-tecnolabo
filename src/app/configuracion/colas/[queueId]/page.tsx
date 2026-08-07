@@ -214,11 +214,11 @@ export default function EditarColaPage() {
           <button
             type="button"
             onClick={() => void load()}
-            className="rounded-xl bg-[#0EA5E9] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0284C7]"
+            className="rounded-xl bg-[#1E2125] px-4 py-2 text-sm font-semibold text-white hover:bg-[#17191C]"
           >
             Reintentar
           </button>
-          <Link href="/configuracion/colas" className="text-sm font-semibold text-[#0EA5E9] hover:underline inline-flex items-center">
+          <Link href="/configuracion/colas" className="text-sm font-semibold text-[#1E2125] hover:underline inline-flex items-center">
             Volver al listado
           </Link>
         </div>
@@ -230,7 +230,7 @@ export default function EditarColaPage() {
     return (
       <div className="max-w-xl space-y-4">
         <p className="text-slate-700">Cola no encontrada.</p>
-        <Link href="/configuracion/colas" className="text-sm font-semibold text-[#0EA5E9] hover:underline">
+        <Link href="/configuracion/colas" className="text-sm font-semibold text-[#1E2125] hover:underline">
           Volver
         </Link>
       </div>
@@ -318,7 +318,7 @@ export default function EditarColaPage() {
             <label
               key={s.value}
               className={`flex cursor-pointer gap-3 rounded-xl border p-3 transition ${
-                strategy === s.value ? "border-sky-400 bg-sky-50/60" : "border-slate-200 hover:border-slate-300"
+                strategy === s.value ? "border-[#3E434B] bg-sky-50/60" : "border-slate-200 hover:border-slate-300"
               }`}
             >
               <input
@@ -649,7 +649,7 @@ export default function EditarColaPage() {
                 ))}
                 <button
                   type="button"
-                  className="text-xs font-medium text-[#0EA5E9] hover:underline"
+                  className="text-xs font-medium text-[#1E2125] hover:underline"
                   onClick={() =>
                     setClosureDraft((d) =>
                       d.map((x, i) =>
@@ -665,7 +665,7 @@ export default function EditarColaPage() {
           ))}
           <button
             type="button"
-            className="text-sm font-medium text-[#0EA5E9] hover:underline"
+            className="text-sm font-medium text-[#1E2125] hover:underline"
             onClick={() => setClosureDraft((d) => [...d, { label: "", substates: [] }])}
           >
             + Agregar estado
@@ -726,7 +726,7 @@ export default function EditarColaPage() {
           type="button"
           disabled={saving}
           onClick={() => void handleSaveQueue()}
-          className="rounded-xl bg-[#0EA5E9] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#0284C7] disabled:opacity-50"
+          className="rounded-xl bg-[#1E2125] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#17191C] disabled:opacity-50"
         >
           {saving ? "Guardando…" : "Guardar cola y canales"}
         </button>

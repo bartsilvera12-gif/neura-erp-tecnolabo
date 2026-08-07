@@ -31,7 +31,7 @@ const ESTADO_BADGE: Record<EstadoPresupuesto, string> = {
 const ESTADO_DOT: Record<EstadoPresupuesto, string> = {
   borrador: "bg-slate-300",
   creado: "bg-slate-400",
-  enviado: "bg-sky-500",
+  enviado: "bg-[#1E2125]",
   aprobado: "bg-emerald-500",
   rechazado: "bg-red-500",
   vencido: "bg-amber-500",

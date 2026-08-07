@@ -566,7 +566,7 @@ function Evento({
 }) {
   const bgMap = {
     amber: "bg-amber-500",
-    sky: "bg-sky-500",
+    sky: "bg-[#1E2125]",
     emerald: "bg-emerald-500",
     slate: "bg-slate-400",
   };

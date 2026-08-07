@@ -70,7 +70,7 @@ const SIMPLE_CLIENTE = SCHEMAS_CLIENTE_SIMPLE.includes(NEURA_CLIENT_SCHEMA);
 // ── Estilos ────────────────────────────────────────────────────────────────────
 
 const inputClass =
-  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#0EA5E9] focus:outline-none bg-white text-sm";
+  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#1E2125] focus:outline-none bg-white text-sm";
 const labelClass = "block text-xs font-medium text-slate-500 mb-1";
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
@@ -921,7 +921,7 @@ export default function ClienteDetailPage() {
         <h1 className="text-xl font-bold text-gray-800">No se pudo cargar el cliente</h1>
         <p className="text-sm text-red-600">{errorCarga}</p>
         <p className="text-xs font-mono text-gray-400 break-all">ID: {id}</p>
-        <button type="button" onClick={() => void cargar()} className="text-sm text-[#0EA5E9] underline">
+        <button type="button" onClick={() => void cargar()} className="text-sm text-[#1E2125] underline">
           Reintentar
         </button>
         <button type="button" onClick={() => router.push("/clientes")} className="ml-4 text-sm text-gray-500 underline">
@@ -958,12 +958,12 @@ export default function ClienteDetailPage() {
 
       {/* ── Panel resumen ─────────────────────────────────────────────────── */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="bg-gradient-to-r from-[#0EA5E9] to-[#0284C7] px-6 py-5">
+        <div className="bg-gradient-to-r from-[#1E2125] to-[#17191C] px-6 py-5">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
               {/* Avatar */}
               <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold text-white shrink-0 ${
-                cliente.tipo_cliente === "empresa" ? "bg-blue-500/80" : "bg-violet-500/80"
+                cliente.tipo_cliente === "empresa" ? "bg-[#1E2125]/80" : "bg-violet-500/80"
               }`}>
                 {nombre.slice(0, 2).toUpperCase()}
               </div>
@@ -1476,7 +1476,7 @@ export default function ClienteDetailPage() {
                         type="button"
                         onClick={() => setForm((prev) => ({ ...prev, tipo_cliente: t }))}
                         className={`px-4 py-2 text-sm font-medium transition-colors ${
-                          form.tipo_cliente === t ? "bg-[#0EA5E9] text-white" : "bg-white text-slate-600 hover:bg-slate-50"
+                          form.tipo_cliente === t ? "bg-[#1E2125] text-white" : "bg-white text-slate-600 hover:bg-slate-50"
                         }`}
                       >
                         {t === "empresa" ? "Empresa" : "Persona"}
@@ -1564,7 +1564,7 @@ export default function ClienteDetailPage() {
                     type="checkbox"
                     checked={form.usa_nota_remision}
                     onChange={(e) => setForm((p) => ({ ...p, usa_nota_remision: e.target.checked }))}
-                    className="h-4 w-4 rounded border-slate-300 text-[#0EA5E9] focus:ring-[#0EA5E9]"
+                    className="h-4 w-4 rounded border-slate-300 text-[#1E2125] focus:ring-[#1E2125]"
                   />
                   Usa nota de remisión
                   <span className="text-xs text-slate-400">(se generará junto al ticket al venderle)</span>
@@ -1948,7 +1948,7 @@ export default function ClienteDetailPage() {
               <div className="flex gap-3">
                 <button
                   type="submit"
-                  className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm active:scale-95"
+                  className="bg-[#1E2125] hover:bg-[#17191C] text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm active:scale-95"
                 >
                   Guardar cambios
                 </button>
@@ -1988,7 +1988,7 @@ export default function ClienteDetailPage() {
                       });
                       setModalPago(true);
                     }}
-                    className="text-sm font-medium text-[#0EA5E9] hover:text-[#0284C7]"
+                    className="text-sm font-medium text-[#1E2125] hover:text-[#17191C]"
                   >
                     Registrar pago
                   </button>
@@ -2011,7 +2011,7 @@ export default function ClienteDetailPage() {
                       {facturas.map((f) => (
                         <tr key={f.id} className="hover:bg-slate-50">
                           <td className="px-4 py-3 font-mono text-slate-800">
-                            <Link href={`/facturas/${f.id}`} className="text-[#0EA5E9] hover:underline font-semibold">
+                            <Link href={`/facturas/${f.id}`} className="text-[#1E2125] hover:underline font-semibold">
                               {f.numero_factura}
                             </Link>
                           </td>
@@ -2038,14 +2038,14 @@ export default function ClienteDetailPage() {
                               <button
                                 type="button"
                                 onClick={() => { setFacturaPago(f); setFormPago({ factura_id: f.id, monto: String(f.saldo), fecha_pago: new Date().toISOString().slice(0, 10), metodo_pago: "efectivo", referencia: "" }); setModalPago(true); }}
-                                className="text-xs font-medium text-[#0EA5E9] hover:underline"
+                                className="text-xs font-medium text-[#1E2125] hover:underline"
                               >
                                 Registrar pago
                               </button>
                             )}
                             <Link
                               href={`/facturas/${f.id}`}
-                              className="text-xs font-medium text-slate-500 hover:text-[#0EA5E9] hover:underline ml-2"
+                              className="text-xs font-medium text-slate-500 hover:text-[#1E2125] hover:underline ml-2"
                             >
                               Ver
                             </Link>
@@ -2067,7 +2067,7 @@ export default function ClienteDetailPage() {
                 <button
                   type="button"
                   onClick={() => { setFormSusc({ plan_id: "", precio: "", fecha_inicio: new Date().toISOString().slice(0, 10), duracion_meses: "12", dia_facturacion: "1", dia_vencimiento: "10", generar_factura_este_mes: false }); setModalSuscripcion(true); }}
-                  className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2 rounded-lg text-sm font-medium"
+                  className="bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2 rounded-lg text-sm font-medium"
                 >
                   Nueva suscripción
                 </button>
@@ -2122,7 +2122,7 @@ export default function ClienteDetailPage() {
                     setErrorTarea(null);
                     setModalNuevaTarea(true);
                   }}
-                  className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2 rounded-lg text-sm font-medium"
+                  className="bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2 rounded-lg text-sm font-medium"
                 >
                   Nueva tarea
                 </button>
@@ -2215,12 +2215,12 @@ export default function ClienteDetailPage() {
                   }}
                   rows={3}
                   placeholder="Escribí una nota interna (Ctrl+Enter para guardar)..."
-                  className="w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#0EA5E9] focus:outline-none bg-white text-sm resize-none mb-3"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#1E2125] focus:outline-none bg-white text-sm resize-none mb-3"
                 />
 <button
                 type="submit"
                 disabled={!nuevaNota.trim() || guardandoNota}
-                className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
+                className="bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed active:scale-95"
               >
                   Agregar nota
                 </button>
@@ -2321,7 +2321,7 @@ export default function ClienteDetailPage() {
                 <button
                   type="submit"
                   disabled={guardandoFacturaContado || !formFacturaContado.monto.trim()}
-                  className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-40"
+                  className="bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-40"
                 >
                   {guardandoFacturaContado ? "Guardando…" : "Emitir factura"}
                 </button>
@@ -2399,7 +2399,7 @@ export default function ClienteDetailPage() {
                 <label htmlFor="gen_fact" className="text-sm text-slate-600">Emitir factura este mes</label>
               </div>
               <div className="flex gap-3 pt-2">
-                <button type="submit" disabled={guardandoSusc} className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50">
+                <button type="submit" disabled={guardandoSusc} className="bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50">
                   Guardar
                 </button>
                 <button type="button" onClick={() => setModalSuscripcion(false)} className="border border-slate-200 px-4 py-2 rounded-lg text-sm hover:bg-slate-50">
@@ -2477,7 +2477,7 @@ export default function ClienteDetailPage() {
                 <p className="text-sm text-red-600">{errorTarea}</p>
               )}
               <div className="flex gap-3 pt-2">
-                <button type="submit" disabled={guardandoTarea} className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50">
+                <button type="submit" disabled={guardandoTarea} className="bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50">
                   Guardar
                 </button>
                 <button type="button" onClick={() => setModalNuevaTarea(false)} className="border border-slate-200 px-4 py-2 rounded-lg text-sm hover:bg-slate-50">
@@ -2553,7 +2553,7 @@ export default function ClienteDetailPage() {
                 <input type="text" value={formPago.referencia} onChange={(e) => setFormPago((p) => ({ ...p, referencia: e.target.value }))} className={inputClass} placeholder="Nº de comprobante" />
               </div>
               <div className="flex gap-3 pt-2">
-                <button type="submit" disabled={guardandoPago} className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50">
+                <button type="submit" disabled={guardandoPago} className="bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50">
                   Guardar
                 </button>
                 <button type="button" onClick={() => setModalPago(false)} className="border border-slate-200 px-4 py-2 rounded-lg text-sm hover:bg-slate-50">

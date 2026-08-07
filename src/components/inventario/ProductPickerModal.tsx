@@ -511,7 +511,7 @@ export default function ProductPickerModal({
                           type="button"
                           onClick={() => handleTipoPrecio(t)}
                           className={`flex-1 py-1.5 px-1 text-center transition-colors ${
-                            tipoPrecio === t ? "bg-[#0EA5E9] text-white" : "bg-white text-slate-600 hover:bg-slate-50"
+                            tipoPrecio === t ? "bg-[#1E2125] text-white" : "bg-white text-slate-600 hover:bg-slate-50"
                           }`}
                         >
                           <span className="block text-xs font-medium">
@@ -578,7 +578,7 @@ export default function ProductPickerModal({
                         <button
                           key={opt} type="button"
                           onClick={() => setIva(opt)}
-                          className={`flex-1 py-1.5 text-xs font-medium ${iva === opt ? "bg-[#0EA5E9] text-white" : "bg-white text-slate-600 hover:bg-slate-50"}`}
+                          className={`flex-1 py-1.5 text-xs font-medium ${iva === opt ? "bg-[#1E2125] text-white" : "bg-white text-slate-600 hover:bg-slate-50"}`}
                         >
                           {opt}
                         </button>

@@ -321,7 +321,7 @@ export default function MarketingOpsPage() {
           <button
             type="button"
             onClick={() => void handlePreviewSync()}
-            className="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg bg-[#0EA5E9] hover:bg-[#0284C7] text-white shadow-sm"
+            className="inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white shadow-sm"
           >
             <Sparkles className="h-4 w-4" />
             Sincronizar y regenerar mes
@@ -341,7 +341,7 @@ export default function MarketingOpsPage() {
 
       {ultimoSyncMsg && !syncMostrarPreview && (
         <div className="flex items-start gap-2 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900 whitespace-pre-wrap">
-          <CheckCircle2 className="h-5 w-5 shrink-0 text-sky-600 mt-0.5" />
+          <CheckCircle2 className="h-5 w-5 shrink-0 text-[#1E2125] mt-0.5" />
           <div className="min-w-0">
             <p className="font-semibold text-sky-950">Última operación</p>
             <p className="text-sky-900/90 mt-0.5">{ultimoSyncMsg}</p>
@@ -423,7 +423,7 @@ export default function MarketingOpsPage() {
                 type="button"
                 onClick={() => void handleExecuteSync()}
                 disabled={syncEjecutando}
-                className="inline-flex items-center justify-center gap-2 bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2.5 rounded-lg text-sm font-medium disabled:opacity-50 min-w-[120px]"
+                className="inline-flex items-center justify-center gap-2 bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2.5 rounded-lg text-sm font-medium disabled:opacity-50 min-w-[120px]"
               >
                 {syncEjecutando ? (
                   <>
@@ -467,7 +467,7 @@ export default function MarketingOpsPage() {
                 type="button"
                 onClick={() => void handleRegenerarTareas(regenerarCliente)}
                 disabled={regenerando}
-                className="flex-1 bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2.5 rounded-lg text-sm font-medium disabled:opacity-50"
+                className="flex-1 bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2.5 rounded-lg text-sm font-medium disabled:opacity-50"
               >
                 {regenerando ? "Regenerando…" : "Confirmar"}
               </button>
@@ -663,7 +663,7 @@ export default function MarketingOpsPage() {
                               <div
                                 key={fecha}
                                 className={`min-h-[72px] p-1.5 rounded-lg border text-left ${
-                                  esHoy ? "border-sky-400 bg-sky-50/90" : "border-slate-200 bg-white"
+                                  esHoy ? "border-[#3E434B] bg-sky-50/90" : "border-slate-200 bg-white"
                                 }`}
                               >
                                 <span className="text-[10px] font-semibold text-slate-500">{fecha.slice(8)}</span>

@@ -198,7 +198,7 @@ export default function SorteosTicketsPage() {
                         type="button"
                         disabled={busyId === r.id || r.status === "pending"}
                         onClick={() => void openSignedUrl(r.id)}
-                        className="text-sky-600 hover:underline disabled:opacity-40 text-xs"
+                        className="text-[#1E2125] hover:underline disabled:opacity-40 text-xs"
                       >
                         {busyId === r.id ? "…" : "Ver / descargar"}
                       </button>

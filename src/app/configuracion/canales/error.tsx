@@ -23,7 +23,7 @@ export default function ConfiguracionCanalesError({
       <button
         type="button"
         onClick={() => reset()}
-        className="rounded-lg bg-[#0EA5E9] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0284C7]"
+        className="rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-semibold text-white hover:bg-[#17191C]"
       >
         Reintentar
       </button>

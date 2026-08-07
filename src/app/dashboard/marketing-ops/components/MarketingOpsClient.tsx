@@ -219,7 +219,7 @@ export default function MarketingOpsClient() {
         <button
           type="button"
           onClick={() => setDraft({ ...EMPTY_DRAFT })}
-          className="rounded-xl bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-700"
+          className="rounded-xl bg-[#1E2125] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#17191C]"
         >
           Nueva pieza
         </button>
@@ -479,7 +479,7 @@ function PiezaModal({
 
         <div className="mt-6 flex justify-end gap-2">
           <button type="button" onClick={onClose} className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700">Cancelar</button>
-          <button type="button" disabled={saving} onClick={onSave} className="rounded-xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700 disabled:opacity-60">
+          <button type="button" disabled={saving} onClick={onSave} className="rounded-xl bg-[#1E2125] px-4 py-2 text-sm font-semibold text-white hover:bg-[#17191C] disabled:opacity-60">
             {saving ? "Guardando..." : "Guardar"}
           </button>
         </div>

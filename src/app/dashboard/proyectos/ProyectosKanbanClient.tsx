@@ -143,7 +143,7 @@ function getPriorityCardStyles(prioridad: string | null | undefined): PriorityCa
     return {
       cardAccentClass: "border-l-sky-500 hover:border-sky-200",
       badgeClass: "border-sky-200 bg-sky-50 text-sky-700",
-      iconDotClass: "bg-sky-500",
+      iconDotClass: "bg-[#1E2125]",
     };
   }
   return {
@@ -618,7 +618,7 @@ function KanbanColumnView({ col, children }: KanbanColumnViewProps) {
       // legibles. shrink-0 evita que se compriman.
       className={`flex w-[82vw] max-w-[320px] shrink-0 flex-col rounded-lg border bg-slate-50/80 transition-colors sm:w-[300px] lg:w-[260px] ${
         isOver && !col.inactiveFallback
-          ? "border-indigo-300 bg-indigo-50/70 ring-2 ring-indigo-100"
+          ? "border-[#3E434B] bg-indigo-50/70 ring-2 ring-indigo-100"
           : "border-slate-200"
       }`}
     >
@@ -748,7 +748,7 @@ function ProjectCardView({
           <div className="mt-2 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5" onClick={(e) => e.stopPropagation()}>
             <label className="block text-[10px] font-semibold uppercase tracking-wide text-slate-500">Mover a</label>
             <select
-              className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-medium text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-sky-400 focus:ring-2 focus:ring-sky-100"
+              className="mt-1 w-full rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-medium text-slate-700 outline-none transition-colors hover:border-slate-300 focus:border-[#3E434B] focus:ring-2 focus:ring-sky-100"
               value={p.estado_id}
               onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}

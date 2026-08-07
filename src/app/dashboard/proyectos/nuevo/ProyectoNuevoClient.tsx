@@ -143,7 +143,7 @@ export default function ProyectoNuevoClient() {
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-6">
       <div className="flex items-center gap-3">
-        <Link href="/dashboard/proyectos" className="text-sm text-indigo-600 hover:underline">
+        <Link href="/dashboard/proyectos" className="text-sm text-[#1E2125] hover:underline">
           ← Volver
         </Link>
       </div>
@@ -347,7 +347,7 @@ export default function ProyectoNuevoClient() {
         <button
           type="submit"
           disabled={saving}
-          className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
+          className="rounded-lg bg-[#1E2125] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-60"
         >
           {saving ? "Guardando…" : "Crear proyecto"}
         </button>

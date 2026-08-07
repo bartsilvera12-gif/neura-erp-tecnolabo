@@ -94,7 +94,7 @@ export default function GastosPage() {
             <p className="font-medium text-gray-600">No hay gastos registrados</p>
             <Link
               href="/gastos/nuevo"
-              className="mt-4 inline-block text-sm text-[#0EA5E9] hover:underline"
+              className="mt-4 inline-block text-sm text-[#1E2125] hover:underline"
             >
               Registrar primer gasto
             </Link>

@@ -35,7 +35,7 @@ function desglosarIva(bruto: number, iva: TipoIva): { subtotal: number; monto_iv
 }
 
 const inputClass =
-  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#0EA5E9] focus:outline-none bg-white text-sm";
+  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#1E2125] focus:outline-none bg-white text-sm";
 const inputSmClass = inputClass;
 const labelClass = "block text-sm font-medium text-slate-700 mb-2";
 const labelSmClass = "block text-xs font-medium text-slate-600 mb-1.5";
@@ -73,7 +73,7 @@ function SegmentedControl<T extends string>({
           type="button"
           onClick={() => onChange(opt.value)}
           className={`flex-1 font-medium transition-colors ${small ? "py-2 text-xs" : "py-2.5 text-sm"} ${
-            value === opt.value ? "bg-[#0EA5E9] text-white" : "bg-white text-slate-600 hover:bg-slate-50"
+            value === opt.value ? "bg-[#1E2125] text-white" : "bg-white text-slate-600 hover:bg-slate-50"
           }`}
         >
           {opt.label}
@@ -723,7 +723,7 @@ export default function NuevaCompraPage() {
                           </button>
                         </div>
                       </td>
-                      <td className="py-2 px-2 text-right tabular-nums font-bold text-[#0EA5E9]">{formatGs(totales.total)}</td>
+                      <td className="py-2 px-2 text-right tabular-nums font-bold text-[#1E2125]">{formatGs(totales.total)}</td>
                       <td className="py-2 px-2" />
                     </tr>
                   </tfoot>
@@ -743,7 +743,7 @@ export default function NuevaCompraPage() {
                 <p className="text-xs text-gray-400 mb-1">IVA</p>
                 <p className="text-sm font-semibold tabular-nums text-gray-700">{formatGs(totales.iva)}</p>
               </div>
-              <div className="bg-[#0EA5E9] text-white rounded-lg px-3 py-3 text-center">
+              <div className="bg-[#1E2125] text-white rounded-lg px-3 py-3 text-center">
                 <p className="text-xs text-gray-200 mb-1">Total compra</p>
                 <p className="text-sm font-bold tabular-nums">{formatGs(totales.total)}</p>
               </div>
@@ -758,7 +758,7 @@ export default function NuevaCompraPage() {
 
           <div className="flex gap-4 pt-2">
             <button type="submit" disabled={lineas.length === 0 || submitting}
-              className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-5 py-3 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed active:scale-95">
+              className="bg-[#1E2125] hover:bg-[#17191C] text-white px-5 py-3 rounded-lg text-sm font-medium transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed active:scale-95">
               {submitting ? "Guardando..." : "Guardar compra"}
             </button>
             <button type="button" onClick={() => router.push("/compras")}
@@ -1010,7 +1010,7 @@ function InlineFormBox({
       {children}
       <div className="flex gap-3 pt-1">
         <button type="button" onClick={onSave} disabled={saveDisabled}
-          className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2 rounded-lg text-xs font-medium transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed active:scale-95">
+          className="bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2 rounded-lg text-xs font-medium transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed active:scale-95">
           Guardar {titulo.toLowerCase()}
         </button>
         <button type="button" onClick={onCancel}

@@ -14,7 +14,7 @@ type UsuarioRow = {
   created_at: string;
 };
 
-const AVATAR_COLORS = ["bg-violet-500", "bg-blue-500", "bg-emerald-500", "bg-amber-500", "bg-rose-500", "bg-sky-500"];
+const AVATAR_COLORS = ["bg-violet-500", "bg-[#1E2125]", "bg-emerald-500", "bg-amber-500", "bg-rose-500", "bg-[#1E2125]"];
 function avatarColor(id: string) {
   return AVATAR_COLORS[Math.abs(id.split("").reduce((a, c) => a + c.charCodeAt(0), 0)) % AVATAR_COLORS.length];
 }
@@ -78,7 +78,7 @@ export default function UsuariosPage() {
         </div>
         <Link
           href="/usuarios/nuevo"
-          className="inline-flex items-center gap-2 bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm active:scale-95"
+          className="inline-flex items-center gap-2 bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm active:scale-95"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
             <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
@@ -93,7 +93,7 @@ export default function UsuariosPage() {
           placeholder="Buscar por nombre, email, teléfono…"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
-          className="w-full max-w-md pl-4 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9]"
+          className="w-full max-w-md pl-4 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125]"
         />
       </div>
 
@@ -157,7 +157,7 @@ export default function UsuariosPage() {
                       <Link
                         href={`/usuarios/${usr.id}`}
                         title="Ver usuario"
-                        className="inline-flex items-center justify-center min-w-[40px] min-h-[40px] rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="inline-flex items-center justify-center min-w-[40px] min-h-[40px] rounded-lg text-gray-400 hover:text-[#1E2125] hover:bg-blue-50 transition-colors"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                           <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />

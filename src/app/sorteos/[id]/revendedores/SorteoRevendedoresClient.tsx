@@ -158,7 +158,7 @@ export default function SorteoRevendedoresClient(props: {
             <button
               type="submit"
               disabled={saving}
-              className="bg-[#0EA5E9] hover:bg-[#0284C7] disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium"
+              className="bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium"
             >
               {saving ? "Guardando…" : "Crear revendedor"}
             </button>
@@ -200,7 +200,7 @@ export default function SorteoRevendedoresClient(props: {
                       <button
                         type="button"
                         onClick={() => void toggleActivo(r)}
-                        className="text-xs text-[#0EA5E9] hover:underline"
+                        className="text-xs text-[#1E2125] hover:underline"
                       >
                         {r.activo ? "Desactivar" : "Activar"}
                       </button>
@@ -215,7 +215,7 @@ export default function SorteoRevendedoresClient(props: {
                   <div className="grid sm:grid-cols-2 gap-3 text-sm">
                     <div>
                       <div className="text-xs font-medium text-slate-500 mb-1">Link oficial</div>
-                      <div className="break-all text-[#0EA5E9] text-xs">{link}</div>
+                      <div className="break-all text-[#1E2125] text-xs">{link}</div>
                     </div>
                     <div className="flex gap-3 items-start">
                       {props.baseUrl.trim() !== "" && r.activo ? (

@@ -155,7 +155,7 @@ function buildClienteColumns(mapNombreTipo: Record<string, string>): ClienteColu
       render: (c) => (
         <div className="flex items-center gap-2 min-w-56">
           <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 ${
-            c.tipo_cliente === "empresa" ? "bg-blue-500" : "bg-violet-500"
+            c.tipo_cliente === "empresa" ? "bg-[#1E2125]" : "bg-violet-500"
           }`}>
             {c.tipo_cliente === "empresa" ? "E" : "P"}
           </div>
@@ -165,7 +165,7 @@ function buildClienteColumns(mapNombreTipo: Record<string, string>): ClienteColu
                 {clienteNombre(c)}
               </p>
               {c.perfil_tributario_activo && (
-                <span className="text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                <span className="text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full bg-indigo-50 text-[#17191C] border border-indigo-100">
                   Tributario
                 </span>
               )}
@@ -425,7 +425,7 @@ export default function ClientesPage() {
           placeholder="Buscar por nombre, código, email, RUC..."
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
-          className="flex-1 min-w-48 border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-[#0EA5E9] focus:outline-none transition-all"
+          className="flex-1 min-w-48 border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-[#1E2125] focus:outline-none transition-all"
         />
         <FancySelect
           value={filtroEstado}
@@ -535,7 +535,7 @@ export default function ClientesPage() {
                           checked={checked}
                           disabled={col.required}
                           onChange={() => toggleColumn(col.key)}
-                          className="h-4 w-4 rounded border-slate-300 text-[#0EA5E9] focus:ring-[#0EA5E9]"
+                          className="h-4 w-4 rounded border-slate-300 text-[#1E2125] focus:ring-[#1E2125]"
                         />
                       </label>
                     );

@@ -13,9 +13,9 @@ import { Suspense } from "react";
 
 const fLabelClass = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1";
 const fInputClass =
-  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white disabled:bg-slate-50 disabled:text-slate-500";
+  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white disabled:bg-slate-50 disabled:text-slate-500";
 const fSelectClass =
-  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white disabled:bg-slate-50 disabled:text-slate-500";
+  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white disabled:bg-slate-50 disabled:text-slate-500";
 
 function formatGs(n: number) {
   return n.toLocaleString("es-PY");
@@ -55,7 +55,7 @@ function BadgeEstado({ estado }: { estado: Plan["estado"] }) {
 
 function BadgePeriodicidad({ p }: { p: Plan["periodicidad"] }) {
   const cfg = {
-    mensual: "bg-blue-50 text-blue-600 border-blue-100",
+    mensual: "bg-blue-50 text-[#1E2125] border-blue-100",
     anual:   "bg-violet-50 text-violet-600 border-violet-100",
     unico:   "bg-amber-50 text-amber-600 border-amber-100",
   };
@@ -472,7 +472,7 @@ function PlanDetailContent() {
                       ...p,
                       plantilla_items: [...p.plantilla_items, { tipo_contenido: "post", periodicidad: "semanal", cantidad: 3, dias_semana: [1, 3, 5] }],
                     }))}
-                    className="text-sm text-[#0EA5E9] hover:underline"
+                    className="text-sm text-[#1E2125] hover:underline"
                   >
                     + Agregar item
                   </button>
@@ -505,7 +505,7 @@ function PlanDetailContent() {
           <div className="flex items-center gap-3">
 <button
             type="submit"
-            className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm active:scale-95"
+            className="bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm active:scale-95"
           >
             Guardar cambios
           </button>

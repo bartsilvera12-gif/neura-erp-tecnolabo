@@ -1,6 +1,6 @@
 /**
  * KuDE PDF — representación gráfica del DE (pdf-lib, Vercel-safe).
- * Estilo factura PY; acento Neura #0EA5E9; textos en negro.
+ * Estilo factura PY; acento Neura #1E2125; textos en negro.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -32,7 +32,7 @@ export type BuildKudePdfInput = {
 
 const A4_W = 595.28;
 const A4_H = 841.89;
-/** Default Neura `#0EA5E9`. Se preserva cuando la empresa no configura branding. */
+/** Default Neura `#1E2125`. Se preserva cuando la empresa no configura branding. */
 const NEURA_BLUE: RGB = rgb(14 / 255, 165 / 255, 233 / 255);
 /** Tonalidad clara default Neura (~ azul a 93% blanco). */
 const NEURA_BLUE_FILL: RGB = rgb(0.93, 0.97, 1);

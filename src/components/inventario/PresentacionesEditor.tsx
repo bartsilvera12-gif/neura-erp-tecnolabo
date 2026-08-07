@@ -218,7 +218,7 @@ export default function PresentacionesEditor({
         <button
           type="button"
           onClick={openCreate}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-700 hover:text-white hover:bg-sky-600 border border-sky-200 hover:border-sky-600 px-2.5 py-1.5 rounded-lg transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-700 hover:text-white hover:bg-[#1E2125] border border-sky-200 hover:border-sky-600 px-2.5 py-1.5 rounded-lg transition-colors"
         >
           <Plus className="w-3.5 h-3.5" />
           Nueva
@@ -460,7 +460,7 @@ export default function PresentacionesEditor({
               <button
                 onClick={save}
                 disabled={saving || !fNombre.trim() || !fCantBase}
-                className="bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2 rounded-lg"
+                className="bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2 rounded-lg"
               >
                 {saving ? "Guardando..." : "Guardar"}
               </button>

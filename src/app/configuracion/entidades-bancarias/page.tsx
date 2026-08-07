@@ -11,7 +11,7 @@ import {
 } from "@/lib/entidades/storage";
 
 const inputClass =
-  "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0EA5E9] outline-none";
+  "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#1E2125] outline-none";
 
 const TIPOS: { value: TipoEntidad; label: string }[] = [
   { value: "caja", label: "Caja" },
@@ -84,7 +84,7 @@ export default function EntidadesBancariasPage() {
   return (
     <div className="mx-auto w-full max-w-4xl space-y-8 px-4 pb-10 sm:px-6 lg:px-8">
       <div>
-        <Link href="/configuracion" className="text-sm text-sky-600 hover:underline">← Configuración</Link>
+        <Link href="/configuracion" className="text-sm text-[#1E2125] hover:underline">← Configuración</Link>
         <h1 className="mt-2 text-2xl font-bold text-slate-900">Entidades bancarias</h1>
         <p className="text-sm text-slate-600">
           Cajas, bancos, tarjetas/POS y billeteras usados al cobrar una venta. El código corto agiliza la búsqueda del cajero.
@@ -110,7 +110,7 @@ export default function EntidadesBancariasPage() {
           </select>
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <button type="submit" className="rounded-lg bg-[#0EA5E9] px-4 py-2 text-sm font-medium text-white hover:bg-[#0284C7]">
+        <button type="submit" className="rounded-lg bg-[#1E2125] px-4 py-2 text-sm font-medium text-white hover:bg-[#17191C]">
           Crear entidad
         </button>
       </form>
@@ -155,11 +155,11 @@ export default function EntidadesBancariasPage() {
                 <td className="py-3">
                   {editId === en.id ? (
                     <div className="flex gap-2">
-                      <button type="button" onClick={() => void saveEdit()} className="text-sky-600 font-medium hover:underline">Guardar</button>
+                      <button type="button" onClick={() => void saveEdit()} className="text-[#1E2125] font-medium hover:underline">Guardar</button>
                       <button type="button" onClick={() => setEditId(null)} className="text-slate-500 hover:underline">Cancelar</button>
                     </div>
                   ) : (
-                    <button type="button" onClick={() => startEdit(en)} className="text-sky-600 font-medium hover:underline">Editar</button>
+                    <button type="button" onClick={() => startEdit(en)} className="text-[#1E2125] font-medium hover:underline">Editar</button>
                   )}
                 </td>
               </tr>

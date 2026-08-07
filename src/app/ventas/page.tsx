@@ -36,7 +36,7 @@ function formatFecha(iso: string) {
 // ── Constantes de estilo ───────────────────────────────────────────────────────
 
 const inputFilterClass =
-  "border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-[#0EA5E9] focus:outline-none";
+  "border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-[#1E2125] focus:outline-none";
 
 const tipoVentaBadge: Record<TipoVenta, string> = {
   CONTADO: "bg-blue-50 text-blue-700",
@@ -187,7 +187,7 @@ export default function VentasPage() {
           <h2 className="text-xl font-semibold">Órdenes de venta</h2>
           <Link
             href="/ventas/nueva"
-            className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+            className="bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
           >
             + Nueva venta
           </Link>
@@ -321,7 +321,7 @@ export default function VentasPage() {
                         {cantTotal}
                       </td>
                       <td className="py-4 pr-4 align-middle hidden lg:table-cell">
-                        <span className="px-2 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+                        <span className="px-2 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-[#17191C]">
                           {ivaResumen(v)}
                         </span>
                       </td>

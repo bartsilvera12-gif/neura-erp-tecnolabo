@@ -141,7 +141,7 @@ export default function NuevoUsuarioPage() {
           <button
             type="submit"
             disabled={guardando}
-            className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+            className="bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
           >
             {guardando ? "Creando usuario…" : "Guardar usuario"}
           </button>

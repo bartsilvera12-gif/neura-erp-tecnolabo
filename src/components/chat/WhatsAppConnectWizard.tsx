@@ -26,7 +26,7 @@ export function WhatsAppConnectWizard({
           </div>
           <button
             type="button"
-            className="text-sm font-semibold text-[#0EA5E9] hover:underline"
+            className="text-sm font-semibold text-[#1E2125] hover:underline"
             onClick={() => setConn("pick")}
           >
             Cambiar
@@ -78,7 +78,7 @@ export function WhatsAppConnectWizard({
         <button
           type="button"
           onClick={() => setConn("official")}
-          className="text-left rounded-2xl border-2 border-slate-200 bg-white p-5 shadow-sm hover:border-[#0EA5E9] hover:shadow-md transition-all"
+          className="text-left rounded-2xl border-2 border-slate-200 bg-white p-5 shadow-sm hover:border-[#1E2125] hover:shadow-md transition-all"
         >
           <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">Opción A</p>
           <p className="mt-1 text-lg font-bold text-slate-900">WhatsApp Cloud API oficial</p>

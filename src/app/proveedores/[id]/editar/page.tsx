@@ -93,7 +93,7 @@ export default function EditarProveedorPage() {
   return (
     <div className="space-y-8">
       <div>
-        <Link href="/proveedores" className="text-sm text-sky-600 hover:underline">
+        <Link href="/proveedores" className="text-sm text-[#1E2125] hover:underline">
           ← Proveedores
         </Link>
         <h1 className="mt-2 text-3xl font-bold text-gray-800">Editar proveedor</h1>
@@ -111,7 +111,7 @@ export default function EditarProveedorPage() {
             <button
               type="submit"
               disabled={saving}
-              className="rounded-lg bg-[#0EA5E9] px-5 py-2 text-sm font-medium text-white hover:bg-[#0284C7] disabled:opacity-50"
+              className="rounded-lg bg-[#1E2125] px-5 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50"
             >
               {saving ? "Guardando…" : "Guardar cambios"}
             </button>

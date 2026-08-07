@@ -280,7 +280,7 @@ function PipelineBar({ data, tone = "light" }: { data: PipelineBarRowZ[]; tone?:
 
 function HBarChart({
   data,
-  color = "bg-blue-400",
+  color = "bg-[#2A2F37]",
   tone = "light",
 }: { data: { label: string; value: number }[]; color?: string; tone?: "light" | "zentra" }) {
   const max = Math.max(...data.map(d => d.value), 1);
@@ -483,7 +483,7 @@ function ProgressBar({
         ? "bg-green-500"
         : pct >= 70
           ? "bg-amber-400"
-          : "bg-blue-500"
+          : "bg-[#1E2125]"
       : "";
   const fmt = (n: number) =>
     format === "gs" ? `Gs. ${formatGsM(n)}` : format === "pct" ? `${n.toFixed(1)}%` : String(n);
@@ -1844,9 +1844,9 @@ const DashVentas = memo(function DashVentas({
       {/* KPIs principales */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard icon={Calendar} label="Ventas del día"    value={`Gs. ${formatGsFull(totalHoy)}`}
-          sub={`${ventasHoy.length} transacciones`} color="text-blue-600" />
+          sub={`${ventasHoy.length} transacciones`} color="text-[#1E2125]" />
         <KpiCard icon={CalendarDays} label="Ventas del mes"    value={`Gs. ${formatGsFull(totalMes)}`}
-          sub={`${ventasMes.length} transacciones`} color="text-indigo-600" />
+          sub={`${ventasMes.length} transacciones`} color="text-[#1E2125]" />
         <KpiCard icon={Receipt} label="Ticket promedio"   value={`Gs. ${formatGsFull(ticketProm)}`}
           sub={`periodo: ${periodo}`} />
         <KpiCard icon={Boxes} label="Unidades vendidas" value={formatGs(unidades)}
@@ -1868,7 +1868,7 @@ const DashVentas = memo(function DashVentas({
           </div>
         </div>
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex items-start gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-[#17191C]">
             <BarChart3 className="h-5 w-5" strokeWidth={2} />
           </div>
           <div>
@@ -1889,7 +1889,7 @@ const DashVentas = memo(function DashVentas({
           </h3>
           {topProductos.length === 0
             ? <p className="text-sm text-gray-400 text-center py-6">Sin ventas en el periodo.</p>
-            : <HBarChart data={topProductos} color="bg-indigo-400" />
+            : <HBarChart data={topProductos} color="bg-[#2A2F37]" />
           }
         </div>
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
@@ -1923,7 +1923,7 @@ const DashVentas = memo(function DashVentas({
               {desglose.map(r => (
                 <tr key={r.tipo} className="hover:bg-gray-50/60 transition-colors">
                   <td className="px-3 py-2.5">
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${r.tipo === "CONTADO" ? "bg-[var(--badge-success-bg)] text-[var(--badge-success-text)]" : "bg-[#E0F2FE] text-[#0284C7]"}`}>
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${r.tipo === "CONTADO" ? "bg-[var(--badge-success-bg)] text-[var(--badge-success-text)]" : "bg-[#E0F2FE] text-[#17191C]"}`}>
                       {r.tipo}
                     </span>
                   </td>
@@ -2346,7 +2346,7 @@ export default function DashboardPage() {
           Cambiar a:
           {usuarios.filter(u => u.nivel !== "usuario").map(u => (
             <button key={u.id} onClick={() => handleUsuarioChange(u.id)}
-              className="px-3 py-1.5 rounded-lg bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-xs font-medium transition-colors">
+              className="px-3 py-1.5 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white text-xs font-medium transition-colors">
               {u.nombre}
             </button>
           ))}
@@ -2462,7 +2462,7 @@ export default function DashboardPage() {
                 className="rounded-lg px-3 py-2 text-xs font-medium transition-all"
                 style={
                   periodo === p.id
-                    ? { backgroundColor: Z.accent, color: Z.text }
+                    ? { backgroundColor: Z.accent, color: "#FFFFFF" }
                     : { color: Z.muted, backgroundColor: "transparent" }
                 }
               >
@@ -2493,7 +2493,7 @@ export default function DashboardPage() {
                 className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all"
                 style={
                   tab === tid
-                    ? { backgroundColor: Z.accent, color: Z.text, boxShadow: "0 8px 24px rgba(23,25,28,0.35)" }
+                    ? { backgroundColor: Z.accent, color: "#FFFFFF", boxShadow: "0 8px 24px rgba(23,25,28,0.35)" }
                     : { color: Z.muted }
                 }
               >

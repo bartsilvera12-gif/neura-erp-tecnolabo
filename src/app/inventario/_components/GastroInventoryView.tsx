@@ -92,7 +92,7 @@ export default function GastroInventoryView({
       {/* Cards resumen */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         <StatCard label="Total" value={stats.total} icon={<Package className="h-4 w-4 text-gray-500" />} />
-        <StatCard label="Vendibles" value={stats.vendibles} dot="bg-sky-500" />
+        <StatCard label="Vendibles" value={stats.vendibles} dot="bg-[#1E2125]" />
         <StatCard label="Insumos" value={stats.insumos} dot="bg-emerald-500" />
         <StatCard label="Mixtos" value={stats.mixtos} dot="bg-purple-500" />
         <StatCard

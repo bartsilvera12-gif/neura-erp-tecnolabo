@@ -413,7 +413,7 @@ export default function EditProspectoPage() {
           {conversationId && (
             <Link
               href={`/dashboard/conversaciones?conversationId=${encodeURIComponent(conversationId)}`}
-              className="text-sm text-[#0EA5E9] hover:underline font-semibold shrink-0"
+              className="text-sm text-[#1E2125] hover:underline font-semibold shrink-0"
             >
               Abrir conversación →
             </Link>
@@ -498,7 +498,7 @@ export default function EditProspectoPage() {
                 <p className="font-medium">No hay planes creados para esta empresa.</p>
                 <Link
                   href="/planes/nuevo"
-                  className="mt-2 inline-flex items-center gap-1.5 text-[#0EA5E9] hover:text-[#0284C7] font-medium"
+                  className="mt-2 inline-flex items-center gap-1.5 text-[#1E2125] hover:text-[#17191C] font-medium"
                 >
                   Ir a crear plan →
                 </Link>

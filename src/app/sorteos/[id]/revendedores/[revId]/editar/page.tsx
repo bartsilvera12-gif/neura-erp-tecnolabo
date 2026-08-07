@@ -68,7 +68,7 @@ export default function EditarRevendedorPage() {
     return (
       <div className="space-y-4">
         <p className="text-red-600 text-sm">Revendedor no encontrado.</p>
-        <Link href={`/sorteos/${sorteoId}/revendedores`} className="text-[#0EA5E9] text-sm hover:underline">
+        <Link href={`/sorteos/${sorteoId}/revendedores`} className="text-[#1E2125] text-sm hover:underline">
           Volver
         </Link>
       </div>
@@ -123,7 +123,7 @@ export default function EditarRevendedorPage() {
           <button
             type="submit"
             disabled={saving}
-            className="bg-[#0EA5E9] hover:bg-[#0284C7] disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium"
+            className="bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium"
           >
             {saving ? "Guardando…" : "Guardar"}
           </button>

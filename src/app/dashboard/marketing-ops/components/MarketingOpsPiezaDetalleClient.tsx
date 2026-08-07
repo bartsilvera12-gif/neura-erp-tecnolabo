@@ -172,12 +172,12 @@ export default function MarketingOpsPiezaDetalleClient({ piezaId }: { piezaId: s
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Comentarios</h2>
           <form onSubmit={agregarComentario} className="mt-4 space-y-2">
             <textarea
-              className="min-h-[90px] w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100"
+              className="min-h-[90px] w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#3E434B] focus:ring-2 focus:ring-sky-100"
               value={comentario}
               onChange={(e) => setComentario(e.target.value)}
               placeholder="Agregar comentario interno..."
             />
-            <button disabled={saving} className="rounded-xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">
+            <button disabled={saving} className="rounded-xl bg-[#1E2125] px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">
               Comentar
             </button>
           </form>
@@ -240,7 +240,7 @@ function EstadoSelect({
     <label className="block text-sm">
       <span className="mb-1 block font-medium text-slate-700">{label}</span>
       <select
-        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100"
+        className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#3E434B] focus:ring-2 focus:ring-sky-100"
         value={value}
         disabled={disabled}
         onChange={(e) => onChange(e.target.value)}

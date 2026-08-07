@@ -6,7 +6,7 @@ import type { PerfilTributarioCliente } from "@/lib/clientes/types";
 import MontoInput from "@/components/ui/MontoInput";
 
 const inputClass =
-  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#0EA5E9] focus:outline-none bg-white text-sm";
+  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#1E2125] focus:outline-none bg-white text-sm";
 const labelClass = "block text-xs font-medium text-slate-500 mb-1";
 
 export type TributarioFormState = {
@@ -117,7 +117,7 @@ export function ClientePerfilTributarioForm({
             aria-checked={value.perfil_activo}
             onClick={() => onChange({ ...value, perfil_activo: !value.perfil_activo })}
             className={`relative inline-flex h-7 w-12 shrink-0 rounded-full transition-colors ${
-              value.perfil_activo ? "bg-indigo-600" : "bg-slate-300"
+              value.perfil_activo ? "bg-[#1E2125]" : "bg-slate-300"
             }`}
           >
             <span

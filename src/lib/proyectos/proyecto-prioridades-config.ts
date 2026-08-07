@@ -116,7 +116,7 @@ function normalizeNullableColor(value: unknown, field: string): string | null | 
   const s = normalizeString(value);
   if (!s) return undefined;
   if (!/^#[0-9a-fA-F]{6}$/.test(s)) {
-    throw new Error(`${field} debe tener formato hexadecimal, por ejemplo #0EA5E9.`);
+    throw new Error(`${field} debe tener formato hexadecimal, por ejemplo #1E2125.`);
   }
   return s;
 }

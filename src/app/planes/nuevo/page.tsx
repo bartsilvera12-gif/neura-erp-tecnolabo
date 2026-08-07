@@ -10,9 +10,9 @@ import { savePlan } from "@/lib/planes/storage";
 
 const fLabelClass = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1";
 const fInputClass =
-  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white";
+  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white";
 const fSelectClass =
-  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white";
+  "w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white";
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
@@ -245,7 +245,7 @@ export default function NuevoPlanPage() {
           <button
             type="submit"
             disabled={guardando}
-            className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors shadow-sm active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {guardando ? "Guardando…" : "Guardar plan"}
           </button>

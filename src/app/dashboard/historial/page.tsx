@@ -149,7 +149,7 @@ export default function HistorialPage() {
         </div>
         <Link
           href="/dashboard/conversaciones"
-          className="text-sm font-medium text-[#0EA5E9] hover:underline px-3 py-2 rounded-lg border border-sky-200 bg-sky-50"
+          className="text-sm font-medium text-[#1E2125] hover:underline px-3 py-2 rounded-lg border border-sky-200 bg-sky-50"
         >
           Ir a inbox
         </Link>
@@ -190,7 +190,7 @@ export default function HistorialPage() {
           type="button"
           onClick={() => void runSearch()}
           disabled={searching}
-          className="md:col-span-5 justify-self-start bg-[#0EA5E9] hover:bg-[#0284C7] disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium"
+          className="md:col-span-5 justify-self-start bg-[#1E2125] hover:bg-[#17191C] disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium"
         >
           {searching ? "Buscando..." : "Buscar historial"}
         </button>
@@ -212,7 +212,7 @@ export default function HistorialPage() {
                 type="button"
                 onClick={() => void openDetail(item.contact_id)}
                 className={`w-full text-left px-4 py-3 border-b border-slate-100 hover:bg-white transition-colors ${
-                  selectedId === item.contact_id ? "bg-white border-l-4 border-l-[#0EA5E9]" : ""
+                  selectedId === item.contact_id ? "bg-white border-l-4 border-l-[#1E2125]" : ""
                 }`}
               >
                 <p className="font-medium text-slate-800 truncate">{item.name || item.phone}</p>
@@ -245,7 +245,7 @@ export default function HistorialPage() {
                   <h2 className="text-lg font-semibold text-slate-800">{detail.contact.name || detail.contact.phone_number}</h2>
                   <span className="text-xs font-mono text-slate-500">{detail.contact.phone_number}</span>
                   {detail.contact.cliente_id && (
-                    <Link href={`/clientes/${detail.contact.cliente_id}`} className="text-xs text-[#0EA5E9] hover:underline">
+                    <Link href={`/clientes/${detail.contact.cliente_id}`} className="text-xs text-[#1E2125] hover:underline">
                       Ver cliente
                     </Link>
                   )}
@@ -273,7 +273,7 @@ export default function HistorialPage() {
                       </div>
                       <Link
                         href={`/dashboard/conversaciones?conversationId=${conv.id}`}
-                        className="text-xs text-[#0EA5E9] hover:underline"
+                        className="text-xs text-[#1E2125] hover:underline"
                       >
                         Abrir conversación actual
                       </Link>
@@ -281,7 +281,7 @@ export default function HistorialPage() {
                     <div className="px-4 py-3 space-y-3">
                       {conv.messages.map((msg) => (
                         <div key={msg.id} className={`flex ${msg.from_me ? "justify-end" : "justify-start"}`}>
-                          <div className={`max-w-[90%] rounded-xl px-3 py-2 text-sm ${msg.from_me ? "bg-sky-500 text-white" : "bg-slate-100 text-slate-800"}`}>
+                          <div className={`max-w-[90%] rounded-xl px-3 py-2 text-sm ${msg.from_me ? "bg-[#1E2125] text-white" : "bg-slate-100 text-slate-800"}`}>
                             <div className="flex flex-wrap gap-2 mb-1">
                               <SenderBadge senderType={msg.sender_type} fromMe={msg.from_me} />
                               {msg.sent_by_user_name && (

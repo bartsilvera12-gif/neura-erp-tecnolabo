@@ -61,7 +61,7 @@ function topProductosEnNegociacion(prospectos: Prospecto[]): { nombre: string; v
 
 // ── Avatar ────────────────────────────────────────────────────────────────────
 
-const AVATAR_COLORS = ["bg-blue-500", "bg-violet-500", "bg-amber-500", "bg-green-600", "bg-pink-500", "bg-cyan-600"];
+const AVATAR_COLORS = ["bg-[#1E2125]", "bg-violet-500", "bg-amber-500", "bg-green-600", "bg-pink-500", "bg-[#1E2125]"];
 
 function getAvatarColor(name: string) {
   let hash = 0;
@@ -119,7 +119,7 @@ function ProspectoCard({
           <p className="font-semibold text-gray-800 text-xs leading-tight truncate">{prospecto.empresa}</p>
           <p className="text-[10px] text-gray-400 font-mono">{prospecto.numero_control}</p>
           {prospecto.origen_creacion === "whatsapp" && (
-            <span className="text-[10px] bg-sky-50 text-[#0284C7] border border-sky-100 px-1 py-0.5 rounded inline-block mt-1">
+            <span className="text-[10px] bg-sky-50 text-[#17191C] border border-sky-100 px-1 py-0.5 rounded inline-block mt-1">
               WhatsApp
             </span>
           )}
@@ -381,7 +381,7 @@ export default function CrmPage() {
         </div>
         <Link
           href="/crm/nuevo"
-          className="flex items-center gap-1.5 bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors shadow-sm shrink-0 active:scale-95"
+          className="flex items-center gap-1.5 bg-[#1E2125] hover:bg-[#17191C] text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors shadow-sm shrink-0 active:scale-95"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
             <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />

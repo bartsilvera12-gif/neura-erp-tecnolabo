@@ -79,7 +79,7 @@ const origenBadge: Record<OrigenMovimiento, string> = {
   devolucion_venta: "bg-amber-50 text-amber-800 border border-amber-200",
   produccion: "bg-teal-50 text-teal-700 border border-teal-200",
   recepcion: "bg-emerald-50 text-emerald-700 border border-emerald-200",
-  remision: "bg-indigo-50 text-indigo-700 border border-indigo-200",
+  remision: "bg-indigo-50 text-[#17191C] border border-indigo-200",
   nota_salida: "bg-rose-50 text-rose-700 border border-rose-200",
   ajuste: "bg-slate-100 text-slate-600 border border-slate-200",
   transferencia: "bg-cyan-50 text-cyan-700 border border-cyan-200",

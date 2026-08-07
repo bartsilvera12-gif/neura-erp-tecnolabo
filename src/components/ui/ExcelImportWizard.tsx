@@ -90,7 +90,7 @@ export default function ExcelImportWizard({
               <div className="flex justify-end gap-2 pt-2">
                 <button onClick={onClose} className="px-4 py-2 text-sm border rounded-lg">Cancelar</button>
                 <button onClick={handleUpload} disabled={!file || busy}
-                  className="px-4 py-2 text-sm rounded-lg bg-[#0EA5E9] text-white disabled:opacity-50">
+                  className="px-4 py-2 text-sm rounded-lg bg-[#1E2125] text-white disabled:opacity-50">
                   {busy ? "Analizando..." : "Analizar (preview)"}
                 </button>
               </div>
@@ -162,7 +162,7 @@ export default function ExcelImportWizard({
                 </ul>
               )}
               <div className="flex justify-end gap-2 pt-2">
-                <button onClick={onClose} className="px-4 py-2 text-sm rounded-lg bg-[#0EA5E9] text-white">Cerrar</button>
+                <button onClick={onClose} className="px-4 py-2 text-sm rounded-lg bg-[#1E2125] text-white">Cerrar</button>
               </div>
             </div>
           )}

@@ -7,7 +7,7 @@ import type {
 } from "@/lib/proveedores/types";
 
 const inputClass =
-  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white text-sm";
+  "w-full border border-slate-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#1E2125] bg-white text-sm";
 const labelClass = "block text-sm font-medium text-slate-700 mb-1";
 
 export interface ProveedorFormValues {
@@ -208,7 +208,7 @@ export default function ProveedorForm({
         {categorias.length === 0 ? (
           <p className="text-sm text-slate-500">
             No hay categorías aún.{" "}
-            <a href="/proveedores/categorias" className="text-sky-600 underline">
+            <a href="/proveedores/categorias" className="text-[#1E2125] underline">
               Crear en gestión de categorías
             </a>
             .
@@ -225,7 +225,7 @@ export default function ProveedorForm({
                   onClick={() => toggleCat(c.id)}
                   className={`rounded-full px-3 py-1 text-xs font-medium border transition-colors ${
                     on
-                      ? "bg-sky-500 border-sky-500 text-white"
+                      ? "bg-[#1E2125] border-[#1E2125] text-white"
                       : "bg-white border-slate-200 text-slate-600 hover:border-sky-300"
                   }`}
                 >

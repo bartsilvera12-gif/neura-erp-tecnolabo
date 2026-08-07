@@ -100,7 +100,7 @@ export default function VerEmpresaPage() {
         </div>
         <Link
           href={`/admin/empresas/${id}/editar`}
-          className="flex items-center gap-1.5 bg-[#0EA5E9] hover:bg-[#0284C7] text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm shrink-0 active:scale-95"
+          className="flex items-center gap-1.5 bg-[#1E2125] hover:bg-[#17191C] text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm shrink-0 active:scale-95"
         >
           Editar
         </Link>

@@ -48,7 +48,7 @@ const impresionLabels: Record<Impresion, string> = {
   ticket_58mm: "Ticket térmico 58 mm",
 };
 
-const inputClass = "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0EA5E9] focus:outline-none bg-white";
+const inputClass = "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#1E2125] focus:outline-none bg-white";
 const labelClass = "block text-xs font-medium text-slate-600 mb-1";
 
 export default function FacturacionModoSection() {
@@ -161,11 +161,11 @@ export default function FacturacionModoSection() {
                 disabled={savingModo}
                 onClick={() => guardarModo({ modo: c.key })}
                 className={`text-left rounded-xl border p-4 transition-colors ${
-                  sel ? "border-sky-400 bg-sky-50 ring-2 ring-sky-200" : "border-slate-200 hover:border-sky-200 hover:bg-slate-50"
+                  sel ? "border-[#3E434B] bg-sky-50 ring-2 ring-sky-200" : "border-slate-200 hover:border-sky-200 hover:bg-slate-50"
                 } disabled:opacity-50`}
               >
                 <div className="flex items-center gap-2">
-                  <span className={`h-3 w-3 rounded-full ${sel ? "bg-sky-500" : "bg-slate-300"}`} />
+                  <span className={`h-3 w-3 rounded-full ${sel ? "bg-[#1E2125]" : "bg-slate-300"}`} />
                   <span className="font-semibold text-sm text-slate-800">{c.titulo}</span>
                 </div>
                 <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">{c.resumen}</p>
@@ -184,7 +184,7 @@ export default function FacturacionModoSection() {
           {modo.modo === "sifen" && (
             <div className="text-xs text-slate-600 bg-sky-50 border border-sky-200 rounded-lg p-3 flex items-center justify-between gap-3">
               <span>Las ventas confirmadas se emiten como Documentos Electrónicos al SIFEN. La configuración de timbrado, certificado y branding KuDE se administra desde la pantalla SIFEN.</span>
-              <Link href="/configuracion/facturacion-electronica" className="shrink-0 px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium">
+              <Link href="/configuracion/facturacion-electronica" className="shrink-0 px-3 py-1.5 rounded-lg bg-[#1E2125] hover:bg-[#17191C] text-white text-xs font-medium">
                 Abrir configuración SIFEN →
               </Link>
             </div>

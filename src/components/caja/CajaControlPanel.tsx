@@ -328,7 +328,7 @@ export default function CajaControlPanel({ onStateChange }: Props) {
               <Metric label="Apertura" value={fmtGs(c.monto_apertura)} icon={<Wallet className="h-3.5 w-3.5" />} />
               <Metric label="Ventas" value={String(cr.cantidad_ventas)} icon={<CheckCircle2 className="h-3.5 w-3.5" />} />
               <Metric label="Efectivo" value={fmtGs(cr.total_efectivo)} icon={<ArrowDownRight className="h-3.5 w-3.5 text-emerald-600" />} highlight="emerald" />
-              <Metric label="Transfer" value={fmtGs(cr.total_transferencia)} icon={<ArrowDownRight className="h-3.5 w-3.5 text-sky-600" />} />
+              <Metric label="Transfer" value={fmtGs(cr.total_transferencia)} icon={<ArrowDownRight className="h-3.5 w-3.5 text-[#1E2125]" />} />
               <Metric label="Tarjeta" value={fmtGs(cr.total_tarjeta)} icon={<ArrowDownRight className="h-3.5 w-3.5 text-violet-600" />} />
               <Metric label="Esperado efectivo" value={fmtGs(cr.efectivo_esperado)} icon={<Wallet className="h-3.5 w-3.5 text-[#1E2125]" />} highlight="turquesa" />
             </div>

@@ -36,7 +36,7 @@ function BadgeEstado({ estado }: { estado: Plan["estado"] }) {
 
 function BadgePeriodicidad({ p }: { p: Plan["periodicidad"] }) {
   const cfg = {
-    mensual: "bg-blue-50  text-blue-600  border-blue-100",
+    mensual: "bg-blue-50  text-[#1E2125]  border-blue-100",
     anual:   "bg-violet-50 text-violet-600 border-violet-100",
     unico:   "bg-amber-50 text-amber-600  border-amber-100",
   };
@@ -98,7 +98,7 @@ export default function PlanesPage() {
         </div>
         <Link
           href="/planes/nuevo"
-          className="inline-flex items-center gap-2 bg-[#0EA5E9] hover:bg-[#0284C7] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 bg-[#1E2125] hover:bg-[#17191C] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
             <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
@@ -118,14 +118,14 @@ export default function PlanesPage() {
             placeholder="Buscar por nombre, código…"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white"
+            className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white"
           />
         </div>
 
         <select
           value={filtroEst}
           onChange={(e) => setFiltroEst(e.target.value as typeof filtroEst)}
-          className="text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white"
+          className="text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white"
         >
           <option value="">Todos los estados</option>
           <option value="activo">Activo</option>
@@ -135,7 +135,7 @@ export default function PlanesPage() {
         <select
           value={filtroPer}
           onChange={(e) => setFiltroPer(e.target.value as typeof filtroPer)}
-          className="text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] bg-white"
+          className="text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1E2125] bg-white"
         >
           <option value="">Todas las periodicidades</option>
           <option value="mensual">Mensual</option>
@@ -229,7 +229,7 @@ export default function PlanesPage() {
                       <Link
                         href={`/planes/${plan.id}`}
                         title="Ver plan"
-                        className="inline-flex items-center justify-center min-w-[40px] min-h-[40px] rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="inline-flex items-center justify-center min-w-[40px] min-h-[40px] rounded-lg text-gray-400 hover:text-[#1E2125] hover:bg-blue-50 transition-colors"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
                           <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
