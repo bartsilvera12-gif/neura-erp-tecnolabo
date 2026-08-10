@@ -251,6 +251,17 @@ export async function crearRemision(schema: string, empresaId: string, input: Cr
     }
 
     if (input.confirmar) await confirmarRemisionTx(client, schema, empresaId, remisionId, usuario);
+    await registrarAuditoriaTx(client, schema, {
+      empresaId,
+      entidad: "remision",
+      entidadId: remisionId,
+      accion: "crear",
+      origen: "api/remisiones",
+      usuarioId: usuario.id ?? null,
+      usuarioEmail: usuario.email ?? null,
+      usuarioNombre: usuario.nombre ?? null,
+      detalle: { numero, factura_id: input.factura_id, items: input.items.length, confirmada: !!input.confirmar },
+    });
     await client.query("COMMIT");
     return { remision_id: remisionId, numero, confirmada: !!input.confirmar };
   } catch (e) {
@@ -359,6 +370,213 @@ export async function getRemision(schema: string, empresaId: string, remisionId:
     const items = await client.query(`SELECT * FROM ${tRI} WHERE remision_id = $1::uuid ORDER BY created_at`, [remisionId]);
     const fac = await client.query(`SELECT numero_factura FROM ${tF} WHERE id = $1::uuid`, [rem.rows[0].factura_id]);
     return { remision: rem.rows[0], items: items.rows, numero_factura: (fac.rows[0]?.numero_factura as string) ?? null };
+  } finally {
+    client.release();
+  }
+}
+
+export interface LineaEdicionRemision extends LineaEntrega {
+  /** Cantidad que esta remisión entrega hoy de este ítem. */
+  en_esta_remision: number;
+  /** Entregado por OTRAS remisiones confirmadas (no cuenta ésta). */
+  entregado_otras: number;
+  /** Tope editable para este ítem en esta remisión = facturado - entregado_otras. */
+  max_a_entregar: number;
+  observacion: string | null;
+}
+
+/**
+ * Detalle de una remisión listo para VER o EDITAR: cabecera + una línea por cada
+ * ítem de la factura con el tope editable correcto según el estado de la remisión
+ * (para confirmada, la cantidad ya entregada por esta remisión se descuenta del
+ * "entregado por otras" para poder subir/bajar sin falsos topes).
+ */
+export async function getRemisionParaEdicion(schema: string, empresaId: string, remisionId: string) {
+  assertAllowedChatDataSchema(schema);
+  const tR = quoteSchemaTable(schema, "notas_remision");
+  const tRI = quoteSchemaTable(schema, "notas_remision_items");
+  const client = await pool().connect();
+  try {
+    const remQ = await client.query(`SELECT * FROM ${tR} WHERE id = $1::uuid AND empresa_id = $2::uuid`, [remisionId, empresaId]);
+    if (remQ.rowCount === 0) return null;
+    const rem = remQ.rows[0];
+    const itemsQ = await client.query(`SELECT factura_item_id, cantidad, observacion FROM ${tRI} WHERE remision_id = $1::uuid`, [remisionId]);
+    const enEsta = new Map<string, { cantidad: number; observacion: string | null }>();
+    for (const it of itemsQ.rows) if (it.factura_item_id) enEsta.set(it.factura_item_id as string, { cantidad: Number(it.cantidad) || 0, observacion: it.observacion ?? null });
+
+    const resumen = await getResumenFacturaEntrega(schema, empresaId, rem.factura_id);
+    if (!resumen) return null;
+    const esConfirmada = rem.estado === "confirmada";
+    const lineas: LineaEdicionRemision[] = resumen.lineas.map((l) => {
+      const e = enEsta.get(l.factura_item_id);
+      const cantEnEsta = e?.cantidad ?? 0;
+      // Para confirmada, cantidad_entregada YA incluye esta remisión → descontarla.
+      // Para borrador, esta remisión aún no suma a cantidad_entregada.
+      const entregadoOtras = esConfirmada ? Math.max(0, l.cantidad_entregada - cantEnEsta) : l.cantidad_entregada;
+      return {
+        ...l,
+        en_esta_remision: cantEnEsta,
+        entregado_otras: entregadoOtras,
+        max_a_entregar: Math.max(0, l.cantidad_facturada - entregadoOtras),
+        observacion: e?.observacion ?? null,
+      };
+    });
+    return {
+      remision: {
+        id: rem.id as string,
+        numero: rem.numero as string,
+        estado: rem.estado as string,
+        fecha: rem.fecha,
+        factura_id: rem.factura_id as string,
+        numero_factura: resumen.numero_factura,
+        cliente_nombre: rem.cliente_nombre ?? null,
+        observacion: rem.observacion ?? null,
+        usuario_creador_nombre: rem.usuario_creador_nombre ?? null,
+        usuario_confirmador_nombre: rem.usuario_confirmador_nombre ?? null,
+        confirmada_at: rem.confirmada_at ?? null,
+      },
+      lineas,
+    };
+  } finally {
+    client.release();
+  }
+}
+
+export interface EditarRemisionInput {
+  items: RemisionItemInput[];
+  observacion?: string | null;
+}
+
+/**
+ * Edita una remisión (borrador o confirmada). NO toca la factura.
+ *  - Borrador: reemplaza ítems/cantidades validando no superar lo disponible.
+ *    No mueve stock (el borrador aún no descontó).
+ *  - Confirmada: aplica SOLO la diferencia por ítem — ajusta stock (SALIDA si sube,
+ *    ENTRADA si baja), actualiza factura_items.cantidad_entregada por el delta y
+ *    recomputa el estado de entrega. No regenera el movimiento completo.
+ * Anulada: no editable. Registra auditoría con el detalle de cambios.
+ */
+export async function editarRemision(schema: string, empresaId: string, remisionId: string, input: EditarRemisionInput, usuario: Usuario): Promise<void> {
+  assertAllowedChatDataSchema(schema);
+  const tR = quoteSchemaTable(schema, "notas_remision");
+  const tRI = quoteSchemaTable(schema, "notas_remision_items");
+  const tFI = quoteSchemaTable(schema, "factura_items");
+  const EPS = 1e-9;
+
+  const client = await pool().connect();
+  try {
+    await client.query("BEGIN");
+    const remQ = await client.query(`SELECT * FROM ${tR} WHERE id = $1::uuid AND empresa_id = $2::uuid FOR UPDATE`, [remisionId, empresaId]);
+    if (remQ.rowCount === 0) throw new Error("Remisión no encontrada.");
+    const rem = remQ.rows[0];
+    if (rem.estado === "anulada") throw new Error("No se puede editar una remisión anulada.");
+    const esConfirmada = rem.estado === "confirmada";
+
+    // Nuevas cantidades por factura_item_id (solo ítems de factura, cantidad > 0).
+    const nuevos = new Map<string, RemisionItemInput>();
+    for (const it of input.items) {
+      if (!it.factura_item_id) continue;
+      if ((Number(it.cantidad) || 0) > 0) nuevos.set(it.factura_item_id, it);
+    }
+    if (nuevos.size === 0) throw new Error("La remisión debe tener al menos un ítem con cantidad mayor a 0.");
+
+    // Ítems actuales de la remisión.
+    const actualesQ = await client.query(`SELECT * FROM ${tRI} WHERE remision_id = $1::uuid`, [remisionId]);
+    const actuales = new Map<string, Record<string, unknown>>();
+    for (const it of actualesQ.rows) if (it.factura_item_id) actuales.set(it.factura_item_id as string, it);
+
+    const cfg = await getEmpresaConfigTx(client, schema, empresaId);
+    const cambios: Array<{ producto: string; de: number; a: number }> = [];
+    const ids = new Set<string>([...actuales.keys(), ...nuevos.keys()]);
+
+    for (const fiId of ids) {
+      const viejo = actuales.get(fiId);
+      const nuevo = nuevos.get(fiId);
+      const cantVieja = viejo ? Number(viejo.cantidad) || 0 : 0;
+      const cantNueva = nuevo ? Number(nuevo.cantidad) || 0 : 0;
+      const delta = cantNueva - cantVieja;
+      const prodId = (nuevo?.producto_id ?? viejo?.producto_id) as string;
+      const prodNombre = (nuevo?.producto_nombre ?? viejo?.producto_nombre) as string;
+      const sku = (nuevo?.sku ?? (viejo?.sku as string | null) ?? null) as string | null;
+      const costo = Number(nuevo?.costo_unitario ?? viejo?.costo_unitario ?? 0);
+
+      // Validación de tope según estado, con lock del ítem de factura.
+      const fiQ = await client.query(
+        `SELECT COALESCE(cantidad,0)::numeric AS cant, COALESCE(cantidad_entregada,0)::numeric AS entr
+           FROM ${tFI} WHERE id = $1::uuid AND empresa_id = $2::uuid FOR UPDATE`,
+        [fiId, empresaId],
+      );
+      if ((fiQ.rowCount ?? 0) > 0) {
+        const facturada = Number(fiQ.rows[0].cant);
+        const entregadaTotal = Number(fiQ.rows[0].entr);
+        // Confirmada: entregadaTotal incluye cantVieja. Borrador: no la incluye.
+        const entregadoOtras = esConfirmada ? entregadaTotal - cantVieja : entregadaTotal;
+        const maxPermitido = facturada - entregadoOtras;
+        if (cantNueva > maxPermitido + EPS) throw new RemisionExcedenteError(prodNombre, Math.max(0, maxPermitido), cantNueva);
+
+        // Confirmada: aplicar SOLO la diferencia (stock + cantidad_entregada).
+        if (esConfirmada && Math.abs(delta) > EPS) {
+          await client.query(`UPDATE ${tFI} SET cantidad_entregada = GREATEST(0, cantidad_entregada + $1::numeric) WHERE id = $2::uuid AND empresa_id = $3::uuid`, [delta, fiId, empresaId]);
+          await registrarMovimientoInventarioTx(
+            client,
+            schema,
+            {
+              empresaId,
+              productoId: prodId,
+              productoNombre: prodNombre,
+              productoSku: sku ?? "",
+              tipo: delta > 0 ? "SALIDA" : "ENTRADA",
+              cantidad: Math.abs(delta),
+              costoUnitario: costo,
+              origen: "remision",
+              referencia: rem.numero,
+              documentoTipo: "remision",
+              documentoId: remisionId,
+              depositoId: rem.deposito_id ?? null,
+              sucursalId: rem.sucursal_id ?? null,
+              observacion: `Ajuste por edición de remisión (${cantVieja} → ${cantNueva})`,
+              usuarioId: usuario.id ?? null,
+              usuarioNombre: usuario.nombre ?? null,
+            },
+            { permitirStockNegativo: cfg.permitir_stock_negativo, onInsuficiente: "throw" },
+          );
+        }
+      }
+
+      // Reflejar en los ítems de la remisión.
+      if (cantNueva <= 0 && viejo) {
+        await client.query(`DELETE FROM ${tRI} WHERE id = $1::uuid`, [viejo.id]);
+      } else if (viejo) {
+        await client.query(`UPDATE ${tRI} SET cantidad = $1::numeric WHERE id = $2::uuid`, [cantNueva, viejo.id]);
+      } else if (cantNueva > 0) {
+        await client.query(
+          `INSERT INTO ${tRI} (empresa_id, remision_id, factura_item_id, producto_id, producto_nombre, sku, cantidad, costo_unitario, observacion)
+             VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, $5, $6, $7::numeric, $8::numeric, $9)`,
+          [empresaId, remisionId, fiId, prodId, prodNombre, sku, cantNueva, costo, null],
+        );
+      }
+      if (Math.abs(delta) > EPS) cambios.push({ producto: prodNombre, de: cantVieja, a: cantNueva });
+    }
+
+    await client.query(`UPDATE ${tR} SET observacion = $1, updated_at = now() WHERE id = $2::uuid AND empresa_id = $3::uuid`, [input.observacion ?? rem.observacion ?? null, remisionId, empresaId]);
+    if (esConfirmada) await recomputarEstadoEntregaFactura(client, schema, empresaId, rem.factura_id);
+
+    await registrarAuditoriaTx(client, schema, {
+      empresaId,
+      entidad: "remision",
+      entidadId: remisionId,
+      accion: "editar",
+      origen: "api/remisiones",
+      usuarioId: usuario.id ?? null,
+      usuarioEmail: usuario.email ?? null,
+      usuarioNombre: usuario.nombre ?? null,
+      detalle: { numero: rem.numero, factura_id: rem.factura_id, estado: rem.estado, cambios },
+    });
+
+    await client.query("COMMIT");
+  } catch (e) {
+    await client.query("ROLLBACK").catch(() => null);
+    throw e;
   } finally {
     client.release();
   }
