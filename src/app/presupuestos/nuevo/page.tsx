@@ -16,6 +16,8 @@ type ProductoLite = {
   sku: string;
   precio_venta: number;
   unidad_medida: string;
+  /** Descripción de la ficha maestra del producto (se copia como snapshot al ítem). */
+  descripcion: string | null;
   /** Ruta en Storage (bucket privado). Se firma al generar el PDF. */
   imagen_path: string | null;
 };
@@ -120,6 +122,7 @@ export default function NuevoPresupuestoPage() {
                 sku: String(p.sku ?? ""),
                 precio_venta: Number(p.precio_venta) || 0,
                 unidad_medida: String(p.unidad_medida ?? "UNIDAD"),
+                descripcion: (p.descripcion as string | null) ?? null,
                 imagen_path: (p.imagen_path as string | null) ?? null,
               }))
           );
@@ -173,7 +176,9 @@ export default function NuevoPresupuestoPage() {
         descuento: 0,
         imagen_url: null,
         imagen_path: p.imagen_path ?? null,
-        descripcion_comercial: null,
+        // Snapshot: se copia la descripción de la ficha del producto; el usuario
+        // puede editarla para este presupuesto sin afectar el producto maestro.
+        descripcion_comercial: p.descripcion?.trim() || null,
         especificaciones_tecnicas: null,
         caracteristicas_texto: null,
       },

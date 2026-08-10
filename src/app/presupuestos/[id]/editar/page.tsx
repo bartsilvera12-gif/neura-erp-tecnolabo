@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { IVA_POR_DEFECTO } from "@/lib/branding/cliente";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { FileText, ArrowLeft, Plus, Trash2, Loader2 } from "lucide-react";
+import { FileText, ArrowLeft, Plus, Trash2, Loader2, ChevronDown, Image as ImageIcon } from "lucide-react";
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
 import SelectFromList from "@/components/inventario/SelectFromList";
 import ClienteBuscador, { type ClienteBuscadorItem } from "@/components/clientes/ClienteBuscador";
 import { calcMontoIvaIncluido, type IvaTipoPresupuesto } from "@/lib/presupuestos/types";
 
-type ProductoLite = { id: string; nombre: string; sku: string; precio_venta: number; unidad_medida: string; };
+type ProductoLite = { id: string; nombre: string; sku: string; precio_venta: number; unidad_medida: string; descripcion: string | null; imagen_path: string | null; };
 type ClienteLite = { id: string; nombre: string; ruc: string | null; telefono: string | null; direccion: string | null; };
 type Item = {
   producto_id: string | null;
@@ -21,7 +21,31 @@ type Item = {
   precio_unitario: number;
   iva_tipo: IvaTipoPresupuesto;
   descuento: number;
+  // Presentación comercial por ítem (snapshot histórico; no toca la ficha del producto).
+  imagen_url: string | null;
+  imagen_path: string | null;
+  descripcion_comercial: string | null;
+  especificaciones_tecnicas: string | null;
+  caracteristicas_texto: string | null;
 };
+
+/** Textarea "clave: valor" por línea → array jsonb [{label, valor}]. */
+function parseCaracteristicas(texto: string | null): Array<{ label: string; valor: string }> {
+  if (!texto) return [];
+  return texto.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => {
+    const idx = l.indexOf(":");
+    if (idx === -1) return { label: "", valor: l };
+    return { label: l.slice(0, idx).trim(), valor: l.slice(idx + 1).trim() };
+  });
+}
+/** array jsonb [{label, valor}] → textarea "clave: valor" por línea (para editar). */
+function serializeCaracteristicas(arr: unknown): string {
+  if (!Array.isArray(arr)) return "";
+  return arr.map((c) => {
+    const o = c as { label?: string; valor?: string };
+    return o.label ? `${o.label}: ${o.valor ?? ""}` : (o.valor ?? "");
+  }).join("\n");
+}
 
 function fmtGs(n: number) {
   return "Gs. " + (Number(n) || 0).toLocaleString("es-PY", { maximumFractionDigits: 0 });
@@ -55,6 +79,7 @@ export default function EditarPresupuestoPage() {
 
   const [items, setItems] = useState<Item[]>([]);
   const [selProd, setSelProd] = useState("");
+  const [expandido, setExpandido] = useState<Record<number, boolean>>({});
 
   const [validezDias, setValidezDias] = useState("15");
   const [formaPago, setFormaPago] = useState("");
@@ -76,6 +101,7 @@ export default function EditarPresupuestoPage() {
           setProductos(list.filter((p) => p.es_vendible !== false).map((p) => ({
             id: String(p.id), nombre: String(p.nombre), sku: String(p.sku ?? ""),
             precio_venta: Number(p.precio_venta) || 0, unidad_medida: String(p.unidad_medida ?? "UNIDAD"),
+            descripcion: (p.descripcion as string | null) ?? null, imagen_path: (p.imagen_path as string | null) ?? null,
           })));
         }
       }).catch(() => {});
@@ -127,6 +153,12 @@ export default function EditarPresupuestoPage() {
           precio_unitario: Number(it.precio_unitario) || 0,
           iva_tipo: (it.iva_tipo === "5%" || it.iva_tipo === "EXENTA" ? it.iva_tipo : IVA_POR_DEFECTO) as IvaTipoPresupuesto,
           descuento: Number(it.descuento) || 0,
+          // Presentación comercial guardada (snapshot). imagen_url viene firmada del GET.
+          imagen_url: it.imagen_url ? String(it.imagen_url) : null,
+          imagen_path: it.imagen_path ? String(it.imagen_path) : null,
+          descripcion_comercial: it.descripcion_comercial ? String(it.descripcion_comercial) : null,
+          especificaciones_tecnicas: it.especificaciones_tecnicas ? String(it.especificaciones_tecnicas) : null,
+          caracteristicas_texto: serializeCaracteristicas(it.caracteristicas) || null,
         })));
         setCargando(false);
       } catch {
@@ -150,6 +182,8 @@ export default function EditarPresupuestoPage() {
     setItems((prev) => [...prev, {
       producto_id: p.id, producto_nombre: p.nombre, sku: p.sku || null,
       cantidad: 1, unidad_medida: p.unidad_medida, precio_unitario: p.precio_venta, iva_tipo: IVA_POR_DEFECTO, descuento: 0,
+      imagen_url: null, imagen_path: p.imagen_path ?? null,
+      descripcion_comercial: p.descripcion?.trim() || null, especificaciones_tecnicas: null, caracteristicas_texto: null,
     }]);
     setSelProd("");
   }
@@ -157,6 +191,7 @@ export default function EditarPresupuestoPage() {
     setItems((prev) => [...prev, {
       producto_id: null, producto_nombre: "", sku: null,
       cantidad: 1, unidad_medida: null, precio_unitario: 0, iva_tipo: IVA_POR_DEFECTO, descuento: 0,
+      imagen_url: null, imagen_path: null, descripcion_comercial: null, especificaciones_tecnicas: null, caracteristicas_texto: null,
     }]);
   }
   function updItem(i: number, patch: Partial<Item>) {
@@ -208,6 +243,12 @@ export default function EditarPresupuestoPage() {
             precio_unitario: Number(it.precio_unitario),
             iva_tipo: it.iva_tipo,
             descuento: Number(it.descuento) || 0,
+            // Snapshot comercial: con imagen_path no se guarda la URL firmada (se re-firma al render).
+            imagen_url: it.imagen_path ? null : (it.imagen_url?.trim() || null),
+            imagen_path: it.imagen_path ?? null,
+            descripcion_comercial: it.descripcion_comercial?.trim() || null,
+            especificaciones_tecnicas: it.especificaciones_tecnicas?.trim() || null,
+            caracteristicas: parseCaracteristicas(it.caracteristicas_texto),
           })),
         }),
       });
@@ -339,10 +380,20 @@ export default function EditarPresupuestoPage() {
               <tbody className="divide-y divide-slate-100">
                 {items.map((it, i) => {
                   const t = itemTotals(it);
+                  const abierto = !!expandido[i];
+                  const tieneDetalle = !!it.imagen_url || !!it.descripcion_comercial || !!it.especificaciones_tecnicas || !!it.caracteristicas_texto;
                   return (
-                    <tr key={i}>
+                    <Fragment key={i}>
+                    <tr>
                       <td className="py-2 pr-2">
-                        <input value={it.producto_nombre} onChange={(e) => updItem(i, { producto_nombre: e.target.value })} className={inputClass} placeholder="Descripción" />
+                        <div className="flex items-center gap-1.5">
+                          <button type="button" onClick={() => setExpandido((p) => ({ ...p, [i]: !p[i] }))}
+                            className={`shrink-0 rounded p-1 hover:bg-slate-100 ${tieneDetalle ? "text-[#1E2125]" : "text-slate-400"}`}
+                            aria-label="Detalle comercial" title="Imagen, descripción y especificaciones">
+                            <ChevronDown className={`h-4 w-4 transition-transform ${abierto ? "rotate-180" : ""}`} />
+                          </button>
+                          <input value={it.producto_nombre} onChange={(e) => updItem(i, { producto_nombre: e.target.value })} className={inputClass} placeholder="Descripción" />
+                        </div>
                       </td>
                       <td className="py-2 px-2">
                         <input type="number" min="0" step="0.01" value={it.cantidad} onChange={(e) => updItem(i, { cantidad: Number(e.target.value) })} className={inputClass} />
@@ -363,6 +414,38 @@ export default function EditarPresupuestoPage() {
                         <button onClick={() => delItem(i)} className="text-red-600 hover:text-red-700" aria-label="Eliminar"><Trash2 className="h-4 w-4" /></button>
                       </td>
                     </tr>
+                    {abierto && (
+                      <tr className="bg-slate-50/60">
+                        <td colSpan={7} className="px-3 py-3">
+                          <div className="grid grid-cols-1 lg:grid-cols-[160px_1fr] gap-4">
+                            <div>
+                              <label className={labelClass}><ImageIcon className="inline h-3.5 w-3.5 mr-1" />Imagen (URL)</label>
+                              <input value={it.imagen_url ?? ""} onChange={(e) => updItem(i, { imagen_url: e.target.value, imagen_path: null })} className={inputClass} placeholder="https://…" />
+                              {it.imagen_url ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={it.imagen_url} alt="" className="mt-2 h-24 w-full rounded-md border border-slate-200 object-cover" />
+                              ) : null}
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                              <div className="sm:col-span-2">
+                                <label className={labelClass}>Descripción comercial</label>
+                                <textarea value={it.descripcion_comercial ?? ""} onChange={(e) => updItem(i, { descripcion_comercial: e.target.value })} rows={2} className={inputClass} placeholder="Texto comercial que verá el cliente" />
+                              </div>
+                              <div>
+                                <label className={labelClass}>Especificaciones técnicas</label>
+                                <textarea value={it.especificaciones_tecnicas ?? ""} onChange={(e) => updItem(i, { especificaciones_tecnicas: e.target.value })} rows={3} className={inputClass} placeholder="Detalle técnico" />
+                              </div>
+                              <div>
+                                <label className={labelClass}>Características (una «clave: valor» por línea)</label>
+                                <textarea value={it.caracteristicas_texto ?? ""} onChange={(e) => updItem(i, { caracteristicas_texto: e.target.value })} rows={3} className={inputClass} placeholder={"Potencia: 1500W\nGarantía: 12 meses"} />
+                              </div>
+                            </div>
+                          </div>
+                          <p className="mt-2 text-xs text-slate-500">Estos datos son propios de este presupuesto (no modifican la ficha del producto).</p>
+                        </td>
+                      </tr>
+                    )}
+                    </Fragment>
                   );
                 })}
               </tbody>
