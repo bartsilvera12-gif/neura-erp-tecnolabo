@@ -27,6 +27,17 @@ export const CLIENTE_SLUG = "tecnolabo";
  */
 export const IVA_POR_DEFECTO: "EXENTA" | "5%" | "10%" = "EXENTA";
 
+/**
+ * Condición comercial fija que aparece en TODOS los presupuestos (Tecnolabo).
+ * Se renderiza siempre en la sección "Condiciones comerciales" (vista, PDF,
+ * impresión), sin depender de que se haya guardado en el presupuesto: así también
+ * la muestran los presupuestos ya existentes. El campo condiciones_comerciales del
+ * presupuesto queda para condiciones ADICIONALES específicas.
+ */
+export const CONDICIONES_COMERCIALES_FIJAS: readonly string[] = [
+  "Entrega sin costo en instalaciones del cliente dentro del Dpto. Central.",
+];
+
 /** Nombre del producto tal como se muestra en títulos y documentos. */
 export const CLIENTE_ERP_NOMBRE = `${CLIENTE_NOMBRE} ERP`;
 

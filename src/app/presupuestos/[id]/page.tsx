@@ -6,6 +6,7 @@ import Link from "next/link";
 import { FileText, ArrowLeft, Loader2, Download, FileCheck2, Pencil } from "lucide-react";
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
 import { ESTADO_LABEL, type EstadoPresupuesto } from "@/lib/presupuestos/types";
+import { CONDICIONES_COMERCIALES_FIJAS } from "@/lib/branding/cliente";
 
 type Presu = {
   id: string;
@@ -25,6 +26,7 @@ type Presu = {
   fecha_vencimiento: string | null;
   forma_pago: string | null;
   plazo_entrega: string | null;
+  condiciones_comerciales: string | null;
   observaciones: string | null;
   convertido_pedido_id: string | null;
   convertido_factura_id: string | null;
@@ -365,6 +367,23 @@ export default function PresupuestoDetallePage() {
             <div className="flex justify-between border-t border-slate-200 pt-1 font-semibold text-base"><span>Total</span><span className="tabular-nums text-[#1E2125]">{fmtGs(presu.total, presu.moneda)}</span></div>
           </div>
         </div>
+      </div>
+
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+        <h3 className="text-xs uppercase tracking-wide text-gray-500 mb-2">Condiciones comerciales</h3>
+        <ul className="list-disc pl-5 text-sm text-gray-700 space-y-0.5">
+          {[
+            ...CONDICIONES_COMERCIALES_FIJAS,
+            ...(presu.validez_dias ? [`Validez: ${presu.validez_dias} día(s)`] : []),
+            ...(presu.forma_pago ? [`Forma de pago: ${presu.forma_pago}`] : []),
+            ...(presu.plazo_entrega ? [`Plazo de entrega: ${presu.plazo_entrega}`] : []),
+            ...(presu.condiciones_comerciales && !CONDICIONES_COMERCIALES_FIJAS.includes(presu.condiciones_comerciales.trim())
+              ? [presu.condiciones_comerciales]
+              : []),
+          ].map((c, i) => (
+            <li key={i}>{c}</li>
+          ))}
+        </ul>
       </div>
 
       {presu.observaciones && (

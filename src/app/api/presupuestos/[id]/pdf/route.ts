@@ -16,7 +16,7 @@ import { firmarImagenesItems } from "@/lib/inventario/imagen-storage";
  * registros: la duplicación existe SOLO en la vista de impresión.
  */
 
-import { CLIENTE_NOMBRE } from "@/lib/branding/cliente";
+import { CLIENTE_NOMBRE, CONDICIONES_COMERCIALES_FIJAS } from "@/lib/branding/cliente";
 
 const NEGOCIO_FALLBACK = CLIENTE_NOMBRE;
 
@@ -153,12 +153,13 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   const filasCompact = items.map((it) => rowHtml(it, false)).join("");
   const filasFull = items.map((it) => rowHtml(it, true)).join("");
 
-  const condiciones: string[] = [];
+  const condiciones: string[] = CONDICIONES_COMERCIALES_FIJAS.map((c) => esc(c));
   if (p.validez_dias) condiciones.push(`Validez: ${esc(p.validez_dias)} día(s)${p.fecha_vencimiento ? ` (vence ${fmtFecha(p.fecha_vencimiento)})` : ""}`);
   if (p.forma_pago) condiciones.push(`Forma de pago: ${esc(p.forma_pago)}`);
   if (p.plazo_entrega) condiciones.push(`Plazo de entrega: ${esc(p.plazo_entrega)}`);
   if (Number(p.tipo_cambio) > 1) condiciones.push(`Tipo de cambio: ${esc(p.tipo_cambio)}`);
-  if (p.condiciones_comerciales) condiciones.push(esc(p.condiciones_comerciales));
+  // Condición adicional guardada (sin duplicar la fija si coincide exactamente).
+  if (p.condiciones_comerciales && !CONDICIONES_COMERCIALES_FIJAS.includes(String(p.condiciones_comerciales).trim())) condiciones.push(esc(p.condiciones_comerciales));
 
   // Componente reutilizable: UNA copia del presupuesto. Se usa dos veces (compacto)
   // o una vez (full). Sin repetir consultas: los datos ya se leyeron una sola vez.
