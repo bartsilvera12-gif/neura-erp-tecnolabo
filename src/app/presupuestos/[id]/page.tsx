@@ -345,7 +345,7 @@ export default function PresupuestoDetallePage() {
                       <span>
                         {it.producto_nombre}
                         {it.sku ? <span className="text-gray-400 text-xs"> · {it.sku}</span> : null}
-                        {it.descripcion_comercial ? <span className="block text-xs text-gray-500">{it.descripcion_comercial}</span> : null}
+                        {it.descripcion_comercial ? <span className="mt-0.5 block whitespace-pre-line text-xs leading-snug text-gray-500">{it.descripcion_comercial}</span> : null}
                       </span>
                     </div>
                   </td>

@@ -169,6 +169,43 @@ export async function firmarImagenesItems(
 }
 
 /**
+ * Fallback de detalle comercial para ítems de presupuesto: si un ítem NO tiene
+ * snapshot de descripción/especificaciones/características (p. ej. presupuestos
+ * creados antes de guardar el snapshot), toma `productos.descripcion` del producto
+ * relacionado y la usa como `descripcion_comercial` (solo para mostrar; no persiste
+ * salvo que se guarde el presupuesto). En este ERP las características del producto
+ * viven en el campo `descripcion`. Muta los ítems recibidos.
+ */
+export async function aplicarFallbackDescripcionProducto(
+  supabase: AppSupabaseClient,
+  empresaId: string,
+  items: Array<Record<string, unknown>>
+): Promise<void> {
+  try {
+    const sinDetalle = items.filter(
+      (it) =>
+        !it.descripcion_comercial &&
+        !it.especificaciones_tecnicas &&
+        (!Array.isArray(it.caracteristicas) || (it.caracteristicas as unknown[]).length === 0) &&
+        it.producto_id
+    );
+    const prodIds = Array.from(new Set(sinDetalle.map((it) => String(it.producto_id))));
+    if (prodIds.length === 0) return;
+    const pr = await supabase.from("productos").select("id, descripcion").eq("empresa_id", empresaId).in("id", prodIds);
+    const desc = new Map<string, string>();
+    for (const row of (pr.data ?? []) as Array<{ id: string; descripcion: string | null }>) {
+      if (row.descripcion && row.descripcion.trim()) desc.set(String(row.id), row.descripcion);
+    }
+    for (const it of sinDetalle) {
+      const d = it.producto_id ? desc.get(String(it.producto_id)) : null;
+      if (d) it.descripcion_comercial = d;
+    }
+  } catch {
+    /* best-effort: sin fallback, el ítem se muestra sin detalle */
+  }
+}
+
+/**
  * Valida que el path pertenezca a la empresa indicada (primer segmento).
  * Previene cross-tenant en operaciones que reciben paths arbitrarios.
  */

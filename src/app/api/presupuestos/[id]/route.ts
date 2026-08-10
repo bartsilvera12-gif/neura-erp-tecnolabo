@@ -3,7 +3,7 @@ import { getTenantSupabaseFromAuth } from "@/lib/supabase/tenant-api";
 import { successResponse, errorResponse } from "@/lib/api/response";
 import { API_ERRORS } from "@/lib/api/errors";
 import { ESTADOS_PRESUPUESTO, type EstadoPresupuesto } from "@/lib/presupuestos/types";
-import { firmarImagenesItems } from "@/lib/inventario/imagen-storage";
+import { firmarImagenesItems, aplicarFallbackDescripcionProducto } from "@/lib/inventario/imagen-storage";
 
 const PRESU_COLS =
   "id, cliente_id, cliente_nombre, cliente_ruc, cliente_telefono, cliente_direccion, " +
@@ -42,6 +42,8 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
     // Firmar la imagen de cada ítem (bucket privado) para mostrarla en la nota.
     const items = (itq.data ?? []) as unknown as Record<string, unknown>[];
     await firmarImagenesItems(ctx.supabase, ctx.auth.empresa_id, items);
+    // Fallback: ítems sin snapshot de detalle → descripción del producto relacionado.
+    await aplicarFallbackDescripcionProducto(ctx.supabase, ctx.auth.empresa_id, items);
 
     return NextResponse.json(successResponse({ presupuesto: pq.data, items }));
   } catch (err) {

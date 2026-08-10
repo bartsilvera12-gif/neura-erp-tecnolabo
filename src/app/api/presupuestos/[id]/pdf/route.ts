@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTenantSupabaseFromAuth } from "@/lib/supabase/tenant-api";
 import { membreteA4 } from "@/lib/documentos/membrete";
-import { firmarImagenesItems } from "@/lib/inventario/imagen-storage";
+import { firmarImagenesItems, aplicarFallbackDescripcionProducto } from "@/lib/inventario/imagen-storage";
 
 /**
  * GET /api/presupuestos/[id]/pdf?auto=1
@@ -88,6 +88,8 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   // crearse); para presupuestos anteriores a esa herencia, se resuelve desde el
   // producto por producto_id. Si el ítem ya trae una URL directa (externa), se respeta.
   await firmarImagenesItems(ctx.supabase, ctx.auth.empresa_id, items);
+  // Fallback: ítems sin snapshot de detalle → descripción del producto relacionado.
+  await aplicarFallbackDescripcionProducto(ctx.supabase, ctx.auth.empresa_id, items);
 
   // Nombre del negocio.
   let nombreEmpresa: string | null = null;
@@ -287,7 +289,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   tbody td.r { text-align: right; white-space: nowrap; }
   thead th.r { white-space: nowrap; }
   .sku { color: #9ca3af; font-size: 9.5px; }
-  .desc { color: #374151; font-size: 10px; margin-top: 1px; }
+  .desc { color: #374151; font-size: 10px; margin-top: 1px; white-space: pre-line; }
   .itemc { display: flex; gap: 6px; align-items: flex-start; }
   .itemc .thumb { width: 34px; height: 34px; object-fit: cover; border-radius: 4px; border: 1px solid #e5e7eb; flex: 0 0 auto; }
   .dual .copia .itemc .thumb { width: 30px; height: 30px; }
