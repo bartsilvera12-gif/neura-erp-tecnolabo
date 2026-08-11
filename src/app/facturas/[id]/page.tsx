@@ -21,6 +21,7 @@ type FacturaApiRow = {
   cliente_display?: string;
   presupuesto_id?: string | null;
   estado_entrega?: string | null;
+  numero_orden_compra?: string | null;
 };
 
 const ENTREGA_LABEL: Record<string, string> = { pendiente: "Entrega pendiente", parcialmente_entregada: "Entrega parcial", entregada: "Entregada" };
@@ -227,6 +228,12 @@ function FacturaDetalleInner() {
             <dt className="text-slate-400 text-xs">Tipo</dt>
             <dd className="font-medium text-slate-800 capitalize">{factura.tipo}</dd>
           </div>
+          {factura.numero_orden_compra ? (
+            <div>
+              <dt className="text-slate-400 text-xs">N.º Orden de Compra</dt>
+              <dd className="font-medium text-slate-800">{factura.numero_orden_compra}</dd>
+            </div>
+          ) : null}
           <div>
             <dt className="text-slate-400 text-xs">Monto</dt>
             <dd className="font-semibold text-slate-900 tabular-nums">

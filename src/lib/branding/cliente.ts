@@ -25,7 +25,7 @@ export const CLIENTE_SLUG = "tecnolabo";
  * costo del producto sin impuesto. Por eso el default es "EXENTA".
  * (El cajero igual puede elegir 5%/10% en una línea puntual si hiciera falta.)
  */
-export const IVA_POR_DEFECTO: "EXENTA" | "5%" | "10%" = "EXENTA";
+export const IVA_POR_DEFECTO: "EXENTA" | "5%" | "10%" = "10%";
 
 /**
  * Condición comercial fija que aparece en TODOS los presupuestos (Tecnolabo).

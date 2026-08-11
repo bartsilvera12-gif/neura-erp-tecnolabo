@@ -219,7 +219,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
       </table>
 
       ${condiciones.length ? `<div class="cond"><h3>Condiciones comerciales</h3><ul>${condiciones.map((c) => `<li>${c}</li>`).join("")}</ul></div>` : ""}
-      ${full && p.observaciones ? `<div class="obs"><strong>Observaciones:</strong>\n${esc(p.observaciones)}</div>` : ""}
+      ${p.observaciones ? `<div class="obs"><strong>Observaciones:</strong> ${esc(p.observaciones)}</div>` : ""}
       ${full ? `<div class="firmas"><div class="firma"><div class="linea">Firma y aclaración — ${esc(negocio)}</div></div><div class="firma"><div class="linea">Aceptación del cliente${p.cliente_nombre ? ` — ${esc(p.cliente_nombre)}` : ""}</div></div></div>` : ""}
 
       <div class="legal">Documento no fiscal — no válido como factura. Sujeto a disponibilidad de stock y validez indicada.</div>
@@ -264,6 +264,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   .dual .copia .totales .total-row td { font-size: 12px; }
   .dual .copia .cond { margin-top: 5px; }
   .dual .copia .cond ul { font-size: 9.5px; }
+  .dual .copia .obs { margin-top: 5px; font-size: 9.5px; }
   .dual .copia .legal { margin-top: 5px; }
 
   .corte { display: flex; align-items: center; gap: 8px; padding: 1mm 8mm; color: #6b7280; font-size: 10px; border-top: 1px dashed #9ca3af; border-bottom: 1px dashed #9ca3af; }

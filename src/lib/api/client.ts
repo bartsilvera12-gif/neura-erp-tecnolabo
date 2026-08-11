@@ -271,6 +271,8 @@ export async function apiCreateFactura(data: {
   dia_vencimiento?: number;
   /** IVA puntual por factura (default `iva_10` para preservar comportamiento). */
   iva_tipo?: "exenta" | "iva_5" | "iva_10";
+  /** N.º de Orden de Compra del cliente (opcional, alfanumérico). */
+  numero_orden_compra?: string;
 }): Promise<{ id: string; [key: string]: unknown } | null> {
   const result = await apiPost<{ id: string; [key: string]: unknown }>("/api/facturas", data);
   return result.success ? result.data : null;

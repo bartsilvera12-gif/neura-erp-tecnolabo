@@ -276,7 +276,8 @@ export default function ClienteDetailPage() {
     monto: string;
     descripcion: string;
     iva_tipo: "exenta" | "iva_5" | "iva_10";
-  }>({ monto: "", descripcion: "Venta al contado", iva_tipo: "iva_10" });
+    numero_orden_compra: string;
+  }>({ monto: "", descripcion: "Venta al contado", iva_tipo: "iva_10", numero_orden_compra: "" });
   const [guardandoFacturaContado, setGuardandoFacturaContado] = useState(false);
   /** Error visible en el modal "Factura al contado". Antes la API podía fallar (p. ej. PGRST106
    *  para tenants erp_* no expuestos) y el botón parecía "no hacer nada". Ahora exponemos el motivo. */
@@ -883,13 +884,14 @@ export default function ClienteDetailPage() {
         moneda: cliente.moneda_preferida ?? "GS",
         descripcion_linea: formFacturaContado.descripcion.trim() || "Venta al contado",
         iva_tipo: formFacturaContado.iva_tipo,
+        numero_orden_compra: formFacturaContado.numero_orden_compra.trim() || undefined,
       });
       if (!result.ok) {
         setErrorFacturaContado(result.error);
         return;
       }
       setModalFacturaContado(false);
-      setFormFacturaContado({ monto: "", descripcion: "Venta al contado", iva_tipo: "iva_10" });
+      setFormFacturaContado({ monto: "", descripcion: "Venta al contado", iva_tipo: "iva_10", numero_orden_compra: "" });
       setActiveTab("estado_cuenta");
       getFacturas(id).then(setFacturas);
     } catch (err) {
@@ -1055,7 +1057,7 @@ export default function ClienteDetailPage() {
             <button
               type="button"
               onClick={() => {
-                setFormFacturaContado({ monto: "", descripcion: "Venta al contado", iva_tipo: "iva_10" });
+                setFormFacturaContado({ monto: "", descripcion: "Venta al contado", iva_tipo: "iva_10", numero_orden_compra: "" });
                 setErrorFacturaContado(null);
                 setModalFacturaContado(true);
               }}
@@ -1965,7 +1967,7 @@ export default function ClienteDetailPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      setFormFacturaContado({ monto: "", descripcion: "Venta al contado", iva_tipo: "iva_10" });
+                      setFormFacturaContado({ monto: "", descripcion: "Venta al contado", iva_tipo: "iva_10", numero_orden_compra: "" });
                       setErrorFacturaContado(null);
                       setModalFacturaContado(true);
                     }}
@@ -2280,6 +2282,16 @@ export default function ClienteDetailPage() {
                   onChange={(e) => setFormFacturaContado((p) => ({ ...p, descripcion: e.target.value }))}
                   className={inputClass}
                   placeholder="Venta al contado"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>N.º de Orden de Compra (opcional)</label>
+                <input
+                  type="text"
+                  value={formFacturaContado.numero_orden_compra}
+                  onChange={(e) => setFormFacturaContado((p) => ({ ...p, numero_orden_compra: e.target.value }))}
+                  className={inputClass}
+                  placeholder="OC-25874 · 12587 · TEC-2026-0045"
                 />
               </div>
               <div>

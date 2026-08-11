@@ -96,6 +96,9 @@ export async function POST(request: NextRequest) {
     const moneda = body.moneda;
     const descripcion_linea =
       typeof body.descripcion_linea === "string" ? body.descripcion_linea.trim() : "";
+    // N.º de Orden de Compra del cliente (opcional, alfanumérico). Solo ERP + impresión.
+    const numero_orden_compra =
+      typeof body.numero_orden_compra === "string" ? body.numero_orden_compra.trim().slice(0, 60) : "";
     const dia_vencimiento_susc = Number(body.dia_vencimiento);
     /**
      * `iva_tipo` (opcional): permite emitir esta factura puntual como Exenta, IVA 5% o IVA 10%.
@@ -156,6 +159,7 @@ export async function POST(request: NextRequest) {
       estado: "Pendiente",
       tipo: tipoFac,
       moneda: moneda === "USD" ? "USD" : "GS",
+      numero_orden_compra: numero_orden_compra || null,
     };
 
     const { data, error } = await supabase
