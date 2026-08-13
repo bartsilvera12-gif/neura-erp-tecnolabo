@@ -240,7 +240,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   .toolbar .hint { font-size: 12px; color: #cbd5e1; }
 
   .sheet { width: 210mm; margin: 12px auto; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.15); }
-  .dual { display: grid; grid-template-rows: 1fr auto 1fr; height: 297mm; }
+  .dual { display: grid; grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr); height: 297mm; overflow: hidden; }
   .single { display: none; }
   .dual .copia { overflow: hidden; padding: 6mm 10mm; }
   .single .copia { padding: 14mm 14mm; }
