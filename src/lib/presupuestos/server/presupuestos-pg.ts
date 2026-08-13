@@ -32,6 +32,7 @@ export interface CrearPresupuestoInput {
   forma_pago: string | null;
   plazo_entrega: string | null;
   condiciones_comerciales?: string | null;
+  numero_orden_compra?: string | null;
   observaciones: string | null;
   /** 'borrador' | 'creado'. Default 'creado'. */
   estado?: string | null;
@@ -135,6 +136,7 @@ export async function crearPresupuesto(
       moneda: input.moneda || "PYG",
       tipo_cambio: input.tipo_cambio && input.tipo_cambio > 0 ? input.tipo_cambio : 1,
       condiciones_comerciales: input.condiciones_comerciales?.trim() || null,
+      numero_orden_compra: input.numero_orden_compra?.trim() || null,
       subtotal: round2(subtotal),
       monto_iva: round2(montoIva),
       descuento_total: round2(descuentoTotal),

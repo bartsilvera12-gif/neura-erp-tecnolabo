@@ -85,6 +85,7 @@ export default function EditarPresupuestoPage() {
   const [formaPago, setFormaPago] = useState("");
   const [plazoEntrega, setPlazoEntrega] = useState("");
   const [observaciones, setObservaciones] = useState("");
+  const [ordenCompra, setOrdenCompra] = useState("");
 
   const [cargando, setCargando] = useState(true);
   const [guardando, setGuardando] = useState(false);
@@ -144,6 +145,7 @@ export default function EditarPresupuestoPage() {
         setFormaPago(String(p.forma_pago ?? ""));
         setPlazoEntrega(String(p.plazo_entrega ?? ""));
         setObservaciones(String(p.observaciones ?? ""));
+        setOrdenCompra(String(p.numero_orden_compra ?? ""));
         setItems(its.map((it) => ({
           producto_id: it.producto_id ? String(it.producto_id) : null,
           producto_nombre: String(it.producto_nombre ?? ""),
@@ -233,6 +235,7 @@ export default function EditarPresupuestoPage() {
           validez_dias: validezDias.trim() === "" ? null : parseInt(validezDias, 10),
           forma_pago: formaPago.trim() || null,
           plazo_entrega: plazoEntrega.trim() || null,
+          numero_orden_compra: ordenCompra.trim() || null,
           observaciones: observaciones.trim() || null,
           items: items.map((it) => ({
             producto_id: it.producto_id,
@@ -478,6 +481,10 @@ export default function EditarPresupuestoPage() {
           <div>
             <label className={labelClass}>Plazo de entrega</label>
             <input value={plazoEntrega} onChange={(e) => setPlazoEntrega(e.target.value)} className={inputClass} />
+          </div>
+          <div>
+            <label className={labelClass}>N.º de Orden de Compra (opcional)</label>
+            <input value={ordenCompra} onChange={(e) => setOrdenCompra(e.target.value)} className={inputClass} placeholder="OC-25874 · TEC-2026-0045" />
           </div>
           <div className="sm:col-span-3">
             <label className={labelClass}>Observaciones</label>

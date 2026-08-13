@@ -102,6 +102,7 @@ export default function NuevoPresupuestoPage() {
   const [moneda, setMoneda] = useState<"PYG" | "USD">("PYG");
   const [tipoCambio, setTipoCambio] = useState("1");
   const [condiciones, setCondiciones] = useState("");
+  const [ordenCompra, setOrdenCompra] = useState("");
   const [expandido, setExpandido] = useState<Record<number, boolean>>({});
 
   const [guardando, setGuardando] = useState(false);
@@ -254,6 +255,7 @@ export default function NuevoPresupuestoPage() {
           forma_pago: formaPago.trim() || null,
           plazo_entrega: plazoEntrega.trim() || null,
           condiciones_comerciales: condiciones.trim() || null,
+          numero_orden_compra: ordenCompra.trim() || null,
           observaciones: observaciones.trim() || null,
           estado,
           items: items.map((it) => ({
@@ -498,6 +500,10 @@ export default function NuevoPresupuestoPage() {
           <div>
             <label className={labelClass}>Plazo de entrega</label>
             <input value={plazoEntrega} onChange={(e) => setPlazoEntrega(e.target.value)} className={inputClass} placeholder="Ej: 5 días hábiles" />
+          </div>
+          <div>
+            <label className={labelClass}>N.º de Orden de Compra (opcional)</label>
+            <input value={ordenCompra} onChange={(e) => setOrdenCompra(e.target.value)} className={inputClass} placeholder="OC-25874 · TEC-2026-0045" />
           </div>
           <div className="sm:col-span-3">
             <label className={labelClass}>Condiciones comerciales (texto libre)</label>

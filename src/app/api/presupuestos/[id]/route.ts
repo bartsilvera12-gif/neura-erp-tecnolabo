@@ -8,7 +8,7 @@ import { firmarImagenesItems, aplicarFallbackDescripcionProducto } from "@/lib/i
 const PRESU_COLS =
   "id, cliente_id, cliente_nombre, cliente_ruc, cliente_telefono, cliente_direccion, " +
   "numero_control, estado, moneda, subtotal, monto_iva, descuento_total, total, validez_dias, " +
-  "fecha, fecha_vencimiento, forma_pago, plazo_entrega, condiciones_comerciales, tipo_cambio, observaciones, " +
+  "fecha, fecha_vencimiento, forma_pago, plazo_entrega, condiciones_comerciales, numero_orden_compra, tipo_cambio, observaciones, " +
   "convertido_pedido_id, convertido_venta_id, convertido_factura_id, created_at, updated_at";
 
 const ITEM_COLS =
@@ -168,6 +168,7 @@ export async function PATCH(request: NextRequest, ctxParams: { params: Promise<{
         validez_dias: validez,
         forma_pago: body.forma_pago ? String(body.forma_pago) : null,
         plazo_entrega: body.plazo_entrega ? String(body.plazo_entrega) : null,
+        numero_orden_compra: body.numero_orden_compra ? String(body.numero_orden_compra).trim().slice(0, 60) : null,
         observaciones: body.observaciones ? String(body.observaciones).slice(0, 4000) : null,
         updated_at: new Date().toISOString(),
       })

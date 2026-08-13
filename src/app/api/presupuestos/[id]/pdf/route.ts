@@ -191,6 +191,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
         <div class="box">
           <h3>Datos del presupuesto</h3>
           <p>Moneda: ${moneda === "USD" ? "Dólares (USD)" : "Guaraníes (PYG)"}</p>
+          ${p.numero_orden_compra ? `<p>N.º Orden de Compra: ${esc(p.numero_orden_compra)}</p>` : ""}
           ${p.forma_pago ? `<p>Forma de pago: ${esc(p.forma_pago)}</p>` : ""}
           ${p.plazo_entrega ? `<p>Plazo de entrega: ${esc(p.plazo_entrega)}</p>` : ""}
           ${p.validez_dias ? `<p>Validez: ${esc(p.validez_dias)} día(s)</p>` : ""}

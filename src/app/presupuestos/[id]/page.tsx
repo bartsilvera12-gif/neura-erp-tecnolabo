@@ -27,6 +27,7 @@ type Presu = {
   forma_pago: string | null;
   plazo_entrega: string | null;
   condiciones_comerciales: string | null;
+  numero_orden_compra: string | null;
   observaciones: string | null;
   convertido_pedido_id: string | null;
   convertido_factura_id: string | null;
@@ -316,6 +317,7 @@ export default function PresupuestoDetallePage() {
           {presu.validez_dias != null && <p className="text-sm text-gray-600">Validez: {presu.validez_dias} día(s){presu.fecha_vencimiento ? ` (vence ${fmtFecha(presu.fecha_vencimiento)})` : ""}</p>}
           {presu.forma_pago && <p className="text-sm text-gray-600">Forma de pago: {presu.forma_pago}</p>}
           {presu.plazo_entrega && <p className="text-sm text-gray-600">Plazo de entrega: {presu.plazo_entrega}</p>}
+          {presu.numero_orden_compra && <p className="text-sm text-gray-600">N.º Orden de Compra: {presu.numero_orden_compra}</p>}
         </div>
       </div>
 

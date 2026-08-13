@@ -168,6 +168,7 @@ export async function POST(request: NextRequest) {
       forma_pago: body.forma_pago ? String(body.forma_pago) : null,
       plazo_entrega: body.plazo_entrega ? String(body.plazo_entrega) : null,
       condiciones_comerciales: body.condiciones_comerciales ? String(body.condiciones_comerciales).slice(0, 4000) : null,
+      numero_orden_compra: body.numero_orden_compra ? String(body.numero_orden_compra).trim().slice(0, 60) : null,
       observaciones: body.observaciones ? String(body.observaciones).slice(0, 4000) : null,
       estado: body.estado === "borrador" ? "borrador" : "creado",
       items,
