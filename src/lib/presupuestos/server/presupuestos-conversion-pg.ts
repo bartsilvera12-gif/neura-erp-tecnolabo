@@ -138,12 +138,12 @@ export async function convertirPresupuestoAFactura(
     const facRes = await client.query(
       `INSERT INTO ${tFac} (
          empresa_id, cliente_id, numero_factura, fecha, fecha_vencimiento,
-         monto, saldo, estado, tipo, moneda, presupuesto_id
+         monto, saldo, estado, tipo, moneda, presupuesto_id, numero_orden_compra
        ) VALUES (
          $1::uuid, $2::uuid, $3, CURRENT_DATE, (CURRENT_DATE + ($4 || ' days')::interval)::date,
-         $5, $6, 'Pendiente', $7, $8, $9::uuid
+         $5, $6, 'Pendiente', $7, $8, $9::uuid, $10
        ) RETURNING id`,
-      [empresaId, pre.cliente_id, numeroFactura, String(diasVenc), total, saldo, tipoPago, pre.moneda, input.presupuestoId],
+      [empresaId, pre.cliente_id, numeroFactura, String(diasVenc), total, saldo, tipoPago, pre.moneda, input.presupuestoId, pre.numero_orden_compra ?? null],
     );
     const facturaId = facRes.rows[0].id as string;
 

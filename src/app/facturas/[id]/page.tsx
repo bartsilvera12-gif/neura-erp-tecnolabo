@@ -53,10 +53,38 @@ function FacturaDetalleInner() {
   const [resumen, setResumen] = useState<SifenResumen | null>(null);
   const [loadingF, setLoadingF] = useState(true);
   const [loadingS, setLoadingS] = useState(true);
+  const [editandoOC, setEditandoOC] = useState(false);
+  const [ocDraft, setOcDraft] = useState("");
+  const [savingOC, setSavingOC] = useState(false);
+  const [ocErr, setOcErr] = useState<string | null>(null);
 
   const onResumenLoaded = useCallback((r: SifenResumen) => {
     setResumen(r);
   }, []);
+
+  const guardarOC = useCallback(async () => {
+    if (!id) return;
+    setSavingOC(true);
+    setOcErr(null);
+    try {
+      const res = await fetchWithSupabaseSession(`/api/facturas/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ numero_orden_compra: ocDraft.trim() || null }),
+      });
+      const j = (await res.json()) as { success?: boolean; data?: { numero_orden_compra?: string | null }; error?: string };
+      if (!res.ok || !j.success) {
+        setOcErr(j.error ?? "No se pudo guardar.");
+        return;
+      }
+      setFactura((prev) => (prev ? { ...prev, numero_orden_compra: j.data?.numero_orden_compra ?? null } : prev));
+      setEditandoOC(false);
+    } catch {
+      setOcErr("No se pudo guardar.");
+    } finally {
+      setSavingOC(false);
+    }
+  }, [id, ocDraft]);
 
   const reloadFacturaComercial = useCallback(async () => {
     if (!id) return;
@@ -228,12 +256,60 @@ function FacturaDetalleInner() {
             <dt className="text-slate-400 text-xs">Tipo</dt>
             <dd className="font-medium text-slate-800 capitalize">{factura.tipo}</dd>
           </div>
-          {factura.numero_orden_compra ? (
-            <div>
-              <dt className="text-slate-400 text-xs">N.º Orden de Compra</dt>
-              <dd className="font-medium text-slate-800">{factura.numero_orden_compra}</dd>
-            </div>
-          ) : null}
+          <div>
+            <dt className="text-slate-400 text-xs">N.º Orden de Compra</dt>
+            {editandoOC ? (
+              <dd className="mt-0.5">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <input
+                    type="text"
+                    value={ocDraft}
+                    onChange={(e) => setOcDraft(e.target.value)}
+                    maxLength={60}
+                    autoFocus
+                    placeholder="OC-25874"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") guardarOC();
+                      if (e.key === "Escape") setEditandoOC(false);
+                    }}
+                    className="w-40 rounded border border-slate-300 px-2 py-1 text-sm text-slate-800 focus:border-slate-500 focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={guardarOC}
+                    disabled={savingOC}
+                    className="rounded bg-slate-800 px-2 py-1 text-xs font-medium text-white hover:bg-slate-700 disabled:opacity-50"
+                  >
+                    {savingOC ? "Guardando…" : "Guardar"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditandoOC(false)}
+                    disabled={savingOC}
+                    className="rounded px-2 py-1 text-xs font-medium text-slate-500 hover:text-slate-700"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+                {ocErr ? <p className="mt-1 text-xs text-red-600">{ocErr}</p> : null}
+              </dd>
+            ) : (
+              <dd className="flex items-center gap-2">
+                <span className="font-medium text-slate-800">{factura.numero_orden_compra || "—"}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOcDraft(factura.numero_orden_compra ?? "");
+                    setOcErr(null);
+                    setEditandoOC(true);
+                  }}
+                  className="text-xs font-medium text-slate-500 underline hover:text-slate-700"
+                >
+                  {factura.numero_orden_compra ? "Editar" : "Agregar"}
+                </button>
+              </dd>
+            )}
+          </div>
           <div>
             <dt className="text-slate-400 text-xs">Monto</dt>
             <dd className="font-semibold text-slate-900 tabular-nums">

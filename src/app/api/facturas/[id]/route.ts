@@ -67,3 +67,60 @@ export async function GET(
     return NextResponse.json(errorResponse(msg), { status: 500 });
   }
 }
+
+/**
+ * PATCH /api/facturas/[id]
+ * Actualiza únicamente el N.º de Orden de Compra del cliente. Es un dato
+ * comercial/administrativo: NO forma parte del documento fiscal SIFEN (XML/KuDE),
+ * por lo que puede cargarse o corregirse en cualquier momento sin afectar la DE.
+ */
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const ctx = await getFacturasSupabaseFromAuth(request);
+    if (!ctx) {
+      return NextResponse.json(errorResponse(API_ERRORS.UNAUTHORIZED), { status: 401 });
+    }
+    const { auth, supabase } = ctx;
+
+    const { id } = await params;
+    const fid = id?.trim();
+    if (!fid) {
+      return NextResponse.json(errorResponse("id de factura es obligatorio"), { status: 400 });
+    }
+
+    let body: Record<string, unknown>;
+    try {
+      body = (await request.json()) as Record<string, unknown>;
+    } catch {
+      return NextResponse.json(errorResponse("JSON inválido."), { status: 400 });
+    }
+    if (!("numero_orden_compra" in body)) {
+      return NextResponse.json(errorResponse("Nada para actualizar."), { status: 400 });
+    }
+    const oc = body.numero_orden_compra
+      ? String(body.numero_orden_compra).trim().slice(0, 60)
+      : null;
+
+    const { data, error } = await supabase
+      .from("facturas")
+      .update({ numero_orden_compra: oc })
+      .eq("id", fid)
+      .eq("empresa_id", auth.empresa_id)
+      .select("id, numero_orden_compra")
+      .maybeSingle();
+
+    if (error) {
+      return NextResponse.json(errorResponse(error.message), { status: 400 });
+    }
+    if (!data) {
+      return NextResponse.json(errorResponse("Factura no encontrada"), { status: 404 });
+    }
+    return NextResponse.json(successResponse(data));
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Error";
+    return NextResponse.json(errorResponse(msg), { status: 500 });
+  }
+}
