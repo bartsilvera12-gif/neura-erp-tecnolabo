@@ -10,6 +10,7 @@ import {
   uploadSifenCertificadoP12,
 } from "@/lib/sifen/sifen-certificados-storage";
 import { toEmpresaSifenConfigPublicDto } from "@/lib/sifen/sifen-config-response";
+import { validarEstructuraP12 } from "@/lib/sifen/validar-p12";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
@@ -67,6 +68,13 @@ export async function POST(request: NextRequest) {
 
     const objectPath = buildSifenCertificadoObjectPath(auth.empresa_id);
     const buf = Buffer.from(await file.arrayBuffer());
+
+    // Validación de tipo: rechazar acá un .cer/.crt público (u otro archivo) en
+    // lugar de aceptarlo y fallar recién al firmar. No requiere la contraseña.
+    const check = validarEstructuraP12(buf);
+    if (!check.ok) {
+      return NextResponse.json(errorResponse(check.error), { status: 400 });
+    }
 
     const up = await uploadSifenCertificadoP12(supabase, objectPath, buf);
     if (!up.ok) {
