@@ -82,11 +82,43 @@ export function extractKeyAndCertFromP12(p12Buffer: Buffer, password: string): P
     throw new Error("El archivo .p12 no es un DER PKCS#12 válido");
   }
 
+  // Un PKCS#12 (PFX) es SEQUENCE { version INTEGER, authSafe, macData }: su primer
+  // hijo es un INTEGER (type 2). Si en su lugar viene una SEQUENCE, el archivo es
+  // en realidad un certificado X.509 público suelto (.cer/.crt), NO el .p12 con la
+  // clave privada. Es un error de carga muy común y ninguna contraseña lo abriría.
+  const primerHijo = Array.isArray(asn1.value) ? asn1.value[0] : undefined;
+  const pareceCertificadoPublico =
+    primerHijo != null &&
+    typeof primerHijo === "object" &&
+    (primerHijo as forge.asn1.Asn1).type === forge.asn1.Type.SEQUENCE;
+  if (pareceCertificadoPublico) {
+    throw new Error(
+      "El archivo cargado es un certificado público (.cer/.crt), no el .p12. " +
+        "Subí el archivo .p12 / .pfx que incluye la CLAVE PRIVADA (el que entrega la " +
+        "Autoridad Certificadora, protegido por contraseña).",
+    );
+  }
+
   let p12: forge.pkcs12.Pkcs12Pfx;
   try {
     p12 = forge.pkcs12.pkcs12FromAsn1(asn1, false, password);
-  } catch {
-    throw new Error("No se pudo abrir el .p12 (contraseña incorrecta o archivo corrupto)");
+  } catch (e) {
+    const raw = e instanceof Error ? e.message : String(e);
+    // node-forge solo soporta el cifrado PKCS#12 "legacy" (3DES/RC2 + SHA-1).
+    // Los .p12 exportados con OpenSSL 3.x usan por defecto PBES2/AES, que forge
+    // NO puede abrir aunque la contraseña sea correcta → mismo síntoma. Lo
+    // detectamos por el mensaje para orientar al usuario al fix real.
+    const pareceAlgoritmoNoSoportado =
+      /unsupported|PBES2|pbkdf2|aes|algorithm|oid|not supported|unable to/i.test(raw);
+    if (pareceAlgoritmoNoSoportado) {
+      throw new Error(
+        "No se pudo abrir el .p12: el certificado usa un cifrado no soportado " +
+          "(exportado con OpenSSL 3.x / AES). Re-exportá el .p12 en formato legacy " +
+          "(3DES) con: openssl pkcs12 -legacy -export ... | detalle: " +
+          raw,
+      );
+    }
+    throw new Error(`No se pudo abrir el .p12 (contraseña incorrecta o archivo corrupto). Detalle: ${raw}`);
   }
 
   const pkcs8Bags = p12.getBags({ bagType: forge.pki.oids.pkcs8ShroudedKeyBag });
