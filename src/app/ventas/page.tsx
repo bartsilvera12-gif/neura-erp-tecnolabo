@@ -375,13 +375,11 @@ export default function VentasPage() {
                           {/* Boton Factura oculto: facturacion electronica desactivada en esta instancia */}
                           {v.genera_nota_remision && (
                             <a
-                              href={`/api/ventas/${v.id}/ticket?tipo=remision`}
-                              target="_blank"
-                              rel="noopener"
+                              href={`/ventas/${v.id}/remisiones`}
                               className="inline-flex items-center justify-center rounded-md border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-medium text-sky-700 hover:bg-sky-100 transition-colors"
-                              title="Nota de remisión (documento no fiscal)"
+                              title="Entregas y notas de remisión: registrar entregas parciales e imprimir"
                             >
-                              Nota de remisión
+                              Entregas
                             </a>
                           )}
                           {!isAnulada && (
