@@ -441,6 +441,25 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
   yOp += 11;
   drawLabelValue(page, col1X, yOp, "Tipo de operación: ", parsed.operacion.tipoOperacion, fontBold, font, labSz, primary);
 
+  // gOpeDE/dInfoEmi. Los DE emitidos antes de incorporar el campo no lo traen,
+  // así que la línea solo aparece cuando el XML realmente lo tiene.
+  if (parsed.infoEmisor) {
+    const crudo = parsed.infoEmisor.trim();
+    const m = /^orden de compra:\s*(.+)$/i.exec(crudo);
+    yOp += 11;
+    drawLabelValue(
+      page,
+      col1X,
+      yOp,
+      m ? "Orden de compra: " : "Información: ",
+      trunc(m ? m[1]!.trim() : crudo, 30),
+      fontBold,
+      font,
+      labSz,
+      primary
+    );
+  }
+
   let yRec = cursorTop + 10;
   drawLabelValue(
     page,

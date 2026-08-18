@@ -707,6 +707,16 @@ export function buildOfficialRdeFacturaElectronicaXml(
     ].join("");
   }
 
+  // gOpeDE/dInfoEmi — "Información de interés del emisor respecto al DE" (opcional,
+  // máx. 3000 caracteres). Es el campo que SIFEN reserva para referencias
+  // comerciales del emisor, y el KuDE lo imprime. Ahí va el N.º de Orden de
+  // Compra del cliente. Si la factura no tiene OC, el nodo NO se emite: los
+  // campos opcionales del XSD se omiten, nunca se mandan vacíos.
+  const ordenCompraDe = String(documento.numero_orden_compra ?? "").trim();
+  const dInfoEmiXml = ordenCompraDe
+    ? textEl("dInfoEmi", `Orden de Compra: ${ordenCompraDe}`.slice(0, 3000))
+    : "";
+
   const deInner = [
     textEl("dDVId", dDVId),
     textEl("dFecFirma", dFecFirma),
@@ -715,6 +725,7 @@ export function buildOfficialRdeFacturaElectronicaXml(
     textEl("iTipEmi", "1"),
     textEl("dDesTipEmi", "Normal"),
     textEl("dCodSeg", dCodSeg),
+    dInfoEmiXml, // va después de dCodSeg: el XSD exige este orden
     "</gOpeDE>",
     "<gTimb>",
     textEl("iTiDE", "1"),

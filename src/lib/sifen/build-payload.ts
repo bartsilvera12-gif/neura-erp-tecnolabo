@@ -42,6 +42,7 @@ export interface SifenBuildFacturaRow {
   moneda: string;
   monto: unknown;
   saldo: unknown;
+  numero_orden_compra?: string | null;
 }
 
 export interface SifenBuildItemRow {
@@ -394,6 +395,7 @@ export function validateAndBuildSifenPayload(input: BuildSifenPayloadInput): Bui
     moneda: trimStr(factura.moneda) || "GS",
     monto: num(factura.monto),
     saldo: num(factura.saldo),
+    numero_orden_compra: trimStr(factura.numero_orden_compra) || null,
   };
 
   if (!documento.numero_factura) {

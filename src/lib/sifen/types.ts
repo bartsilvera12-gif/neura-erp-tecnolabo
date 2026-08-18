@@ -226,6 +226,8 @@ export interface SifenPayloadDocumento {
   moneda: string;
   monto: number;
   saldo: number;
+  /** N.º de Orden de Compra del cliente → gOpeDE/dInfoEmi del DE. */
+  numero_orden_compra?: string | null;
 }
 
 export interface SifenPayloadReceptor {

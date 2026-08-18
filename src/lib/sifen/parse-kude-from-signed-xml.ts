@@ -77,6 +77,8 @@ export type KudeParsedFromXml = {
     condicionVenta: string;
     tipoOperacion: string;
   };
+  /** `gOpeDE.dInfoEmi` — información de interés del emisor (p. ej. Orden de Compra). */
+  infoEmisor: string | null;
   totales: {
     dSubExe: string;
     dSub5: string;
@@ -390,6 +392,12 @@ export function parseKudeFromSignedRdeXml(xmlUtf8: string): KudeParsedFromXml {
       condicionVenta: condicionVenta || "—",
       tipoOperacion: tipoOperacion || "—",
     },
+    // Opcional: los DE emitidos antes de incorporarlo no traen el nodo.
+    infoEmisor: (() => {
+      const gOpeDE = firstNs(de, "gOpeDE");
+      const v = gOpeDE ? textOf(firstNs(gOpeDE, "dInfoEmi")).trim() : "";
+      return v || null;
+    })(),
     totales,
     items,
   };

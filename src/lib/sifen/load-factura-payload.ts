@@ -31,7 +31,7 @@ export async function loadValidatedSifenPayload(
 
   const { data: factura, error: errFactura } = await supabase
     .from("facturas")
-    .select("id, cliente_id, numero_factura, fecha, tipo, moneda, monto, saldo")
+    .select("id, cliente_id, numero_factura, fecha, tipo, moneda, monto, saldo, numero_orden_compra")
     .eq("id", fid)
     .eq("empresa_id", empresaId)
     .maybeSingle();
