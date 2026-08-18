@@ -107,9 +107,14 @@ export function buildSifenDcarQrUrl(signedXmlUtf8: string, opts: BuildSifenDcarQ
   qr += `cItems=${cItems}&`;
   qr += `DigestValue=${digestHexUtf8}&`;
 
+  // IdCSC: en test es 0001. En producción el SET puede haber registrado el CSC
+  // bajo 0001 o 0002; se hace configurable por env (SIFEN_ID_CSC) para poder
+  // alinearlo con el número real asignado, sin tener que tocar código.
   const idCsc =
     opts.idCsc?.trim() ||
-    (opts.ambiente === "test" ? SIFEN_TEST_ID_CSC : "0001");
+    (opts.ambiente === "test"
+      ? SIFEN_TEST_ID_CSC
+      : process.env.SIFEN_ID_CSC?.trim() || "0001");
   qr += `IdCSC=${idCsc}`;
 
   const cHashQR = createHash("sha256").update(qr + opts.csc, "utf8").digest("hex");
