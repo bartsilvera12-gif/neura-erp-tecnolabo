@@ -67,6 +67,8 @@ export interface Presupuesto {
   fecha_vencimiento: string | null;
   forma_pago: string | null;
   plazo_entrega: string | null;
+  /** N.º de Orden de Compra del cliente. Viaja a la factura y a la nota de remisión. */
+  numero_orden_compra: string | null;
   observaciones: string | null;
   convertido_pedido_id: string | null;
   convertido_venta_id: string | null;

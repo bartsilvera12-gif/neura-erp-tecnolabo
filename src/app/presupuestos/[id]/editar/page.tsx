@@ -484,7 +484,7 @@ export default function EditarPresupuestoPage() {
           </div>
           <div>
             <label className={labelClass}>N.º de Orden de Compra (opcional)</label>
-            <input value={ordenCompra} onChange={(e) => setOrdenCompra(e.target.value)} className={inputClass} placeholder="OC-25874 · TEC-2026-0045" />
+            <input value={ordenCompra} onChange={(e) => setOrdenCompra(e.target.value)} maxLength={60} className={inputClass} placeholder="OC-25874 · TEC-2026-0045" />
           </div>
           <div className="sm:col-span-3">
             <label className={labelClass}>Observaciones</label>

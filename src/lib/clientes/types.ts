@@ -27,6 +27,8 @@ export interface Cliente {
 
   tipo_cliente:        TipoCliente;
   empresa?:            string;          // razón social (si es empresa)
+  /** Nombre que sale en el documento tributario (SIFEN). Vacío = se usa el del cliente. */
+  nombre_factura?:     string;
   nombre_contacto:     string;          // persona de contacto principal
 
   ruc?:                string;

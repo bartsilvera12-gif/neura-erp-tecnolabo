@@ -117,7 +117,7 @@ export async function GET(
     // 1) Venta
     const { data: venta } = await sb
       .from("ventas")
-      .select("id, numero_control, fecha, subtotal, monto_iva, total, tipo_venta, plazo_dias, metodo_pago, cliente_id, nota_remision_numero, genera_nota_remision, observaciones, estado")
+      .select("id, numero_control, fecha, subtotal, monto_iva, total, tipo_venta, plazo_dias, metodo_pago, cliente_id, nota_remision_numero, genera_nota_remision, observaciones, estado, numero_orden_compra")
       .eq("id", ventaId)
       .eq("empresa_id", empresaId)
       .maybeSingle();
@@ -198,6 +198,7 @@ export async function GET(
     const notaRem = v.genera_nota_remision === true && v.nota_remision_numero
       ? String(v.nota_remision_numero)
       : "";
+    const ordenCompra = v.numero_orden_compra ? String(v.numero_orden_compra) : "";
     const condicion = v.tipo_venta === "CREDITO"
       ? `CREDITO${v.plazo_dias ? ` ${v.plazo_dias}d` : ""}`
       : "CONTADO";
@@ -369,6 +370,7 @@ export async function GET(
         <div class="linea"><span class="lbl">CONDICION DE VENTA:</span> <span class="val">${escapeHtml(condicion)}</span></div>
         <div class="linea"><span class="lbl">R.U.C./C.I.:</span> <span class="val">${escapeHtml(cliente?.ruc ?? "")}</span></div>
         <div class="linea"><span class="lbl">NOTA DE REMISION:</span> <span class="val">${escapeHtml(notaRem)}</span></div>
+        ${ordenCompra ? `<div class="linea"><span class="lbl">ORDEN DE COMPRA:</span> <span class="val">${escapeHtml(ordenCompra)}</span></div>` : ""}
       </div>
     </div>
 

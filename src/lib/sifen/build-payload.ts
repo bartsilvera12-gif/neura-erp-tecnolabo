@@ -56,6 +56,7 @@ export interface SifenBuildItemRow {
 export interface SifenBuildClienteRow {
   id: string;
   empresa: string | null;
+  nombre_factura?: string | null;
   nombre_contacto: string | null;
   nombre: string | null;
   ruc: string | null;
@@ -110,7 +111,9 @@ export type BuildSifenPayloadResult =
   | { ok: false; error: string };
 
 function nombreReceptor(c: SifenBuildClienteRow): string {
-  return trimStr(c.empresa) || trimStr(c.nombre_contacto) || trimStr(c.nombre);
+  // `nombre_factura` primero: es lo que el cliente pidió que salga en el DE.
+  // Si está vacío se mantiene el orden histórico y nada cambia.
+  return trimStr(c.nombre_factura) || trimStr(c.empresa) || trimStr(c.nombre_contacto) || trimStr(c.nombre);
 }
 
 function validateEmisor(config: SifenBuildConfigRow | null): { ok: true; emisor: SifenPayloadEmisor } | { ok: false; error: string } {

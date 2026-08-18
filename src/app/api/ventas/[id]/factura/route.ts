@@ -51,7 +51,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   // Venta
   const vQ = await ctx.supabase
     .from("ventas")
-    .select("id, numero_control, fecha, tipo_venta, cliente_id")
+    .select("id, numero_control, fecha, tipo_venta, cliente_id, numero_orden_compra")
     .eq("id", id)
     .eq("empresa_id", empresaId)
     .maybeSingle();
@@ -59,6 +59,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   if (!vQ.data) return new NextResponse("Venta no encontrada", { status: 404 });
   const venta = vQ.data as {
     id: string; numero_control: string; fecha: string; tipo_venta: string | null; cliente_id: string | null;
+    numero_orden_compra: string | null;
   };
 
   // Ítems
@@ -142,6 +143,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
       condicion: opts.condicion,
       cliente,
       ventaNumeroControl: venta.numero_control,
+      numeroOrdenCompra: venta.numero_orden_compra ?? null,
       items,
       liq: opts.liq,
       autoPrint,

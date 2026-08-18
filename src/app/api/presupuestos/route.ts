@@ -7,7 +7,7 @@ import { crearPresupuesto, type PresupuestoItemInput } from "@/lib/presupuestos/
 const PRESU_COLS =
   "id, cliente_id, cliente_nombre, cliente_ruc, cliente_telefono, cliente_direccion, " +
   "numero_control, estado, moneda, subtotal, monto_iva, descuento_total, total, validez_dias, " +
-  "fecha, fecha_vencimiento, forma_pago, plazo_entrega, observaciones, " +
+  "fecha, fecha_vencimiento, forma_pago, plazo_entrega, numero_orden_compra, observaciones, " +
   "convertido_pedido_id, convertido_venta_id, created_at, updated_at";
 
 function asIva(v: unknown): "EXENTA" | "5%" | "10%" {

@@ -139,6 +139,7 @@ interface VentaRow {
   cliente_id: string | null;
   genera_nota_remision: boolean | null;
   nota_remision_numero: string | null;
+  numero_orden_compra: string | null;
 }
 
 interface ItemRow {
@@ -370,6 +371,7 @@ function renderNotaRemision(opts: {
       <div><strong>N°:</strong> ${escapeHtml(numeroNota)}</div>
       <div><strong>Fecha:</strong> ${escapeHtml(formatFecha(venta.fecha))}</div>
       <div><strong>Venta:</strong> ${escapeHtml(venta.numero_control)}</div>
+      ${venta.numero_orden_compra ? `<div><strong>N.º Orden de Compra:</strong> ${escapeHtml(venta.numero_orden_compra)}</div>` : ""}
     </div>
     <div class="box"><h3>Cliente</h3>${cli}</div>
   </div>
@@ -403,7 +405,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   // Venta
   const vQ = await ctx.supabase
     .from("ventas")
-    .select("id, numero_control, fecha, subtotal, monto_iva, total, observaciones, metodo_pago, cliente_id, genera_nota_remision, nota_remision_numero")
+    .select("id, numero_control, fecha, subtotal, monto_iva, total, observaciones, metodo_pago, cliente_id, genera_nota_remision, nota_remision_numero, numero_orden_compra")
     .eq("id", id)
     .eq("empresa_id", empresaId)
     .maybeSingle();

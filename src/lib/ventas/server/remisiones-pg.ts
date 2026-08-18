@@ -47,6 +47,8 @@ export interface ResumenFacturaEntrega {
   factura_id: string;
   numero_factura: string;
   estado_entrega: string;
+  /** N.º de Orden de Compra del cliente (heredado del presupuesto o cargado en la factura). */
+  numero_orden_compra: string | null;
   lineas: LineaEntrega[];
 }
 
@@ -68,7 +70,10 @@ export async function getResumenFacturaEntrega(
   const tP = quoteSchemaTable(schema, "productos");
   const client = await pool().connect();
   try {
-    const fac = await client.query(`SELECT id, numero_factura, estado_entrega FROM ${tF} WHERE id = $1::uuid AND empresa_id = $2::uuid`, [facturaId, empresaId]);
+    const fac = await client.query(
+      `SELECT id, numero_factura, estado_entrega, numero_orden_compra FROM ${tF} WHERE id = $1::uuid AND empresa_id = $2::uuid`,
+      [facturaId, empresaId],
+    );
     if (fac.rowCount === 0) return null;
     const items = await client.query(
       `SELECT fi.id, fi.producto_id, fi.descripcion AS producto_nombre, fi.sku,
@@ -98,6 +103,7 @@ export async function getResumenFacturaEntrega(
       factura_id: facturaId,
       numero_factura: fac.rows[0].numero_factura,
       estado_entrega: fac.rows[0].estado_entrega,
+      numero_orden_compra: (fac.rows[0].numero_orden_compra as string | null) ?? null,
       lineas,
     };
   } finally {
@@ -368,8 +374,15 @@ export async function getRemision(schema: string, empresaId: string, remisionId:
     const rem = await client.query(`SELECT * FROM ${tR} WHERE id = $1::uuid AND empresa_id = $2::uuid`, [remisionId, empresaId]);
     if (rem.rowCount === 0) return null;
     const items = await client.query(`SELECT * FROM ${tRI} WHERE remision_id = $1::uuid ORDER BY created_at`, [remisionId]);
-    const fac = await client.query(`SELECT numero_factura FROM ${tF} WHERE id = $1::uuid`, [rem.rows[0].factura_id]);
-    return { remision: rem.rows[0], items: items.rows, numero_factura: (fac.rows[0]?.numero_factura as string) ?? null };
+    const fac = await client.query(`SELECT numero_factura, numero_orden_compra FROM ${tF} WHERE id = $1::uuid`, [rem.rows[0].factura_id]);
+    return {
+      remision: rem.rows[0],
+      items: items.rows,
+      numero_factura: (fac.rows[0]?.numero_factura as string) ?? null,
+      // Se lee en vivo desde la factura (no se congela en la remisión): si la OC se
+      // corrige en la factura, las remisiones ya emitidas siguen coherentes.
+      numero_orden_compra: (fac.rows[0]?.numero_orden_compra as string | null) ?? null,
+    };
   } finally {
     client.release();
   }
@@ -429,6 +442,7 @@ export async function getRemisionParaEdicion(schema: string, empresaId: string, 
         fecha: rem.fecha,
         factura_id: rem.factura_id as string,
         numero_factura: resumen.numero_factura,
+        numero_orden_compra: resumen.numero_orden_compra,
         cliente_nombre: rem.cliente_nombre ?? null,
         observacion: rem.observacion ?? null,
         usuario_creador_nombre: rem.usuario_creador_nombre ?? null,

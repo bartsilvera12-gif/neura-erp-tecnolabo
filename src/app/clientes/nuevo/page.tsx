@@ -23,8 +23,6 @@ import MontoInput from "@/components/ui/MontoInput";
 import { getPlanes } from "@/lib/planes/storage";
 import type { Cliente, TipoCliente, OrigenCliente } from "@/lib/clientes/types";
 import { ClienteDatosSifenReceptorForm } from "@/components/clientes/ClienteDatosSifenReceptorForm";
-import type { ClienteTipoServicioRow } from "@/lib/clientes/tipo-servicio-catalogo";
-import { filasTiposDesdeSistemaEstatico, fetchTiposFormCliente } from "@/lib/clientes/fetch-tipos-servicio-form";
 import type { Plan } from "@/lib/planes/types";
 import { NEURA_CLIENT_SCHEMA } from "@/lib/supabase/schema";
 
@@ -74,6 +72,7 @@ function NuevoClienteForm() {
     empresa:             "",
     nombre_contacto:     "",
     ruc:                 "",
+    nombre_factura:      "",
     documento:           "",
     telefono:            "",
     telefono_secundario: "",
@@ -92,7 +91,6 @@ function NuevoClienteForm() {
     vendedor_usuario_id: "",
     origen:              "MANUAL" as OrigenCliente,
     prospecto_id:          null as string | null,
-    tipo_servicio_cliente: "" as string,
     estado:                "activo" as "activo" | "inactivo",
     usa_nota_remision:     false,
     sifen_receptor_manual: false,
@@ -128,7 +126,6 @@ function NuevoClienteForm() {
     { id: string; slug: string; nombre: string; requiere_detalle_otro: boolean }[]
   >([]);
   const [formTributario, setFormTributario] = useState<TributarioFormState>(() => emptyTributarioForm());
-  const [filasTipoServicio, setFilasTipoServicio] = useState<ClienteTipoServicioRow[]>(() => filasTiposDesdeSistemaEstatico());
 
   useEffect(() => {
     getPlanes().then(setPlanes);
@@ -151,10 +148,6 @@ function NuevoClienteForm() {
     return () => {
       cancelled = true;
     };
-  }, []);
-
-  useEffect(() => {
-    void fetchTiposFormCliente().then(setFilasTipoServicio);
   }, []);
 
   useEffect(() => {
@@ -321,9 +314,9 @@ function NuevoClienteForm() {
 
     const creado = await apiCreateCliente({
       tipo_cliente: form.tipo_cliente,
-      tipo_servicio_cliente: form.tipo_servicio_cliente || undefined,
       empresa: form.tipo_cliente === "empresa" ? form.empresa.trim().toUpperCase() : undefined,
       nombre_contacto: form.nombre_contacto.trim().toUpperCase(),
+      nombre_factura: form.nombre_factura.trim().toUpperCase() || undefined,
       ruc: form.ruc.trim() || undefined,
       documento: form.documento.trim() || undefined,
       telefono: form.telefono.trim() || undefined,
@@ -469,25 +462,6 @@ function NuevoClienteForm() {
               </div>
             )}
 
-            {!SIMPLE_CLIENTE && (
-            <div>
-              <label className={labelClass}>Tipo de servicio</label>
-              <select
-                name="tipo_servicio_cliente"
-                value={form.tipo_servicio_cliente}
-                onChange={(e) => setForm((prev) => ({ ...prev, tipo_servicio_cliente: e.target.value }))}
-                className={inputClass}
-              >
-                <option value="">— Ninguno —</option>
-                {filasTipoServicio.map((f) => (
-                  <option key={f.slug} value={f.slug}>
-                    {f.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-            )}
-
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className={labelClass}>
@@ -528,6 +502,46 @@ function NuevoClienteForm() {
                   />
                 )}
               </div>
+            </div>
+          </section>
+
+          {/* ── Datos para factura ───────────────────────────────────────── */}
+          <section className="space-y-4">
+            <SectionTitle>Datos para factura</SectionTitle>
+            <p className="-mt-2 text-xs text-slate-500">Lo que sale en el documento tributario (SIFEN). La factura siempre se emite contra un RUC. Si se deja vacío, se factura con el nombre y documento del cliente.</p>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className={labelClass}>Nombre para factura</label>
+                <input
+                  type="text"
+                  name="nombre_factura"
+                  value={form.nombre_factura}
+                  onChange={handleChange}
+                  placeholder="Como debe figurar en la factura"
+                  className={`${inputClass} uppercase`}
+                />
+              </div>
+              {form.tipo_cliente === "persona" ? (
+                <div>
+                  <label className={labelClass}>RUC</label>
+                  <input
+                    type="text"
+                    name="ruc"
+                    value={form.ruc}
+                    onChange={handleChange}
+                    placeholder="0000000-0"
+                    className={inputClass}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <label className={labelClass}>RUC</label>
+                  <p className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500">
+                    {form.ruc.trim() || "Se toma el RUC cargado en Datos de identificación."}
+                  </p>
+                </div>
+              )}
             </div>
           </section>
 

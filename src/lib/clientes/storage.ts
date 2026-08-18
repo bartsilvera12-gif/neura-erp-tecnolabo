@@ -350,6 +350,7 @@ export function construirPatchActualizacionCliente(datos: ActualizarClienteInput
   const patch: Record<string, unknown> = {};
   if (datos.tipo_cliente !== undefined) patch.tipo_cliente = datos.tipo_cliente;
   if (datos.empresa !== undefined) patch.empresa = datos.empresa ?? null;
+  if (datos.nombre_factura !== undefined) patch.nombre_factura = datos.nombre_factura ?? null;
   if (datos.nombre_contacto !== undefined) {
     patch.nombre = datos.nombre_contacto ?? null;
     patch.nombre_contacto = datos.nombre_contacto ?? null;

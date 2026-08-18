@@ -245,6 +245,10 @@ export async function POST(request: NextRequest) {
       pedidoCocina,
       permitirSinStock,
       presupuestoId,
+      numeroOrdenCompra:
+        typeof o.numero_orden_compra === "string" && o.numero_orden_compra.trim()
+          ? o.numero_orden_compra.trim().slice(0, 60)
+          : null,
       generaNotaRemision: o.genera_nota_remision === true,
       cajaId: o.caja_id != null && String(o.caja_id).trim() !== "" ? String(o.caja_id) : null,
       usuarioId: auth.usuarioCatalogId ?? null,

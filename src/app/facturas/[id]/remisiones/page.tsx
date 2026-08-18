@@ -7,12 +7,12 @@ import { ArrowLeft, Loader2, Truck, Printer, Ban, Eye, Pencil, X, Trash2 } from 
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
 
 type Linea = { factura_item_id: string; producto_id: string; producto_nombre: string; sku: string | null; cantidad_facturada: number; cantidad_entregada: number; disponible: number; costo_unitario: number };
-type Resumen = { factura_id: string; numero_factura: string; estado_entrega: string; lineas: Linea[] };
+type Resumen = { factura_id: string; numero_factura: string; estado_entrega: string; numero_orden_compra: string | null; lineas: Linea[] };
 type Remision = { id: string; numero: string; estado: string; fecha: string; total_items: number };
 
 type LineaEd = Linea & { en_esta_remision: number; entregado_otras: number; max_a_entregar: number };
 type RemDetalle = {
-  remision: { id: string; numero: string; estado: string; fecha: string; factura_id: string; numero_factura: string; cliente_nombre: string | null; observacion: string | null; usuario_creador_nombre: string | null; usuario_confirmador_nombre: string | null; confirmada_at: string | null };
+  remision: { id: string; numero: string; estado: string; fecha: string; factura_id: string; numero_factura: string; numero_orden_compra: string | null; cliente_nombre: string | null; observacion: string | null; usuario_creador_nombre: string | null; usuario_confirmador_nombre: string | null; confirmada_at: string | null };
   lineas: LineaEd[];
 };
 
@@ -156,10 +156,15 @@ export default function RemisionesFacturaPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Remisiones · {resumen?.numero_factura ?? ""}</h1>
           {resumen && (
-            <div className="mt-1 text-sm">
+            <div className="mt-1 flex flex-wrap items-center gap-2 text-sm">
               <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${ESTADO_BADGE[resumen.estado_entrega] ?? "bg-slate-100"}`}>
                 Entrega: {ESTADO_LABEL[resumen.estado_entrega] ?? resumen.estado_entrega}
               </span>
+              {resumen.numero_orden_compra ? (
+                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">
+                  OC: {resumen.numero_orden_compra}
+                </span>
+              ) : null}
             </div>
           )}
         </div>
@@ -276,6 +281,9 @@ export default function RemisionesFacturaPage() {
                 <>
                   <div className="mb-3 grid grid-cols-2 gap-2 text-xs text-gray-600 sm:grid-cols-4">
                     <div><span className="text-gray-400">Factura</span><br />{detalle.remision.numero_factura}</div>
+                    {detalle.remision.numero_orden_compra ? (
+                      <div><span className="text-gray-400">N.º Orden de Compra</span><br />{detalle.remision.numero_orden_compra}</div>
+                    ) : null}
                     <div><span className="text-gray-400">Cliente</span><br />{detalle.remision.cliente_nombre ?? "—"}</div>
                     <div><span className="text-gray-400">Fecha</span><br />{new Date(detalle.remision.fecha).toLocaleDateString("es-PY")}</div>
                     <div><span className="text-gray-400">Creada por</span><br />{detalle.remision.usuario_creador_nombre ?? "—"}</div>

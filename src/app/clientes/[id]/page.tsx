@@ -196,6 +196,7 @@ export default function ClienteDetailPage() {
     nombre_contacto:     "",
     ruc:                 "",
     documento:           "",
+    nombre_factura:      "",
     telefono:            "",
     telefono_secundario: "",
     email:               "",
@@ -354,6 +355,7 @@ export default function ClienteDetailPage() {
         nombre_contacto:     c.nombre_contacto,
         ruc:                 c.ruc                 ?? "",
         documento:           c.documento           ?? "",
+        nombre_factura:      c.nombre_factura      ?? "",
         telefono:            c.telefono            ?? "",
         telefono_secundario: c.telefono_secundario ?? "",
         email:               c.email               ?? "",
@@ -636,6 +638,7 @@ export default function ClienteDetailPage() {
         nombre_contacto:     form.nombre_contacto.trim().toUpperCase(),
         ruc:                 form.ruc.trim()                 || undefined,
         documento:           form.documento.trim()           || undefined,
+        nombre_factura:      form.nombre_factura.trim().toUpperCase() || undefined,
         telefono:            form.telefono.trim()            || undefined,
         telefono_secundario: form.telefono_secundario.trim() || undefined,
         email:               form.email.trim()               || undefined,
@@ -1527,6 +1530,39 @@ export default function ClienteDetailPage() {
                       <input type="text" name="documento" value={form.documento} onChange={handleChange} className={inputClass} />
                     )}
                   </div>
+                </div>
+              </section>
+
+              {/* Datos para factura */}
+              <section className="space-y-4">
+                <SectionTitle>Datos para factura</SectionTitle>
+                <p className="-mt-2 text-xs text-slate-500">Lo que sale en el documento tributario (SIFEN). La factura siempre se emite contra un RUC. Si se deja vacío, se factura con el nombre y documento del cliente.</p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className={labelClass}>Nombre para factura</label>
+                    <input
+                      type="text"
+                      name="nombre_factura"
+                      value={form.nombre_factura}
+                      onChange={handleChange}
+                      placeholder="Como debe figurar en la factura"
+                      className={`${inputClass} uppercase`}
+                    />
+                  </div>
+                  {form.tipo_cliente === "persona" ? (
+                    <div>
+                      <label className={labelClass}>RUC</label>
+                      <input type="text" name="ruc" value={form.ruc} onChange={handleChange} placeholder="0000000-0" className={inputClass} />
+                    </div>
+                  ) : (
+                    <div>
+                      <label className={labelClass}>RUC</label>
+                      <p className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500">
+                        {form.ruc.trim() || "Se toma el RUC cargado en Datos de identificación."}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </section>
 

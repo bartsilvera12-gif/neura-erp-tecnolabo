@@ -280,6 +280,7 @@ export async function convertirEnPedido(
         cliente_direccion: p.cliente_direccion,
         forma_pago: p.forma_pago,
         plazo_entrega: p.plazo_entrega,
+        numero_orden_compra: p.numero_orden_compra ?? null,
         observaciones: p.observaciones,
         items: itemsSnapshot,
         total: Number(p.total) || 0,
@@ -288,6 +289,7 @@ export async function convertirEnPedido(
         source: "presupuesto",
         presupuesto_id: presupuestoId,
         numero_presupuesto: p.numero_control,
+        numero_orden_compra: p.numero_orden_compra ?? null,
       },
     })
     .select("id")

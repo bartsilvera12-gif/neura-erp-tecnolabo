@@ -86,6 +86,8 @@ export interface CreateVentaPgParams {
   permitirSinStock?: boolean;
   /** Si true y hay cliente, la venta emite nota de remisión (documento NO fiscal) con número NR-XXXXXX. */
   generaNotaRemision?: boolean;
+  /** N.º de Orden de Compra del cliente. Si no viene, se hereda del presupuesto. */
+  numeroOrdenCompra?: string | null;
   /** Caja (turno) a la que se asocia la venta. La elige el cajero cuando hay varias abiertas. */
   cajaId?: string | null;
   /** Usuario que registra la venta (auditoría de movimientos de inventario). */
@@ -491,6 +493,26 @@ export async function createVentaTransaccionalPg(
     notaRemisionNumero = `NR-${String(nextNr).padStart(6, "0")}`;
   }
 
+  // 4b-bis) N.º de Orden de Compra. Prioridad: lo que mandó el cliente; si no,
+  //         lo que traía el presupuesto de origen. La lectura es en el server
+  //         para que la herencia funcione aunque la UI no lo envíe.
+  let numeroOrdenCompra: string | null =
+    typeof params.numeroOrdenCompra === "string" && params.numeroOrdenCompra.trim()
+      ? params.numeroOrdenCompra.trim().slice(0, 60)
+      : null;
+  if (!numeroOrdenCompra && params.presupuestoId) {
+    const ocQ = await sb
+      .from("presupuestos")
+      .select("numero_orden_compra")
+      .eq("empresa_id", params.empresaId)
+      .eq("id", params.presupuestoId)
+      .maybeSingle();
+    if (!ocQ.error) {
+      const oc = (ocQ.data as { numero_orden_compra?: string | null } | null)?.numero_orden_compra;
+      numeroOrdenCompra = oc ? String(oc).trim().slice(0, 60) || null : null;
+    }
+  }
+
   // 4c) Resolver la caja (turno) a la que se asocia la venta. Soporta múltiples
   //     cajas abiertas: el cajero elige cuál (params.cajaId). Reglas:
   //       - Si viene cajaId, debe estar ABIERTA (no 'en_cierre' ni cerrada).
@@ -539,6 +561,7 @@ export async function createVentaTransaccionalPg(
       plazo_dias: params.plazoDias,
       metodo_pago: params.metodoPago,
       presupuesto_id: params.presupuestoId ?? null,
+      numero_orden_compra: numeroOrdenCompra,
       genera_nota_remision: generaNota,
       nota_remision_numero: notaRemisionNumero,
       fecha: fechaIso,

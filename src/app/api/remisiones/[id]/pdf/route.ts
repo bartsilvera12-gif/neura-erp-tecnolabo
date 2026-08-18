@@ -59,6 +59,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     <div><b>Fecha:</b> ${(() => { try { return new Date(String(r.fecha)).toLocaleString("es-PY"); } catch { return esc(r.fecha); } })()}</div>
     <div><b>Cliente:</b> ${esc(r.cliente_nombre ?? "—")}</div>
     <div><b>Entrega:</b> ${esc(r.usuario_confirmador_nombre ?? r.usuario_creador_nombre ?? "—")}</div>
+    ${data.numero_orden_compra ? `<div><b>N.º Orden de Compra:</b> ${esc(data.numero_orden_compra)}</div>` : ""}
   </div>
   <table><thead><tr><th>Producto</th><th class="r">Cantidad</th><th>Observación</th></tr></thead><tbody>${filas || `<tr><td colspan="3">Sin ítems</td></tr>`}</tbody></table>
   ${r.observacion ? `<div class="muted" style="margin-top:12px"><b>Observaciones:</b> ${esc(r.observacion)}</div>` : ""}

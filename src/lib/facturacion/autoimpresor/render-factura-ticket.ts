@@ -34,6 +34,8 @@ export interface FacturaTicketData {
   condicion: "contado" | "credito";
   cliente: { nombre: string; ruc: string | null } | null;
   ventaNumeroControl: string;
+  /** N.º de Orden de Compra del cliente. Referencia comercial, no campo fiscal. */
+  numeroOrdenCompra?: string | null;
   items: Array<{
     cantidad: number;
     descripcion: string;
@@ -207,6 +209,7 @@ export function renderFacturaTicketHTML(d: FacturaTicketData): string {
     <div class="kv">
       <div><span>Cliente</span><span>${esc(clienteNombre)}</span></div>
       <div><span>RUC / CI</span><span>${esc(clienteRuc)}</span></div>
+      ${d.numeroOrdenCompra ? `<div><span>Orden de Compra</span><span>${esc(d.numeroOrdenCompra)}</span></div>` : ""}
     </div>
     <hr>
     <table><tbody>${itemsHtml}</tbody></table>
