@@ -530,8 +530,11 @@ export function buildOfficialRdeFacturaElectronicaXml(
   } else {
     const doc = (receptor.documento ?? "").replace(/\s/g, "").trim();
     if (!doc) throw new Error("Receptor sin RUC: se requiere documento (CI) en cliente.");
+    // Receptor nacional sin RUC = consumidor final (no contribuyente). El SET exige
+    // que un iNatRec=2 (no contribuyente) vaya con iTiOpe=2 (B2C); enviar B2B (1) es
+    // incompatible → rechazo "El tipo de operación no compatible con la naturaleza del receptor".
     recParts.push(textEl("iNatRec", "2"));
-    recParts.push(textEl("iTiOpe", "1"));
+    recParts.push(textEl("iTiOpe", "2"));
     recParts.push(textEl("cPaisRec", "PRY"));
     recParts.push(textEl("dDesPaisRe", "Paraguay"));
     recParts.push(textEl("iTipIDRec", "1"));
