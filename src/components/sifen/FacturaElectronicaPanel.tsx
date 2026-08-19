@@ -575,6 +575,23 @@ export function FacturaElectronicaPanel({
               )}
 
               <div className="flex flex-wrap items-center gap-3">
+                {/*
+                  KuDE: es la representacion grafica impresa del DE. Se dibuja desde
+                  el XML firmado, asi que solo tiene sentido una vez aprobado. Es el
+                  documento que se le entrega al cliente: imprimir la pagina web no
+                  sirve, hay que abrir este PDF.
+                */}
+                {stStr === "aprobado" ? (
+                  <a
+                    href={`/api/facturas/${facturaId}/sifen/kude`}
+                    target="_blank"
+                    rel="noopener"
+                    className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-[#C7202A] text-white text-sm font-semibold shadow-sm hover:bg-[#A81B23]"
+                    title="Abrir el KuDE (representación gráfica del documento electrónico) para imprimir o guardar"
+                  >
+                    Imprimir factura (KuDE)
+                  </a>
+                ) : null}
                 {stStr === "rechazado" && puedeGenerarXml ? (
                   <button
                     type="button"
