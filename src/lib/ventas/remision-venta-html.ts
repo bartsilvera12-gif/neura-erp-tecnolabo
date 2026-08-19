@@ -27,6 +27,9 @@ export interface RemisionHtmlData {
     fecha: string;
     numero_control: string;
     numero_orden_compra: string | null;
+    factura_numero?: string | null;
+    factura_cdc?: string | null;
+    factura_estado_sifen?: string | null;
     cliente_nombre: string | null;
     observacion: string | null;
     usuario_creador_nombre: string | null;
@@ -128,6 +131,9 @@ export function renderRemisionVentaHTML(data: RemisionHtmlData, origin = ""): st
   .pend { border: 1px solid #fbbf24; background: #fffbeb; border-radius: 5px; padding: 10px 12px; margin-top: 6px; }
   .pend table thead th { background: #b45309; }
   .obs { margin-top: 10px; color: #4b5563; }
+  .cdc { margin-top: 6px; border: 1px solid #d1d5db; border-radius: 5px; padding: 8px 12px; display: flex; gap: 10px; align-items: baseline; }
+  .cdc b { color: #4b5563; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+  .cdc span { font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: .02em; word-break: break-all; }
 
   .firmas { display: flex; gap: 52px; margin-top: 54px; }
   .firma { flex: 1; text-align: center; }
@@ -158,9 +164,12 @@ export function renderRemisionVentaHTML(data: RemisionHtmlData, origin = ""): st
   <div class="caja grid2">
     <div class="kv"><b>Cliente</b><span>${esc(r.cliente_nombre ?? "—")}</span></div>
     <div class="kv"><b>Venta</b><span>${esc(r.numero_control)}</span></div>
+    ${r.factura_numero ? `<div class="kv"><b>Factura</b><span>${esc(r.factura_numero)}</span></div>` : ""}
     ${r.numero_orden_compra ? `<div class="kv"><b>Orden de compra</b><span>${esc(r.numero_orden_compra)}</span></div>` : ""}
     <div class="kv"><b>Entregado por</b><span>${esc(r.usuario_creador_nombre ?? "—")}</span></div>
   </div>
+
+  ${r.factura_cdc ? `<div class="cdc"><b>CDC de la factura electrónica</b><span>${esc(r.factura_cdc)}</span></div>` : ""}
 
   <div class="sec">Mercadería entregada</div>
   <table>

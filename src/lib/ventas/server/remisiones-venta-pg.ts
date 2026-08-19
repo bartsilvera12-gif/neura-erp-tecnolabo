@@ -47,6 +47,11 @@ export interface ResumenVentaEntrega {
   estado_entrega: string;
   cliente_nombre: string | null;
   numero_orden_compra: string | null;
+  /** Factura de la venta, si ya se genero (puente venta -> factura -> SIFEN). */
+  factura_numero: string | null;
+  /** CDC del DE, presente solo si la factura electronica ya fue generada. */
+  factura_cdc: string | null;
+  factura_estado_sifen: string | null;
   lineas: LineaEntregaVenta[];
 }
 
@@ -100,13 +105,20 @@ export async function getResumenVentaEntrega(
   const tV = quoteSchemaTable(schema, "ventas");
   const tVI = quoteSchemaTable(schema, "ventas_items");
   const tC = quoteSchemaTable(schema, "clientes");
+  const tF = quoteSchemaTable(schema, "facturas");
+  const tFE = quoteSchemaTable(schema, "factura_electronica");
   const client = await pool().connect();
   try {
     const v = await client.query(
       `SELECT v.id, v.numero_control, v.estado_entrega, v.numero_orden_compra,
-              COALESCE(c.empresa, c.nombre_contacto, c.nombre) AS cliente_nombre
+              COALESCE(c.empresa, c.nombre_contacto, c.nombre) AS cliente_nombre,
+              f.numero_factura AS factura_numero,
+              fe.cdc          AS factura_cdc,
+              fe.estado_sifen AS factura_estado_sifen
          FROM ${tV} v
-         LEFT JOIN ${tC} c ON c.id = v.cliente_id
+         LEFT JOIN ${tC} c  ON c.id = v.cliente_id
+         LEFT JOIN ${tF} f  ON f.venta_id = v.id
+         LEFT JOIN ${tFE} fe ON fe.factura_id = f.id
         WHERE v.id = $1::uuid AND v.empresa_id = $2::uuid`,
       [ventaId, empresaId],
     );
@@ -142,6 +154,9 @@ export async function getResumenVentaEntrega(
       estado_entrega: v.rows[0].estado_entrega as string,
       cliente_nombre: (v.rows[0].cliente_nombre as string) ?? null,
       numero_orden_compra: (v.rows[0].numero_orden_compra as string) ?? null,
+      factura_numero: (v.rows[0].factura_numero as string) ?? null,
+      factura_cdc: (v.rows[0].factura_cdc as string) ?? null,
+      factura_estado_sifen: (v.rows[0].factura_estado_sifen as string) ?? null,
       lineas,
     };
   } finally {
@@ -591,6 +606,9 @@ export async function getRemisionVentaParaEdicion(schema: string, empresaId: str
         venta_id: String(rem.venta_id),
         numero_control: resumen.numero_control,
         numero_orden_compra: resumen.numero_orden_compra,
+        factura_numero: resumen.factura_numero,
+        factura_cdc: resumen.factura_cdc,
+        factura_estado_sifen: resumen.factura_estado_sifen,
         cliente_nombre: rem.cliente_nombre ?? resumen.cliente_nombre ?? null,
         observacion: (rem.observacion as string) ?? null,
         usuario_creador_nombre: (rem.usuario_creador_nombre as string) ?? null,
