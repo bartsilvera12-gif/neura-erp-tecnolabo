@@ -54,6 +54,8 @@ export interface Venta {
 
   /** La venta emite nota de remisión (documento no fiscal). */
   genera_nota_remision?: boolean;
+  /** N.º de Orden de Compra del cliente (propia o heredada del presupuesto). */
+  numero_orden_compra?: string | null;
   /** Número de nota de remisión (NR-XXXXXX) si genera_nota_remision. */
   nota_remision_numero?: string | null;
 

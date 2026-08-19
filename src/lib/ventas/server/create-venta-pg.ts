@@ -129,7 +129,7 @@ const TOL = 2;
  */
 export async function createVentaTransaccionalPg(
   params: CreateVentaPgParams
-): Promise<{ ventaId: string; numeroControl: string; fechaIso: string; notaRemisionNumero: string | null; cuentaPorCobrarId?: string | null }> {
+): Promise<{ ventaId: string; numeroControl: string; fechaIso: string; notaRemisionNumero: string | null; cuentaPorCobrarId?: string | null; numeroOrdenCompra: string | null }> {
   const items = params.items;
   if (!items.length) {
     throw new Error("La venta debe tener al menos un ítem.");
@@ -829,7 +829,7 @@ export async function createVentaTransaccionalPg(
       }
     } catch { /* silencioso */ }
 
-    return { ventaId, numeroControl, fechaIso, notaRemisionNumero, cuentaPorCobrarId };
+    return { ventaId, numeroControl, fechaIso, notaRemisionNumero, cuentaPorCobrarId, numeroOrdenCompra };
   } catch (err) {
     await rollback();
     throw err;

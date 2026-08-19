@@ -68,6 +68,7 @@ function toVentaResponse(
     total: number;
     genera_nota_remision?: boolean;
     nota_remision_numero?: string | null;
+    numero_orden_compra?: string | null;
   }
 ): Venta {
   const lineas: LineaVenta[] = items.map((i) => ({
@@ -97,6 +98,7 @@ function toVentaResponse(
     metodo_pago: meta.metodo_pago,
     genera_nota_remision: meta.genera_nota_remision === true,
     nota_remision_numero: meta.nota_remision_numero ?? null,
+    numero_orden_compra: meta.numero_orden_compra ?? null,
     fecha: meta.fechaIso,
   };
 }
@@ -228,7 +230,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const { ventaId, numeroControl, fechaIso, notaRemisionNumero } = await createVentaTransaccionalPg({
+    const { ventaId, numeroControl, fechaIso, notaRemisionNumero, numeroOrdenCompra } = await createVentaTransaccionalPg({
       schema,
       empresaId: auth.empresa_id,
       clienteId,
@@ -392,6 +394,7 @@ export async function POST(request: NextRequest) {
       total: tot,
       genera_nota_remision: !!notaRemisionNumero,
       nota_remision_numero: notaRemisionNumero,
+      numero_orden_compra: numeroOrdenCompra,
     });
 
     return NextResponse.json(successResponse({ venta, nota_remision_numero: notaRemisionNumero }));

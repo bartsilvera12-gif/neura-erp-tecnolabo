@@ -137,7 +137,15 @@ export default function NuevaVentaPage() {
   const [faltantes, setFaltantes] = useState<FaltanteStock[]>([]);
   const [confirmSinStockOpen, setConfirmSinStockOpen] = useState(false);
   // Panel post-venta: tras confirmar, ofrece abrir ticket y (si aplica) nota de remisión.
-  const [postVenta, setPostVenta] = useState<{ id: string; numero: string; generaNota: boolean; credito: boolean } | null>(null);
+  const [postVenta, setPostVenta] = useState<{
+    id: string;
+    numero: string;
+    generaNota: boolean;
+    credito: boolean;
+    /** OC heredada del presupuesto: se muestra para confirmar que quedo enganchada. */
+    ocPresupuesto: string | null;
+  } | null>(null);
+  const [remitiendo, setRemitiendo] = useState(false);
   // Guard anti doble-submit: estado para UI (botón/spinner) + ref para bloqueo síncrono
   // inmediato (React puede tardar en aplicar el estado; el ref corta el segundo disparo ya).
   const [guardando, setGuardando] = useState(false);
@@ -904,14 +912,52 @@ export default function NuevaVentaPage() {
       // bloquearlo). Si pasa, el cajero puede reimprimirlo desde el listado.
       try { window.open(ticketUrl, "_blank", "noopener"); } catch {}
       if (generaNota) { try { window.open(remisionUrl, "_blank", "noopener"); } catch {} }
-      // Redirige directo al listado de ventas en lugar de mostrar el modal
-      // post-venta. El cajero queda libre para registrar otra venta de
-      // inmediato. El ticket sigue accesible desde el listado.
-      router.push("/ventas");
+      // Panel post-venta: desde aca se emiten factura y nota de remision en el
+      // acto, sin tener que buscar la venta en el listado.
+      setPostVenta({
+        id: String(v.id),
+        numero: String(v.numero_control ?? ""),
+        generaNota,
+        credito: tipoVenta === "CREDITO",
+        ocPresupuesto: (v as { numero_orden_compra?: string | null }).numero_orden_compra ?? null,
+      });
     } finally {
       // Liberar el guard SIEMPRE: éxito, error o flujo de "confirmar sin stock".
       isSubmittingRef.current = false;
       setGuardando(false);
+    }
+  }
+
+  /**
+   * Nota de remision por el TOTAL de la venta recien registrada. Lee el
+   * pendiente del resumen en vez de asumir cantidades, y abre el documento.
+   */
+  async function remitirTodoPostVenta() {
+    if (!postVenta) return;
+    setRemitiendo(true);
+    setErrorVenta(null);
+    try {
+      const resR = await fetchWithSupabaseSession(`/api/ventas/${postVenta.id}/remisiones`, { cache: "no-store" });
+      const jR = await resR.json();
+      if (!resR.ok || !jR.success) throw new Error(jR.error ?? "No se pudo leer la venta.");
+      const lineas = (jR.data?.resumen?.lineas ?? []) as Array<{ venta_item_id: string; pendiente: number }>;
+      const items = lineas
+        .filter((l) => Number(l.pendiente) > 0)
+        .map((l) => ({ venta_item_id: l.venta_item_id, cantidad: Number(l.pendiente) }));
+      if (items.length === 0) throw new Error("Esta venta ya está totalmente remitida.");
+
+      const res = await fetchWithSupabaseSession(`/api/ventas/${postVenta.id}/remisiones`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items }),
+      });
+      const j = await res.json();
+      if (!res.ok || !j.success) throw new Error(j.error ?? "No se pudo generar la nota de remisión.");
+      try { window.open(`/api/ventas/remisiones/${j.data.remision_id}/pdf?auto=1`, "_blank", "noopener"); } catch {}
+    } catch (e) {
+      setErrorVenta(e instanceof Error ? e.message : "Error al generar la nota de remisión.");
+    } finally {
+      setRemitiendo(false);
     }
   }
 
@@ -1642,6 +1688,11 @@ export default function NuevaVentaPage() {
               {postVenta.generaNota && (
                 <p className="mt-1 text-sm text-sky-700">Esta venta genera nota de remisión.</p>
               )}
+              {postVenta.ocPresupuesto && (
+                <p className="mt-2 inline-block rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">
+                  OC {postVenta.ocPresupuesto}
+                </p>
+              )}
               <p className="mt-1 text-xs text-gray-400">
                 Si tu navegador bloqueó las pestañas, abrí los documentos con estos botones.
               </p>
@@ -1664,16 +1715,21 @@ export default function NuevaVentaPage() {
               >
                 Imprimir factura
               </a>
-              {postVenta.generaNota && (
-                <a
-                  href={`/api/ventas/${postVenta.id}/ticket?tipo=remision&auto=1`}
-                  target="_blank"
-                  rel="noopener"
-                  className="rounded-lg border border-sky-300 bg-sky-50 px-4 py-2.5 text-sm font-medium text-sky-700 hover:bg-sky-100"
-                >
-                  Abrir nota de remisión
-                </a>
-              )}
+              <button
+                type="button"
+                onClick={() => void remitirTodoPostVenta()}
+                disabled={remitiendo}
+                className="rounded-lg border border-sky-300 bg-sky-50 px-4 py-2.5 text-sm font-medium text-sky-700 hover:bg-sky-100 disabled:opacity-50"
+              >
+                {remitiendo ? "Generando…" : "Nota de remisión — entregar todo"}
+              </button>
+              <button
+                type="button"
+                onClick={() => { setPostVenta(null); router.push(`/ventas/${postVenta.id}/remisiones`); }}
+                className="rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50"
+              >
+                Nota de remisión — entrega parcial
+              </button>
               {/* Recibo de dinero solo para venta contado (en crédito el recibo sale al cobrar). */}
               {!postVenta.credito && (
                 <button
