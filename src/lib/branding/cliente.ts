@@ -65,3 +65,20 @@ export const CLIENTE_DATOS_FISCALES = {
   /** Ciudad que encabeza comprobantes impresos. Vacía = solo se imprime la fecha. */
   ciudad: "",
 };
+
+/**
+ * Paleta de la marca, tomada del logo TECNO/LABO: rojo como primario y gris
+ * como acento. Se usa en los documentos imprimibles (KuDE, nota de remisión) y
+ * es el default cuando la empresa no cargó un color propio en
+ * `empresa_sifen_config`.
+ *
+ * Formato `#RRGGBB` porque es lo que ya parsea `kude-pdf.ts`.
+ */
+export const CLIENTE_COLORES = {
+  /** Rojo del logo. */
+  primario: "#C7202A",
+  /** Tono claro del primario para rellenos de encabezado de sección. */
+  primarioFill: "#FBEDEE",
+  /** Gris del logo, para textos secundarios y bordes suaves. */
+  secundario: "#8C9196",
+} as const;

@@ -4,6 +4,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { CLIENTE_COLORES, CLIENTE_LOGO_URL } from "@/lib/branding/cliente";
 import { PDFDocument, StandardFonts, rgb, type PDFImage, type PDFPage, type PDFFont, type RGB } from "pdf-lib";
 import QRCode from "qrcode";
 import type { KudeItemRow, KudeParsedFromXml } from "./parse-kude-from-signed-xml";
@@ -111,14 +112,32 @@ function formatMonto(nStr: string, moneda: string): string {
   return n.toLocaleString("es-PY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function readLogoBytes(): Uint8Array | null {
-  const p = path.join(process.cwd(), "public", "logo-neura.png");
-  try {
-    if (fs.existsSync(p)) return new Uint8Array(fs.readFileSync(p));
-  } catch {
-    /* ignore */
+/**
+ * Logos de fallback del bundle, en orden de preferencia: primero el del
+ * cliente de esta instancia (CLIENTE_LOGO_URL apunta a /public), y recién
+ * despues el de Neura. Devuelve los bytes junto al formato, porque pdf-lib
+ * necesita embedJpg o embedPng segun corresponda.
+ */
+function readLogosFallback(): Array<{ bytes: Uint8Array; jpg: boolean }> {
+  const out: Array<{ bytes: Uint8Array; jpg: boolean }> = [];
+  const rels: string[] = [];
+  if (CLIENTE_LOGO_URL) rels.push(CLIENTE_LOGO_URL);
+  rels.push("/logo-neura.png");
+  for (const rel of rels) {
+    const limpio = String(rel).replace(/^\/+/, "");
+    if (!limpio) continue;
+    const p = path.join(process.cwd(), "public", limpio);
+    try {
+      if (!fs.existsSync(p)) continue;
+      out.push({
+        bytes: new Uint8Array(fs.readFileSync(p)),
+        jpg: /\.jpe?g$/i.test(limpio),
+      });
+    } catch {
+      /* ignore */
+    }
   }
-  return null;
+  return out;
 }
 
 function trunc(s: string, max: number): string {
@@ -261,10 +280,17 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
    * (cero cambios visuales para empresas sin branding).
    */
   const primaryConfig = parseHexColorToRgb(branding?.colorPrimario ?? null);
-  const primary: RGB = primaryConfig ?? NEURA_BLUE;
+  // Default de marca: el color del cliente de esta instancia. NEURA_BLUE queda
+  // como ultimo recurso si el hex de la marca fuese invalido.
+  const primaryMarca = parseHexColorToRgb(CLIENTE_COLORES.primario);
+  const primary: RGB = primaryConfig ?? primaryMarca ?? NEURA_BLUE;
   const primaryFillConfig = parseHexColorToRgb(branding?.colorPrimarioFill ?? null);
   const primaryFill: RGB =
-    primaryFillConfig ?? (primaryConfig ? blendWithWhite(primaryConfig, 0.92) : NEURA_BLUE_FILL);
+    primaryFillConfig ??
+    (primaryConfig
+      ? blendWithWhite(primaryConfig, 0.92)
+      : parseHexColorToRgb(CLIENTE_COLORES.primarioFill) ??
+        (primaryMarca ? blendWithWhite(primaryMarca, 0.92) : NEURA_BLUE_FILL));
 
   const qrPng = await QRCode.toBuffer(qrUrl, {
     type: "png",
@@ -309,14 +335,14 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
    * Si ambos fallan, header se renderiza sin logo (igual que hoy).
    */
   const brandingLogo = branding?.logoBytes ?? null;
-  const fallbackLogo = readLogoBytes();
-  const candidates: Uint8Array[] = [];
-  if (brandingLogo && brandingLogo.length > 0) candidates.push(brandingLogo);
-  if (fallbackLogo) candidates.push(fallbackLogo);
+  const candidates: Array<{ bytes: Uint8Array; jpg: boolean }> = [];
+  // El logo cargado por la empresa llega siempre como PNG desde el endpoint.
+  if (brandingLogo && brandingLogo.length > 0) candidates.push({ bytes: brandingLogo, jpg: false });
+  candidates.push(...readLogosFallback());
 
-  for (const bytes of candidates) {
+  for (const cand of candidates) {
     try {
-      logoImg = await pdfDoc.embedPng(bytes);
+      logoImg = cand.jpg ? await pdfDoc.embedJpg(cand.bytes) : await pdfDoc.embedPng(cand.bytes);
       logoW = logoMaxW;
       const sc = logoW / logoImg.width;
       logoH = logoImg.height * sc;
@@ -334,8 +360,20 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
   const leftChunks: { lines: string[]; size: number; bold: boolean; col: RGB }[] = [
     { lines: wrapByChars(parsed.emisor.dNomEmi, leftMaxChars), size: 9, bold: true, col: BLACK },
     { lines: wrapByChars(parsed.emisor.dDirEmi, leftMaxChars), size: 7.5, bold: false, col: BLACK },
-    { lines: [`Tel.: ${NEURA_KUDE_TEL}`], size: 7.5, bold: false, col: BLACK },
-    { lines: [`Email: ${NEURA_KUDE_EMAIL}`], size: 7.5, bold: false, col: BLACK },
+    // Contacto del EMISOR tomado del propio DE. Antes se imprimia el de Neura,
+    // que en una instancia de cliente es informacion ajena al comprobante.
+    {
+      lines: [`Tel.: ${parsed.emisor.dTelEmi || NEURA_KUDE_TEL}`],
+      size: 7.5,
+      bold: false,
+      col: BLACK,
+    },
+    {
+      lines: [`Email: ${parsed.emisor.dEmailE || NEURA_KUDE_EMAIL}`],
+      size: 7.5,
+      bold: false,
+      col: BLACK,
+    },
   ];
 
   const rightLines = 6;
