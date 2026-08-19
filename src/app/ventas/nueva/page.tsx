@@ -146,6 +146,7 @@ export default function NuevaVentaPage() {
     ocPresupuesto: string | null;
   } | null>(null);
   const [remitiendo, setRemitiendo] = useState(false);
+  const [facturando, setFacturando] = useState(false);
   // Guard anti doble-submit: estado para UI (botón/spinner) + ref para bloqueo síncrono
   // inmediato (React puede tardar en aplicar el estado; el ref corta el segundo disparo ya).
   const [guardando, setGuardando] = useState(false);
@@ -890,12 +891,13 @@ export default function NuevaVentaPage() {
         setErrorVenta(resultado.error);
         return;
       }
-      // Documentos de la venta. La nota de remisión se abre además del ticket
-      // SOLO si la venta la genera (cliente con usa_nota_remision o toggle activo).
+      // Documentos de la venta: NO se abre ninguno automaticamente. Antes saltaba
+      // el comprobante A4 (y la remision vieja) en pestañas nuevas, que ademas de
+      // molestar imprimia un documento que no es el que se le entrega al cliente.
+      // Ahora el cajero elige en el panel post-venta, donde la accion principal es
+      // generar la factura electronica.
       const v = resultado.venta;
       const generaNota = v.genera_nota_remision === true || !!v.nota_remision_numero;
-      const ticketUrl = `/api/ventas/${v.id}/comprobante-a4`;
-      const remisionUrl = `/api/ventas/${v.id}/ticket?tipo=remision&auto=1`;
 
       // Si esta venta se origino desde un presupuesto, marcar el presupuesto
       // como convertido (guardando el venta_id como convertido_pedido_id).
@@ -908,10 +910,6 @@ export default function NuevaVentaPage() {
           });
         } catch { /* best-effort: si falla, se puede marcar a mano */ }
       }
-      // Intento de apertura automática del ticket (popup; el navegador puede
-      // bloquearlo). Si pasa, el cajero puede reimprimirlo desde el listado.
-      try { window.open(ticketUrl, "_blank", "noopener"); } catch {}
-      if (generaNota) { try { window.open(remisionUrl, "_blank", "noopener"); } catch {} }
       // Panel post-venta: desde aca se emiten factura y nota de remision en el
       // acto, sin tener que buscar la venta en el listado.
       setPostVenta({
@@ -1699,17 +1697,12 @@ export default function NuevaVentaPage() {
             </div>
 
             <div className="grid grid-cols-1 gap-2">
-              <a
-                href={`/api/ventas/${postVenta.id}/comprobante-a4`}
-                target="_blank"
-                rel="noopener"
-                className="rounded-lg bg-[#1E2125] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#17191C]"
-              >
-                Abrir ticket
-              </a>
+              {/* Accion principal: es el documento que se le entrega al cliente. */}
               <button
                 type="button"
+                disabled={facturando}
                 onClick={async () => {
+                  setFacturando(true);
                   try {
                     const res = await fetchWithSupabaseSession(`/api/ventas/${postVenta.id}/factura-electronica`, {
                       method: "POST",
@@ -1719,11 +1712,12 @@ export default function NuevaVentaPage() {
                     router.push(`/facturas/${j.data.factura_id}`);
                   } catch (e) {
                     setErrorVenta(e instanceof Error ? e.message : "Error al generar la factura.");
+                    setFacturando(false);
                   }
                 }}
-                className="rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.08] px-4 py-2.5 text-sm font-medium text-[#17191C] hover:bg-[#1E2125]/[0.16]"
+                className="rounded-lg bg-[#C7202A] px-4 py-3 text-sm font-semibold text-white hover:bg-[#A81B23] disabled:opacity-50"
               >
-                Factura electrónica
+                {facturando ? "Generando…" : "Generar factura electrónica"}
               </button>
               <button
                 type="button"
