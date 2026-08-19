@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { FileText, ArrowLeft, Loader2, Download, FileCheck2, Pencil } from "lucide-react";
+import {
+  ShoppingCart, FileText, ArrowLeft, Loader2, Download, FileCheck2, Pencil } from "lucide-react";
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
 import { ESTADO_LABEL, type EstadoPresupuesto } from "@/lib/presupuestos/types";
 import { CONDICIONES_COMERCIALES_FIJAS } from "@/lib/branding/cliente";
@@ -250,12 +251,13 @@ export default function PresupuestoDetallePage() {
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileCheck2 className="h-4 w-4" />} Convertir a factura
             </button>
           )}
-          {presu.estado === "aprobado" && (
+          {presu.estado !== "convertido" && presu.estado !== "rechazado" && (
             <Link
               href={`/ventas/nueva?presupuesto_id=${presu.id}`}
-              className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              className="inline-flex items-center gap-1.5 rounded-md bg-[#C7202A] px-4 py-2 text-sm font-medium text-white hover:bg-[#A81B23]"
+              title="Abre la caja con los productos de este presupuesto ya cargados"
             >
-              <FileCheck2 className="h-4 w-4" /> Cobrar en Caja
+              <ShoppingCart className="h-4 w-4" /> Enviar a caja
             </Link>
           )}
         </div>
