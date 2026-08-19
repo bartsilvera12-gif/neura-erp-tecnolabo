@@ -25,7 +25,7 @@ export interface RemisionHtmlData {
     numero: string;
     estado: string;
     fecha: string;
-    numero_control: string;
+    numero_control?: string | null;
     numero_orden_compra: string | null;
     factura_numero?: string | null;
     factura_cdc?: string | null;
@@ -171,7 +171,7 @@ export function renderRemisionVentaHTML(data: RemisionHtmlData, logoSrc: string 
   <div class="sec">Datos de la entrega y del cliente</div>
   <div class="caja grid2">
     <div class="kv"><b>Cliente</b><span>${esc(r.cliente_nombre ?? "—")}</span></div>
-    <div class="kv"><b>Venta</b><span>${esc(r.numero_control)}</span></div>
+    ${r.numero_control ? `<div class="kv"><b>Venta</b><span>${esc(r.numero_control)}</span></div>` : ""}
     ${r.factura_numero ? `<div class="kv"><b>Factura</b><span>${esc(r.factura_numero)}</span></div>` : ""}
     ${r.numero_orden_compra ? `<div class="kv"><b>Orden de compra</b><span>${esc(r.numero_orden_compra)}</span></div>` : ""}
     <div class="kv"><b>Entregado por</b><span>${esc(r.usuario_creador_nombre ?? "—")}</span></div>
