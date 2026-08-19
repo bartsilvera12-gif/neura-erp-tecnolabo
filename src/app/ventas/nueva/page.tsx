@@ -1707,14 +1707,24 @@ export default function NuevaVentaPage() {
               >
                 Abrir ticket
               </a>
-              <a
-                href={`/api/ventas/${postVenta.id}/factura?auto=1`}
-                target="_blank"
-                rel="noopener"
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    const res = await fetchWithSupabaseSession(`/api/ventas/${postVenta.id}/factura-electronica`, {
+                      method: "POST",
+                    });
+                    const j = await res.json();
+                    if (!res.ok || !j.success) throw new Error(j.error ?? "No se pudo generar la factura.");
+                    router.push(`/facturas/${j.data.factura_id}`);
+                  } catch (e) {
+                    setErrorVenta(e instanceof Error ? e.message : "Error al generar la factura.");
+                  }
+                }}
                 className="rounded-lg border border-[#1E2125]/40 bg-[#1E2125]/[0.08] px-4 py-2.5 text-sm font-medium text-[#17191C] hover:bg-[#1E2125]/[0.16]"
               >
-                Imprimir factura
-              </a>
+                Factura electrónica
+              </button>
               <button
                 type="button"
                 onClick={() => void remitirTodoPostVenta()}

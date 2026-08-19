@@ -108,6 +108,7 @@ export default function VentasPage() {
    * que el boton solo tiene sentido en modo autoimpresor.
    */
   const [facturacionModo, setFacturacionModo] = useState<string | null>(null);
+  const [facturaBusy, setFacturaBusy] = useState<string | null>(null);
 
   /**
    * Nota de remision de una venta en un clic: si ya hay una emitida, la abre;
@@ -129,6 +130,27 @@ export default function VentasPage() {
     })();
     return () => { cancelado = true; };
   }, []);
+  /**
+   * Factura electronica: crea la factura de la venta (idempotente) y navega a
+   * su ficha, donde esta el panel SIFEN para generar el DE, firmar, enviar y
+   * descargar el KuDE.
+   */
+  async function facturaElectronica(ventaId: string) {
+    setFacturaBusy(ventaId);
+    setRemisionError(null);
+    try {
+      const res = await fetchWithSupabaseSession(`/api/ventas/${ventaId}/factura-electronica`, {
+        method: "POST",
+      });
+      const j = await res.json();
+      if (!res.ok || !j.success) throw new Error(j.error ?? "No se pudo generar la factura.");
+      window.location.href = `/facturas/${j.data.factura_id}`;
+    } catch (e) {
+      setRemisionError(e instanceof Error ? e.message : "Error al generar la factura.");
+      setFacturaBusy(null);
+    }
+  }
+
   async function abrirRemision(ventaId: string) {
     setRemisionBusy(ventaId);
     setRemisionError(null);
@@ -443,6 +465,17 @@ export default function VentasPage() {
                           >
                             Imprimir
                           </a>
+                          {!isAnulada && facturacionModo === "sifen" && (
+                            <button
+                              type="button"
+                              onClick={() => void facturaElectronica(v.id)}
+                              disabled={facturaBusy === v.id}
+                              className="inline-flex items-center justify-center rounded-md border border-slate-300 bg-slate-800 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-slate-900 disabled:opacity-50"
+                              title="Generar la factura electrónica de esta venta y abrir el panel SIFEN"
+                            >
+                              {facturaBusy === v.id ? "Generando…" : "Factura"}
+                            </button>
+                          )}
                           {!isAnulada && facturacionModo === "autoimpresor" && (
                             <a
                               href={`/api/ventas/${v.id}/factura?auto=1`}
