@@ -456,15 +456,7 @@ export default function VentasPage() {
                               {v.estado === "parcialmente_devuelta" ? "Devolver más" : "Devolver"}
                             </button>
                           )}
-                          <a
-                            href={`/api/ventas/${v.id}/comprobante-a4`}
-                            target="_blank"
-                            rel="noopener"
-                            className="inline-flex items-center justify-center rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:border-slate-300 hover:bg-slate-50 transition-colors"
-                            title="Abrir comprobante A4 imprimible"
-                          >
-                            Imprimir
-                          </a>
+                          {/* Comprobante A4 quitado del listado a pedido: la fila queda con Factura y Remisión. */}
                           {!isAnulada && facturacionModo === "sifen" && (
                             <button
                               type="button"
@@ -498,15 +490,7 @@ export default function VentasPage() {
                               {remisionBusy === v.id ? "Generando…" : "Remisión"}
                             </button>
                           )}
-                          {!isAnulada && (
-                            <a
-                              href={`/ventas/${v.id}/remisiones`}
-                              className="inline-flex items-center justify-center rounded-md border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-medium text-sky-700 hover:bg-sky-100 transition-colors"
-                              title="Entregas y notas de remisión: registrar entregas parciales e imprimir"
-                            >
-                              Entregas
-                            </a>
-                          )}
+                          {/* Entregas quitado del listado a pedido: sigue en Comercial → Notas de remisión (lápiz). */}
                           {!isAnulada && (
                             <button
                               type="button"
