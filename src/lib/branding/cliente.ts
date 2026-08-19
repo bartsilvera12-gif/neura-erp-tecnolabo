@@ -57,13 +57,19 @@ export const CLIENTE_LOGO_URL: string | null = "/tecnolabo-logo.jpeg";
  * no se heredan los del ERP fuente ni se inventan.
  */
 export const CLIENTE_DATOS_FISCALES = {
-  razonSocial: "",
-  ruc: "",
-  telefono: "",
-  direccion: [] as string[],
-  actividad: [] as string[],
+  razonSocial: "TECNOLABO E.A.S. UNIPERSONAL",
+  ruc: "80167938-9",
+  telefono: "(0982) 520995",
+  direccion: ["JACINTO HERRERA C/ AMAMBAY", "ÑEMBY - CENTRAL"],
+  actividad: [
+    "MANTENIMIENTO Y REPARACIÓN DE PRODUCTOS ELABORADOS DE METAL",
+    "MANTENIMIENTO Y REPARACIÓN DE MÁQUINAS Y EQUIPOS DE USO GENERAL Y ESPECIAL",
+    "CONSTRUCCIÓN DE OTROS PROYECTOS DE INGENIERÍA CIVIL N.C.P.",
+    "COMERCIO AL POR MAYOR DE MAQUINARIA Y EQUIPO PARA USO INDUSTRIAL",
+    "ALQUILER Y ARRENDAMIENTO DE MAQUINARIA PARA LA CONSTRUCCIÓN SIN OPERARIO",
+  ],
   /** Ciudad que encabeza comprobantes impresos. Vacía = solo se imprime la fecha. */
-  ciudad: "",
+  ciudad: "ÑEMBY",
 };
 
 /**
