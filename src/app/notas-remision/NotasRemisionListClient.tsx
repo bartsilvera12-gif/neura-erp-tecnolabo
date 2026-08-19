@@ -22,6 +22,7 @@ type Row = {
   cliente_nombre: string | null;
   total_items: number;
   total_cantidad: number;
+  pendiente_entrega: number;
 };
 
 type ClienteOpt = { id: string; nombre: string };
@@ -254,14 +255,32 @@ export default function NotasRemisionListClient() {
                       <td className="px-4 py-3 text-right tabular-nums text-slate-600">{r.total_items}</td>
                       <td className="px-4 py-3 text-right tabular-nums text-slate-700">{fmtCant(r.total_cantidad)}</td>
                       <td className="px-4 py-3">
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
-                            r.estado === "anulada" ? "bg-red-100 text-red-700" : "bg-indigo-100 text-indigo-700"
-                          }`}
-                          title={r.estado === "anulada" ? r.anulada_motivo ?? "" : r.observacion ?? ""}
-                        >
-                          {r.estado === "anulada" ? "Anulada" : "Confirmada"}
-                        </span>
+                        {(() => {
+                          // Anulada manda sobre todo. Si no, lo que importa operativamente
+                          // es si al cliente le falta recibir algo.
+                          const anulada = r.estado === "anulada";
+                          const pendiente = !anulada && r.pendiente_entrega > 0;
+                          const cls = anulada
+                            ? "bg-red-100 text-red-700"
+                            : pendiente
+                              ? "bg-amber-100 text-amber-800"
+                              : "bg-emerald-100 text-emerald-800";
+                          const texto = anulada
+                            ? "Anulada"
+                            : pendiente
+                              ? "Entrega pendiente"
+                              : "Entregado";
+                          const tip = anulada
+                            ? r.anulada_motivo ?? ""
+                            : pendiente
+                              ? `Faltan ${fmtCant(r.pendiente_entrega)} unidades por entregar`
+                              : r.observacion ?? "";
+                          return (
+                            <span className={`whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-semibold ${cls}`} title={tip}>
+                              {texto}
+                            </span>
+                          );
+                        })()}
                       </td>
                       <td className="px-4 py-3 text-slate-500">{r.usuario_creador_nombre ?? "—"}</td>
                       <td className="px-4 py-3">

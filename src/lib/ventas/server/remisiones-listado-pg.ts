@@ -38,6 +38,8 @@ export interface RemisionListadoRow {
   cliente_nombre: string | null;
   total_items: number;
   total_cantidad: number;
+  /** Cantidad del documento de origen que todavia no se remitio. */
+  pendiente_entrega: number;
 }
 
 function pool() {
@@ -58,6 +60,8 @@ export async function listarRemisionesGlobal(
   const tF = quoteSchemaTable(schema, "facturas");
   const tFA = quoteSchemaTable(schema, "factura_autoimpresor");
   const tC = quoteSchemaTable(schema, "clientes");
+  const tVI = quoteSchemaTable(schema, "ventas_items");
+  const tFI = quoteSchemaTable(schema, "factura_items");
 
   const cond: string[] = ["r.empresa_id = $1::uuid"];
   const vals: unknown[] = [empresaId];
@@ -104,7 +108,20 @@ export async function listarRemisionesGlobal(
               COALESCE(v.numero_orden_compra, f.numero_orden_compra) AS numero_orden_compra,
               COALESCE(r.cliente_nombre, cl.empresa, cl.nombre_contacto, cl.nombre) AS cliente_nombre,
               (SELECT count(*)::int FROM ${tRI} i WHERE i.remision_id = r.id) AS total_items,
-              (SELECT COALESCE(SUM(i.cantidad),0)::numeric FROM ${tRI} i WHERE i.remision_id = r.id) AS total_cantidad
+              (SELECT COALESCE(SUM(i.cantidad),0)::numeric FROM ${tRI} i WHERE i.remision_id = r.id) AS total_cantidad,
+              -- Pendiente del documento de origen (venta o factura), no de esta
+              -- remision: es lo que falta entregarle al cliente.
+              -- CASE y no COALESCE: un SUM sobre cero filas devuelve 0, no NULL,
+              -- asi que con COALESCE la rama de facturas nunca se evaluaria.
+              CASE
+                WHEN r.venta_id IS NOT NULL THEN
+                  (SELECT COALESCE(SUM(vi.cantidad - vi.cantidad_entregada), 0)::numeric
+                     FROM ${tVI} vi WHERE vi.venta_id = r.venta_id)
+                WHEN r.factura_id IS NOT NULL THEN
+                  (SELECT COALESCE(SUM(fi.cantidad - fi.cantidad_entregada), 0)::numeric
+                     FROM ${tFI} fi WHERE fi.factura_id = r.factura_id)
+                ELSE 0
+              END AS pendiente_entrega
          ${from}
         ORDER BY r.fecha DESC, r.numero DESC
         LIMIT ${limit} OFFSET ${offset}`,
@@ -128,6 +145,7 @@ export async function listarRemisionesGlobal(
       cliente_nombre: (r.cliente_nombre as string) ?? null,
       total_items: Number(r.total_items) || 0,
       total_cantidad: Number(r.total_cantidad) || 0,
+      pendiente_entrega: Math.max(0, Number(r.pendiente_entrega) || 0),
     }));
 
     return { rows, total: Number(totalQ.rows[0].n) || 0 };
