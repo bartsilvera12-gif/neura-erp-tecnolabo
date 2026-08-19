@@ -28,6 +28,7 @@ import {
   History,
   Activity,
   ScrollText,
+  Truck,
   Percent,
   ChefHat,
   Utensils,
@@ -116,6 +117,9 @@ const MENU_STRUCTURE: MenuItem[] = [
   // Presupuestos: cotizaciones al cliente con PDF (logo + membrete Ferreteria
   // Republica). Reactivado a pedido.
   { key: "presupuestos", slug: "presupuestos", label: "Presupuestos", href: "/presupuestos", icon: FileText },
+  // Notas de remision: registro global de entregas. Slug 'ventas' porque la
+  // remision siempre cuelga de una venta (o de una factura en la rama CxC).
+  { key: "notas_remision", slug: "ventas", label: "Notas de remisión", href: "/notas-remision", icon: Truck },
   // Items gastro/legacy ocultados para ferreteria (codigo conservado por si se reactivan):
   // - Pedidos (proyectos): kanban de cocina, no aplica.
   // - Recetas: combos/insumos, no aplica.
@@ -212,7 +216,7 @@ const MENU_STRUCTURE: MenuItem[] = [
  */
 const MENU_FAMILIES: { id: string; titulo: string; keys: string[] }[] = [
   { id: "inicio", titulo: "Inicio", keys: ["dashboard"] },
-  { id: "comercial", titulo: "Comercial", keys: ["clientes", "crm", "gestion-clientes", "ventas", "presupuestos", "comisiones", "planes"] },
+  { id: "comercial", titulo: "Comercial", keys: ["clientes", "crm", "gestion-clientes", "ventas", "presupuestos", "notas_remision", "comisiones", "planes"] },
   { id: "finanzas", titulo: "Finanzas", keys: ["pagos", "cobranzas", "gastos", "otros_ingresos", "entidades_bancarias", "notas_credito", "reportes"] },
   { id: "operaciones", titulo: "Operaciones", keys: ["inventario", "compras", "recetas", "proyectos"] },
   { id: "omnicanal", titulo: "Omnicanal", keys: ["conversaciones", "conversaciones-finalizadas", "historial-omnicanal", "monitoreo", "campanas"] },
