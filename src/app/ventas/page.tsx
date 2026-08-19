@@ -102,12 +102,33 @@ export default function VentasPage() {
   /** Venta cuya nota de remision se esta resolviendo (spinner en el boton). */
   const [remisionBusy, setRemisionBusy] = useState<string | null>(null);
   const [remisionError, setRemisionError] = useState<string | null>(null);
+  /**
+   * Modo de facturacion de la empresa. El endpoint /factura renderiza el ticket
+   * AUTOIMPRESOR: con modo 'sifen' devuelve un borrador sin validez fiscal, asi
+   * que el boton solo tiene sentido en modo autoimpresor.
+   */
+  const [facturacionModo, setFacturacionModo] = useState<string | null>(null);
 
   /**
    * Nota de remision de una venta en un clic: si ya hay una emitida, la abre;
    * si no, registra la entrega del pendiente y abre el documento nuevo.
    * Para entregas parciales o para editar, esta el boton Entregas.
    */
+  useEffect(() => {
+    let cancelado = false;
+    (async () => {
+      try {
+        const res = await fetchWithSupabaseSession("/api/configuracion/facturacion-modo", { cache: "no-store" });
+        const j = await res.json();
+        if (!cancelado && res.ok && j.success) {
+          setFacturacionModo(String(j.data?.facturacion_modo?.modo ?? ""));
+        }
+      } catch {
+        /* sin modo: el boton de factura no se muestra */
+      }
+    })();
+    return () => { cancelado = true; };
+  }, []);
   async function abrirRemision(ventaId: string) {
     setRemisionBusy(ventaId);
     setRemisionError(null);
@@ -422,7 +443,7 @@ export default function VentasPage() {
                           >
                             Imprimir
                           </a>
-                          {!isAnulada && (
+                          {!isAnulada && facturacionModo === "autoimpresor" && (
                             <a
                               href={`/api/ventas/${v.id}/factura?auto=1`}
                               target="_blank"
