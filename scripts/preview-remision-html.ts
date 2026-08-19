@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { renderRemisionVentaHTML } from "@/lib/ventas/remision-venta-html";
+import { logoClienteSrc } from "@/lib/documentos/logo-embed";
 
 const html = renderRemisionVentaHTML({
   remision: {
@@ -23,7 +24,7 @@ const html = renderRemisionVentaHTML({
     { producto_nombre: "MOLDE CILINDRICO 15x30", sku: "MO-2210", cantidad_vendida: 20, en_esta_remision: 20, pendiente: 0, observacion: null },
     { producto_nombre: "TAMIZ NORMALIZADO Nº 200", sku: null, cantidad_vendida: 8, en_esta_remision: 0, pendiente: 8, observacion: null },
   ],
-}, "");
+}, logoClienteSrc());
 
 const outDir = path.join(process.cwd(), "scripts", "_out");
 fs.mkdirSync(outDir, { recursive: true });
@@ -31,5 +32,5 @@ const out = path.join(outDir, "remision-muestra.html");
 fs.writeFileSync(out, html, "utf8");
 console.log("OK  documento generado: " + out);
 console.log("OK  color de marca presente: " + html.includes("#C7202A"));
-console.log("OK  logo del cliente: " + html.includes("tecnolabo-logo"));
+console.log("OK  logo embebido: " + html.includes("src=\"data:image/"));
 console.log("OK  bloque de pendientes: " + html.includes("Pendiente de entrega"));

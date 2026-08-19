@@ -5,6 +5,7 @@ import { errorResponse } from "@/lib/api/response";
 import { API_ERRORS } from "@/lib/api/errors";
 import { getRemisionVentaParaEdicion } from "@/lib/ventas/server/remisiones-venta-pg";
 import { renderRemisionVentaHTML } from "@/lib/ventas/remision-venta-html";
+import { logoClienteSrc } from "@/lib/documentos/logo-embed";
 
 /**
  * GET /api/ventas/remisiones/[id]/pdf?auto=1
@@ -22,8 +23,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const data = await getRemisionVentaParaEdicion(schema, ctx.auth.empresa_id, id);
     if (!data) return new NextResponse("Remisión no encontrada", { status: 404 });
 
-    const origin = new URL(request.url).origin;
-    const html = renderRemisionVentaHTML(data, origin);
+    const html = renderRemisionVentaHTML(data, logoClienteSrc());
     return new NextResponse(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
   } catch (err) {
     console.error("[/api/ventas/remisiones/[id]/pdf]", err instanceof Error ? err.message : err);

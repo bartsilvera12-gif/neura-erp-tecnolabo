@@ -56,8 +56,12 @@ function fechaCorta(v: string): string {
   }
 }
 
-/** `origin` se usa para la URL absoluta del logo (necesaria al imprimir a PDF). */
-export function renderRemisionVentaHTML(data: RemisionHtmlData, origin = ""): string {
+/**
+ * `logoSrc` es el src ya resuelto del logo (data URI o ruta). Se recibe en vez
+ * de construirlo acá para que la función siga siendo pura y renderizable fuera
+ * de una request.
+ */
+export function renderRemisionVentaHTML(data: RemisionHtmlData, logoSrc: string | null = null): string {
   const r = data.remision;
   const entregadas = data.lineas.filter((l) => l.en_esta_remision > 0);
   const pendientes = data.lineas.filter((l) => l.pendiente > 0);
@@ -79,7 +83,11 @@ export function renderRemisionVentaHTML(data: RemisionHtmlData, origin = ""): st
     .map((l) => `<tr><td>${esc(l.producto_nombre)}</td><td class="r strong">${fmt(l.pendiente)}</td></tr>`)
     .join("");
 
-  const logo = EMPRESA_DOC.logoUrl ? `<img class="logo" src="${origin}${esc(EMPRESA_DOC.logoUrl)}" alt="" />` : "";
+  // alt con la razón social: si el src fallara, al menos queda el nombre y no
+  // un hueco silencioso.
+  const logo = logoSrc
+    ? `<img class="logo" src="${logoSrc}" alt="${esc(EMPRESA_DOC.razonSocialODenominacion)}" />`
+    : "";
 
   const emisorLineas = [
     ...(EMPRESA_DOC.direccion ?? []),
