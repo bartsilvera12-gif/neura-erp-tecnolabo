@@ -6,6 +6,7 @@ import EdgeScrollArea from "@/components/ui/EdgeScrollArea";
 import { FancySelect } from "@/components/ui/FancySelect";
 import MobileFab from "@/components/ui/MobileFab";
 import { getVentas } from "@/lib/ventas/storage";
+import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
 import PedidosPendientesCaja from "./PedidosPendientesCaja";
 import PedidosConsultaPendientes from "./PedidosConsultaPendientes";
 import CajaControlPanel from "@/components/caja/CajaControlPanel";
@@ -98,6 +99,50 @@ export default function VentasPage() {
   const [reloadKey, setReloadKey] = useState(0);
   const [devolucionesOn, setDevolucionesOn] = useState(false);
   const [devolverVentaId, setDevolverVentaId] = useState<string | null>(null);
+  /** Venta cuya nota de remision se esta resolviendo (spinner en el boton). */
+  const [remisionBusy, setRemisionBusy] = useState<string | null>(null);
+  const [remisionError, setRemisionError] = useState<string | null>(null);
+
+  /**
+   * Nota de remision de una venta en un clic: si ya hay una emitida, la abre;
+   * si no, registra la entrega del pendiente y abre el documento nuevo.
+   * Para entregas parciales o para editar, esta el boton Entregas.
+   */
+  async function abrirRemision(ventaId: string) {
+    setRemisionBusy(ventaId);
+    setRemisionError(null);
+    try {
+      const res = await fetchWithSupabaseSession(`/api/ventas/${ventaId}/remisiones`, { cache: "no-store" });
+      const j = await res.json();
+      if (!res.ok || !j.success) throw new Error(j.error ?? "No se pudo leer la venta.");
+
+      const emitidas = (j.data?.remisiones ?? []) as Array<{ id: string; estado: string }>;
+      const vigente = emitidas.find((r) => r.estado !== "anulada");
+      if (vigente) {
+        window.open(`/api/ventas/remisiones/${vigente.id}/pdf?auto=1`, "_blank", "noopener");
+        return;
+      }
+
+      const lineas = (j.data?.resumen?.lineas ?? []) as Array<{ venta_item_id: string; pendiente: number }>;
+      const items = lineas
+        .filter((l) => Number(l.pendiente) > 0)
+        .map((l) => ({ venta_item_id: l.venta_item_id, cantidad: Number(l.pendiente) }));
+      if (items.length === 0) throw new Error("Esta venta no tiene nada pendiente de remitir.");
+
+      const crear = await fetchWithSupabaseSession(`/api/ventas/${ventaId}/remisiones`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items }),
+      });
+      const jc = await crear.json();
+      if (!crear.ok || !jc.success) throw new Error(jc.error ?? "No se pudo generar la nota de remisión.");
+      window.open(`/api/ventas/remisiones/${jc.data.remision_id}/pdf?auto=1`, "_blank", "noopener");
+    } catch (e) {
+      setRemisionError(e instanceof Error ? e.message : "Error al generar la nota de remisión.");
+    } finally {
+      setRemisionBusy(null);
+    }
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -251,6 +296,11 @@ export default function VentasPage() {
 
         {/* Tabla — min-w fuerza scroll horizontal en mobile; columnas secundarias
             (Items, Cant total, IVA, Pago) se ocultan progresivamente. */}
+        {remisionError && (
+          <div className="mb-3 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            {remisionError}
+          </div>
+        )}
         <EdgeScrollArea>
           <table className="w-full min-w-[760px] lg:min-w-0 text-left text-sm">
             <thead>
@@ -372,7 +422,28 @@ export default function VentasPage() {
                           >
                             Imprimir
                           </a>
-                          {/* Boton Factura oculto: facturacion electronica desactivada en esta instancia */}
+                          {!isAnulada && (
+                            <a
+                              href={`/api/ventas/${v.id}/factura?auto=1`}
+                              target="_blank"
+                              rel="noopener"
+                              className="inline-flex items-center justify-center rounded-md border border-slate-300 bg-slate-800 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-slate-900"
+                              title="Emitir e imprimir la factura de esta venta"
+                            >
+                              Factura
+                            </a>
+                          )}
+                          {!isAnulada && (
+                            <button
+                              type="button"
+                              onClick={() => void abrirRemision(v.id)}
+                              disabled={remisionBusy === v.id}
+                              className="inline-flex items-center justify-center rounded-md border border-sky-300 bg-sky-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-sky-700 disabled:opacity-50"
+                              title="Nota de remisión: abre la emitida o genera una por el total"
+                            >
+                              {remisionBusy === v.id ? "Generando…" : "Remisión"}
+                            </button>
+                          )}
                           {!isAnulada && (
                             <a
                               href={`/ventas/${v.id}/remisiones`}
