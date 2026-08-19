@@ -57,6 +57,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       {
         venta_id: id,
         observacion: typeof body.observacion === "string" ? body.observacion.slice(0, 2000) : null,
+        fecha: typeof body.fecha === "string" ? body.fecha : null,
         items,
       },
       { id: ctx.auth.usuarioCatalogId ?? null, nombre: ctx.auth.nombre ?? null, email: ctx.auth.user?.email ?? null },

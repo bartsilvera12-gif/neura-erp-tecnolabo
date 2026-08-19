@@ -373,7 +373,7 @@ export default function VentasPage() {
                             Imprimir
                           </a>
                           {/* Boton Factura oculto: facturacion electronica desactivada en esta instancia */}
-                          {v.genera_nota_remision && (
+                          {!isAnulada && (
                             <a
                               href={`/ventas/${v.id}/remisiones`}
                               className="inline-flex items-center justify-center rounded-md border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-medium text-sky-700 hover:bg-sky-100 transition-colors"

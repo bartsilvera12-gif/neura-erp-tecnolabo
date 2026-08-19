@@ -158,7 +158,18 @@ export interface RemisionVentaItemInput {
 export interface CrearRemisionVentaInput {
   venta_id: string;
   observacion?: string | null;
+  /** Fecha de la entrega (ISO o YYYY-MM-DD). Permite remitir una venta de dias atras. */
+  fecha?: string | null;
   items: RemisionVentaItemInput[];
+}
+
+/** Acepta 'YYYY-MM-DD' o ISO completo. Devuelve null si no es una fecha usable. */
+function fechaValida(v: unknown): string | null {
+  const s = String(v ?? "").trim();
+  if (!s) return null;
+  const soloFecha = s.length === 10 && s[4] === "-" && s[7] === "-";
+  const d = new Date(soloFecha ? s + "T12:00:00" : s);
+  return Number.isNaN(d.getTime()) ? null : d.toISOString();
 }
 
 /**
@@ -238,10 +249,11 @@ export async function crearRemisionVenta(
 
     const rem = await client.query(
       `INSERT INTO ${tR} (
-         empresa_id, numero, venta_id, cliente_id, observacion, estado,
+         empresa_id, numero, venta_id, cliente_id, observacion, estado, fecha,
          usuario_creador_id, usuario_creador_nombre, confirmada_at,
          usuario_confirmador_id, usuario_confirmador_nombre
-       ) VALUES ($1::uuid, $2, $3::uuid, $4::uuid, $5, 'confirmada', $6::uuid, $7, now(), $6::uuid, $7)
+       ) VALUES ($1::uuid, $2, $3::uuid, $4::uuid, $5, 'confirmada', COALESCE($8::timestamptz, now()),
+                 $6::uuid, $7, now(), $6::uuid, $7)
        RETURNING id`,
       [
         empresaId,
@@ -251,6 +263,7 @@ export async function crearRemisionVenta(
         input.observacion ?? null,
         usuario.id ?? null,
         usuario.nombre ?? null,
+        fechaValida(input.fecha),
       ],
     );
     const remisionId = rem.rows[0].id as string;
@@ -317,6 +330,7 @@ export async function editarRemisionVenta(
   items: RemisionVentaItemInput[],
   observacion: string | null | undefined,
   usuario: Usuario,
+  fecha?: string | null,
 ): Promise<void> {
   assertAllowedChatDataSchema(schema);
   const tR = quoteSchemaTable(schema, "notas_remision");
@@ -396,6 +410,13 @@ export async function editarRemisionVenta(
     if (observacion !== undefined) {
       await client.query(`UPDATE ${tR} SET observacion = $1, updated_at = now() WHERE id = $2::uuid`, [
         observacion ?? null,
+        remisionId,
+      ]);
+    }
+    const fechaIso = fechaValida(fecha);
+    if (fechaIso) {
+      await client.query(`UPDATE ${tR} SET fecha = $1::timestamptz, updated_at = now() WHERE id = $2::uuid`, [
+        fechaIso,
         remisionId,
       ]);
     }

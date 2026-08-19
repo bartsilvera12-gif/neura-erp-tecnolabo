@@ -50,10 +50,12 @@ type Detalle = {
   lineas: LineaEd[];
 };
 
+// El estado refleja lo REMITIDO (documentado en una nota de remisión), no lo
+// que el cliente se llevó del mostrador.
 const ESTADO_LABEL: Record<string, string> = {
-  pendiente: "Sin entregar",
-  parcialmente_entregada: "Entrega parcial",
-  entregada: "Entregada",
+  pendiente: "Sin remitir",
+  parcialmente_entregada: "Remitido parcial",
+  entregada: "Remitido",
 };
 const ESTADO_BADGE: Record<string, string> = {
   pendiente: "bg-slate-100 text-slate-700",
@@ -80,11 +82,14 @@ export default function RemisionesVentaPage() {
   // Nueva entrega: cantidad por venta_item_id.
   const [nueva, setNueva] = useState<Record<string, string>>({});
   const [obsNueva, setObsNueva] = useState("");
+  // Fecha de la entrega: por defecto hoy, pero se puede remitir una venta de dias atras.
+  const [fechaNueva, setFechaNueva] = useState(() => new Date().toISOString().slice(0, 10));
 
   // Edición de una remisión existente.
   const [detalle, setDetalle] = useState<Detalle | null>(null);
   const [edit, setEdit] = useState<Record<string, string>>({});
   const [obsEdit, setObsEdit] = useState("");
+  const [fechaEdit, setFechaEdit] = useState("");
 
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -124,13 +129,14 @@ export default function RemisionesVentaPage() {
       const res = await fetchWithSupabaseSession(`/api/ventas/${ventaId}/remisiones`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items, observacion: obsNueva.trim() || null }),
+        body: JSON.stringify({ items, observacion: obsNueva.trim() || null, fecha: fechaNueva || null }),
       });
       const j = await res.json();
       if (!res.ok || !j.success) throw new Error(j.error ?? "No se pudo registrar la entrega.");
       setOk(`Remisión ${j.data.numero} registrada.`);
       setNueva({});
       setObsNueva("");
+      setFechaNueva(new Date().toISOString().slice(0, 10));
       await cargar();
       window.open(`/api/ventas/remisiones/${j.data.remision_id}/pdf?auto=1`, "_blank", "noopener");
     } catch (e) {
@@ -149,6 +155,7 @@ export default function RemisionesVentaPage() {
       const d = j.data as Detalle;
       setDetalle(d);
       setObsEdit(d.remision.observacion ?? "");
+      setFechaEdit(String(d.remision.fecha ?? "").slice(0, 10));
       const map: Record<string, string> = {};
       for (const l of d.lineas) map[l.venta_item_id] = String(l.en_esta_remision || "");
       setEdit(map);
@@ -170,7 +177,7 @@ export default function RemisionesVentaPage() {
       const res = await fetchWithSupabaseSession(`/api/ventas/remisiones/${detalle.remision.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items, observacion: obsEdit.trim() || null }),
+        body: JSON.stringify({ items, observacion: obsEdit.trim() || null, fecha: fechaEdit || null }),
       });
       const j = await res.json();
       if (!res.ok || !j.success) throw new Error(j.error ?? "No se pudo guardar.");
@@ -294,7 +301,17 @@ export default function RemisionesVentaPage() {
             </table>
           </div>
 
-          <div className="mt-3">
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-[200px_1fr]">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-slate-600">Fecha de la entrega</label>
+              <input
+                type="date"
+                value={fechaNueva}
+                onChange={(e) => setFechaNueva(e.target.value)}
+                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
             <label className="mb-1 block text-xs font-medium text-slate-600">Observación (opcional)</label>
             <input
               value={obsNueva}
@@ -302,6 +319,7 @@ export default function RemisionesVentaPage() {
               placeholder="Ej.: falta stock del ítem 2, se entrega la semana próxima"
               className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
             />
+            </div>
           </div>
 
           <div className="mt-4 flex justify-end gap-2">
@@ -444,13 +462,24 @@ export default function RemisionesVentaPage() {
               </table>
             </div>
 
-            <div className="mt-3">
-              <label className="mb-1 block text-xs font-medium text-slate-600">Observación</label>
-              <input
-                value={obsEdit}
-                onChange={(e) => setObsEdit(e.target.value)}
-                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-              />
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-[200px_1fr]">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-600">Fecha de la entrega</label>
+                <input
+                  type="date"
+                  value={fechaEdit}
+                  onChange={(e) => setFechaEdit(e.target.value)}
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-600">Observación</label>
+                <input
+                  value={obsEdit}
+                  onChange={(e) => setObsEdit(e.target.value)}
+                  className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+                />
+              </div>
             </div>
 
             <div className="mt-5 flex justify-end gap-2">
