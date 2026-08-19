@@ -90,6 +90,8 @@ export default function RemisionesVentaPage() {
   const [edit, setEdit] = useState<Record<string, string>>({});
   const [obsEdit, setObsEdit] = useState("");
   const [fechaEdit, setFechaEdit] = useState("");
+  /** Destinatario: puede diferir del cliente de la venta (entrega a un tercero). */
+  const [destinatarioEdit, setDestinatarioEdit] = useState("");
 
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -156,6 +158,7 @@ export default function RemisionesVentaPage() {
       setDetalle(d);
       setObsEdit(d.remision.observacion ?? "");
       setFechaEdit(String(d.remision.fecha ?? "").slice(0, 10));
+      setDestinatarioEdit(d.remision.cliente_nombre ?? "");
       const map: Record<string, string> = {};
       for (const l of d.lineas) map[l.venta_item_id] = String(l.en_esta_remision || "");
       setEdit(map);
@@ -177,7 +180,7 @@ export default function RemisionesVentaPage() {
       const res = await fetchWithSupabaseSession(`/api/ventas/remisiones/${detalle.remision.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items, observacion: obsEdit.trim() || null, fecha: fechaEdit || null }),
+        body: JSON.stringify({ items, observacion: obsEdit.trim() || null, fecha: fechaEdit || null, cliente_nombre: destinatarioEdit.trim() }),
       });
       const j = await res.json();
       if (!res.ok || !j.success) throw new Error(j.error ?? "No se pudo guardar.");
@@ -462,6 +465,18 @@ export default function RemisionesVentaPage() {
               </table>
             </div>
 
+            <div className="mt-3">
+              <label className="mb-1 block text-xs font-medium text-slate-600">Destinatario</label>
+              <input
+                value={destinatarioEdit}
+                onChange={(e) => setDestinatarioEdit(e.target.value)}
+                placeholder="A nombre de quién se entrega"
+                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
+              />
+              <p className="mt-1 text-xs text-slate-500">
+                Por defecto el cliente de la venta. Cambialo si la mercadería se entrega a un tercero.
+              </p>
+            </div>
             <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-[200px_1fr]">
               <div>
                 <label className="mb-1 block text-xs font-medium text-slate-600">Fecha de la entrega</label>

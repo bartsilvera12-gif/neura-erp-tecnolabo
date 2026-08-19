@@ -244,8 +244,11 @@ export async function crearRemisionVenta(
   try {
     await client.query("BEGIN");
 
+    const tCli = quoteSchemaTable(schema, "clientes");
     const v = await client.query(
-      `SELECT cliente_id FROM ${tV} WHERE id = $1::uuid AND empresa_id = $2::uuid FOR UPDATE`,
+      `SELECT v.cliente_id, COALESCE(c.empresa, c.nombre_contacto, c.nombre) AS cliente_nombre
+         FROM ${tV} v LEFT JOIN ${tCli} c ON c.id = v.cliente_id
+        WHERE v.id = $1::uuid AND v.empresa_id = $2::uuid FOR UPDATE OF v`,
       [input.venta_id, empresaId],
     );
     if (v.rowCount === 0) throw new Error("Venta no encontrada.");
@@ -264,10 +267,10 @@ export async function crearRemisionVenta(
 
     const rem = await client.query(
       `INSERT INTO ${tR} (
-         empresa_id, numero, venta_id, cliente_id, observacion, estado, fecha,
+         empresa_id, numero, venta_id, cliente_id, cliente_nombre, observacion, estado, fecha,
          usuario_creador_id, usuario_creador_nombre, confirmada_at,
          usuario_confirmador_id, usuario_confirmador_nombre
-       ) VALUES ($1::uuid, $2, $3::uuid, $4::uuid, $5, 'confirmada', COALESCE($8::timestamptz, now()),
+       ) VALUES ($1::uuid, $2, $3::uuid, $4::uuid, $9, $5, 'confirmada', COALESCE($8::timestamptz, now()),
                  $6::uuid, $7, now(), $6::uuid, $7)
        RETURNING id`,
       [
@@ -279,6 +282,7 @@ export async function crearRemisionVenta(
         usuario.id ?? null,
         usuario.nombre ?? null,
         fechaValida(input.fecha),
+        v.rows[0].cliente_nombre ?? null,
       ],
     );
     const remisionId = rem.rows[0].id as string;
@@ -346,6 +350,8 @@ export async function editarRemisionVenta(
   observacion: string | null | undefined,
   usuario: Usuario,
   fecha?: string | null,
+  /** Destinatario editable: puede no ser el nombre del cliente de la venta. */
+  destinatario?: string | null,
 ): Promise<void> {
   assertAllowedChatDataSchema(schema);
   const tR = quoteSchemaTable(schema, "notas_remision");
@@ -425,6 +431,13 @@ export async function editarRemisionVenta(
     if (observacion !== undefined) {
       await client.query(`UPDATE ${tR} SET observacion = $1, updated_at = now() WHERE id = $2::uuid`, [
         observacion ?? null,
+        remisionId,
+      ]);
+    }
+    if (destinatario !== undefined) {
+      const d = String(destinatario ?? "").trim();
+      await client.query(`UPDATE ${tR} SET cliente_nombre = $1, updated_at = now() WHERE id = $2::uuid`, [
+        d || null,
         remisionId,
       ]);
     }

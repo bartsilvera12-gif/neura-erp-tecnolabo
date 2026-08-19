@@ -52,6 +52,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       typeof body.observacion === "string" ? body.observacion.slice(0, 2000) : undefined,
       { id: ctx.auth.usuarioCatalogId ?? null, nombre: ctx.auth.nombre ?? null, email: ctx.auth.user?.email ?? null },
       typeof body.fecha === "string" ? body.fecha : null,
+      typeof body.cliente_nombre === "string" ? body.cliente_nombre.slice(0, 200) : undefined,
     );
     const data = await getRemisionVentaParaEdicion(schema, ctx.auth.empresa_id, id);
     return NextResponse.json(successResponse(data));

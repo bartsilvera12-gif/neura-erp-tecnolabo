@@ -235,16 +235,25 @@ export async function crearRemision(schema: string, empresaId: string, input: Cr
   const client = await pool().connect();
   try {
     await client.query("BEGIN");
-    const fac = await client.query(`SELECT cliente_id FROM ${tF} WHERE id = $1::uuid AND empresa_id = $2::uuid`, [input.factura_id, empresaId]);
+    const tCli = quoteSchemaTable(schema, "clientes");
+    // Se resuelve el nombre del destinatario y se GUARDA en la remision: asi el
+    // documento no depende de que el cliente siga existiendo, y ademas queda
+    // editable despues (puede entregarse a un tercero).
+    const fac = await client.query(
+      `SELECT f.cliente_id, COALESCE(c.empresa, c.nombre_contacto, c.nombre) AS cliente_nombre
+         FROM ${tF} f LEFT JOIN ${tCli} c ON c.id = f.cliente_id
+        WHERE f.id = $1::uuid AND f.empresa_id = $2::uuid`,
+      [input.factura_id, empresaId],
+    );
     if (fac.rowCount === 0) throw new Error("Factura no encontrada.");
 
     const { numero } = await siguienteCorrelativoTx(client, schema, empresaId, "remision", { prefijo: "REM" });
     const rem = await client.query(
       `INSERT INTO ${tR} (
-         empresa_id, numero, factura_id, cliente_id, deposito_id, sucursal_id, observacion, estado,
+         empresa_id, numero, factura_id, cliente_id, cliente_nombre, deposito_id, sucursal_id, observacion, estado,
          firma_entrega, firma_recepcion, usuario_creador_id, usuario_creador_nombre
-       ) VALUES ($1::uuid, $2, $3::uuid, $4::uuid, $5::uuid, $6::uuid, $7, 'borrador', $8, $9, $10::uuid, $11) RETURNING id`,
-      [empresaId, numero, input.factura_id, fac.rows[0].cliente_id ?? null, input.deposito_id ?? null, input.sucursal_id ?? null, input.observacion ?? null, input.firma_entrega ?? null, input.firma_recepcion ?? null, usuario.id ?? null, usuario.nombre ?? null],
+       ) VALUES ($1::uuid, $2, $3::uuid, $4::uuid, $12, $5::uuid, $6::uuid, $7, 'borrador', $8, $9, $10::uuid, $11) RETURNING id`,
+      [empresaId, numero, input.factura_id, fac.rows[0].cliente_id ?? null, input.deposito_id ?? null, input.sucursal_id ?? null, input.observacion ?? null, input.firma_entrega ?? null, input.firma_recepcion ?? null, usuario.id ?? null, usuario.nombre ?? null, fac.rows[0].cliente_nombre ?? null],
     );
     const remisionId = rem.rows[0].id as string;
 
@@ -410,7 +419,15 @@ export async function getRemisionParaEdicion(schema: string, empresaId: string, 
   const tRI = quoteSchemaTable(schema, "notas_remision_items");
   const client = await pool().connect();
   try {
-    const remQ = await client.query(`SELECT * FROM ${tR} WHERE id = $1::uuid AND empresa_id = $2::uuid`, [remisionId, empresaId]);
+    const tCli = quoteSchemaTable(schema, "clientes");
+    // COALESCE con el cliente: las remisiones creadas antes de guardar el nombre
+    // tienen cliente_nombre en NULL y mostraban el destinatario vacio.
+    const remQ = await client.query(
+      `SELECT r.*, COALESCE(r.cliente_nombre, c.empresa, c.nombre_contacto, c.nombre) AS destinatario
+         FROM ${tR} r LEFT JOIN ${tCli} c ON c.id = r.cliente_id
+        WHERE r.id = $1::uuid AND r.empresa_id = $2::uuid`,
+      [remisionId, empresaId],
+    );
     if (remQ.rowCount === 0) return null;
     const rem = remQ.rows[0];
     const itemsQ = await client.query(`SELECT factura_item_id, cantidad, observacion FROM ${tRI} WHERE remision_id = $1::uuid`, [remisionId]);
@@ -443,7 +460,7 @@ export async function getRemisionParaEdicion(schema: string, empresaId: string, 
         factura_id: rem.factura_id as string,
         numero_factura: resumen.numero_factura,
         numero_orden_compra: resumen.numero_orden_compra,
-        cliente_nombre: rem.cliente_nombre ?? null,
+        cliente_nombre: (rem.destinatario as string) ?? rem.cliente_nombre ?? null,
         observacion: rem.observacion ?? null,
         usuario_creador_nombre: rem.usuario_creador_nombre ?? null,
         usuario_confirmador_nombre: rem.usuario_confirmador_nombre ?? null,
