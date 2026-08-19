@@ -43,6 +43,8 @@ export default function RemisionesFacturaPage() {
   const [modo, setModo] = useState<"ver" | "editar" | null>(null);
   const [edCant, setEdCant] = useState<Record<string, string>>({});
   const [edObs, setEdObs] = useState("");
+  /** Destinatario editable de la remisión (puede no ser el cliente de la factura). */
+  const [edDest, setEdDest] = useState("");
   const [modalBusy, setModalBusy] = useState(false);
   const [modalErr, setModalErr] = useState<string | null>(null);
 
@@ -114,9 +116,10 @@ export default function RemisionesFacturaPage() {
       for (const l of d.lineas) init[l.factura_item_id] = String(l.en_esta_remision || 0);
       setEdCant(init);
       setEdObs(d.remision.observacion ?? "");
+      setEdDest(d.remision.cliente_nombre ?? "");
     } catch { setModalErr("Error de red."); } finally { setModalBusy(false); }
   }
-  function cerrarModal() { setDetalle(null); setModo(null); setEdCant({}); setEdObs(""); setModalErr(null); }
+  function cerrarModal() { setDetalle(null); setModo(null); setEdCant({}); setEdObs(""); setEdDest(""); setModalErr(null); }
 
   async function guardarEdicion() {
     if (!detalle || modalBusy) return;
@@ -133,7 +136,7 @@ export default function RemisionesFacturaPage() {
     try {
       const res = await fetchWithSupabaseSession(`/api/remisiones/${detalle.remision.id}`, {
         method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items: items.filter((it) => it.cantidad > 0), observacion: edObs.trim() || null }),
+        body: JSON.stringify({ items: items.filter((it) => it.cantidad > 0), observacion: edObs.trim() || null, cliente_nombre: edDest.trim() }),
       });
       const body = await res.json();
       if (!res.ok || body?.success === false) { setModalErr(body?.error ?? "No se pudo guardar."); return; }
@@ -330,6 +333,17 @@ export default function RemisionesFacturaPage() {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+                  <div className="mt-3">
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Destinatario</label>
+                    {modo === "ver"
+                      ? <p className="text-sm text-gray-700">{detalle.remision.cliente_nombre || "—"}</p>
+                      : (
+                        <>
+                          <input value={edDest} onChange={(e) => setEdDest(e.target.value)} className={inputClass} placeholder="A nombre de quién se entrega" />
+                          <p className="mt-1 text-xs text-slate-500">Por defecto el cliente de la factura. Cambialo si la mercadería se entrega a un tercero.</p>
+                        </>
+                      )}
                   </div>
                   <div className="mt-3">
                     <label className="block text-xs font-medium text-gray-600 mb-1">Observación</label>

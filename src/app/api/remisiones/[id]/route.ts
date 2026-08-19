@@ -64,7 +64,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       schema,
       ctx.auth.empresa_id,
       id,
-      { items, observacion: typeof body.observacion === "string" ? body.observacion : detalle.remision.observacion },
+      {
+        items,
+        observacion: typeof body.observacion === "string" ? body.observacion : detalle.remision.observacion,
+        cliente_nombre: typeof body.cliente_nombre === "string" ? body.cliente_nombre.slice(0, 200) : undefined,
+      },
       { id: ctx.auth.usuarioCatalogId ?? null, nombre: ctx.auth.nombre ?? null, email: ctx.auth.user?.email ?? null },
     );
     return NextResponse.json(successResponse({ ok: true }));

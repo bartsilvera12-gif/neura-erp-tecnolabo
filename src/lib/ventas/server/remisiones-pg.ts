@@ -476,6 +476,8 @@ export async function getRemisionParaEdicion(schema: string, empresaId: string, 
 export interface EditarRemisionInput {
   items: RemisionItemInput[];
   observacion?: string | null;
+  /** Destinatario: por defecto el cliente de la factura, editable a mano. */
+  cliente_nombre?: string | null;
 }
 
 /**
@@ -590,6 +592,10 @@ export async function editarRemision(schema: string, empresaId: string, remision
     }
 
     await client.query(`UPDATE ${tR} SET observacion = $1, updated_at = now() WHERE id = $2::uuid AND empresa_id = $3::uuid`, [input.observacion ?? rem.observacion ?? null, remisionId, empresaId]);
+    if (input.cliente_nombre !== undefined) {
+      const dest = String(input.cliente_nombre ?? "").trim();
+      await client.query(`UPDATE ${tR} SET cliente_nombre = $1, updated_at = now() WHERE id = $2::uuid AND empresa_id = $3::uuid`, [dest || null, remisionId, empresaId]);
+    }
     if (esConfirmada) await recomputarEstadoEntregaFactura(client, schema, empresaId, rem.factura_id);
 
     await registrarAuditoriaTx(client, schema, {
