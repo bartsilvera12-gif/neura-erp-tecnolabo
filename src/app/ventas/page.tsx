@@ -160,9 +160,17 @@ export default function VentasPage() {
       if (!res.ok || !j.success) throw new Error(j.error ?? "No se pudo leer la venta.");
 
       const emitidas = (j.data?.remisiones ?? []) as Array<{ id: string; estado: string }>;
-      const vigente = emitidas.find((r) => r.estado !== "anulada");
-      if (vigente) {
-        window.open(`/api/ventas/remisiones/${vigente.id}/pdf?auto=1`, "_blank", "noopener");
+      const vigentes = emitidas.filter((r) => r.estado !== "anulada");
+
+      // Con varias remisiones no se puede adivinar cual quiere: antes abria la
+      // mas reciente en silencio, y quien acababa de editar OTRA imprimia la
+      // equivocada sin enterarse. Se manda a elegir.
+      if (vigentes.length > 1) {
+        window.location.href = `/ventas/${ventaId}/remisiones`;
+        return;
+      }
+      if (vigentes.length === 1) {
+        window.open(`/api/ventas/remisiones/${vigentes[0]!.id}/pdf?auto=1`, "_blank", "noopener");
         return;
       }
 
