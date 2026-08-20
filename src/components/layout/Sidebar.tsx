@@ -153,6 +153,9 @@ const MENU_STRUCTURE: MenuItem[] = [
   },
   { key: "cobranzas", slug: "pagos", label: "Cobranzas", href: "/cobranzas", icon: Banknote },
   { key: "pagos", slug: "pagos", label: "Pagos", href: "/pagos", icon: Banknote },
+  // Recibos: registro global de los recibos de dinero emitidos al cobrar.
+  // Slug 'pagos': el recibo nace de un cobro, hereda ese permiso.
+  { key: "recibos", slug: "pagos", label: "Recibos", href: "/recibos", icon: Receipt },
   { key: "gastos", slug: "gastos", label: "Gastos", href: "/gastos", icon: Receipt },
   // Otros ingresos: ingresos manuales que NO son ventas de productos (cartones,
   // servicios, alquileres). Suman a caja, no tocan inventario. Slug 'ventas'
@@ -217,7 +220,7 @@ const MENU_STRUCTURE: MenuItem[] = [
 const MENU_FAMILIES: { id: string; titulo: string; keys: string[] }[] = [
   { id: "inicio", titulo: "Inicio", keys: ["dashboard"] },
   { id: "comercial", titulo: "Comercial", keys: ["clientes", "crm", "gestion-clientes", "ventas", "presupuestos", "notas_remision", "comisiones", "planes"] },
-  { id: "finanzas", titulo: "Finanzas", keys: ["pagos", "cobranzas", "gastos", "otros_ingresos", "entidades_bancarias", "notas_credito", "reportes"] },
+  { id: "finanzas", titulo: "Finanzas", keys: ["pagos", "recibos", "cobranzas", "gastos", "otros_ingresos", "entidades_bancarias", "notas_credito", "reportes"] },
   { id: "operaciones", titulo: "Operaciones", keys: ["inventario", "compras", "recetas", "proyectos"] },
   { id: "omnicanal", titulo: "Omnicanal", keys: ["conversaciones", "conversaciones-finalizadas", "historial-omnicanal", "monitoreo", "campanas"] },
   { id: "marketing", titulo: "Marketing y Automatización", keys: ["marketing", "marketing_ops", "sorteos"] },

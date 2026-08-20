@@ -3,6 +3,36 @@ import { getTenantSupabaseFromAuthWithRol } from "@/lib/supabase/tenant-api";
 import { successResponse, errorResponse } from "@/lib/api/response";
 import { API_ERRORS } from "@/lib/api/errors";
 import { crearOReusarRecibo, ReciboError, type OrigenRecibo } from "@/lib/recibos/server/recibos-pg";
+import { fetchDataSchemaForEmpresaId } from "@/lib/supabase/empresa-data-schema";
+import { listarRecibosGlobal } from "@/lib/recibos/server/recibos-listado-pg";
+
+/** GET /api/recibos-dinero — listado global con filtros (auditoria). */
+export async function GET(request: NextRequest) {
+  try {
+    const ctx = await getTenantSupabaseFromAuthWithRol(request);
+    if (!ctx) return NextResponse.json(errorResponse(API_ERRORS.UNAUTHORIZED), { status: 401 });
+    const schema = await fetchDataSchemaForEmpresaId(ctx.auth.empresa_id);
+
+    const sp = new URL(request.url).searchParams;
+    const str = (k: string) => { const v = sp.get(k); return v && v.trim() ? v.trim() : null; };
+
+    const out = await listarRecibosGlobal(schema, ctx.auth.empresa_id, {
+      desde: str("desde"),
+      hasta: str("hasta"),
+      clienteId: str("cliente_id"),
+      origen: str("origen"),
+      metodoPago: str("metodo_pago"),
+      soloVigentes: sp.get("solo_vigentes") === "1",
+      texto: str("q"),
+      limit: Number(sp.get("limit")) || 200,
+      offset: Number(sp.get("offset")) || 0,
+    });
+    return NextResponse.json(successResponse(out));
+  } catch (err) {
+    console.error("[/api/recibos-dinero GET]", err instanceof Error ? err.message : err);
+    return NextResponse.json(errorResponse("No se pudieron cargar los recibos."), { status: 500 });
+  }
+}
 
 /**
  * POST /api/recibos-dinero — crea (o reutiliza si ya existe) un recibo de dinero.
