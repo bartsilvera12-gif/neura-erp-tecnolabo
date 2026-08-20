@@ -61,6 +61,19 @@ export default function RemisionesFacturaPage() {
 
   useEffect(() => { void cargar(); }, [cargar]);
 
+  // ?editar=<id> abre la edicion de esa remision al entrar, para que el lapiz del
+  // listado global no deje al usuario buscando la fila dentro de la pagina.
+  useEffect(() => {
+    if (remisiones.length === 0) return;
+    let pedido: string | null = null;
+    try { pedido = new URLSearchParams(window.location.search).get("editar"); } catch { pedido = null; }
+    if (!pedido) return;
+    if (!remisiones.some((r) => r.id === pedido)) return;
+    void abrirModal(pedido, "editar");
+    try { window.history.replaceState({}, "", window.location.pathname); } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [remisiones]);
+
   const hayDisponible = useMemo(() => (resumen?.lineas ?? []).some((l) => l.disponible > 0), [resumen]);
 
   async function crear(confirmar: boolean) {

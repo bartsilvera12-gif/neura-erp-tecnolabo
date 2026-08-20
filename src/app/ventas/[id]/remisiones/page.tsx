@@ -113,6 +113,20 @@ export default function RemisionesVentaPage() {
     if (ventaId) void cargar();
   }, [ventaId, cargar]);
 
+  // ?editar=<id> abre la edicion de esa remision al entrar. Lo usa el lapiz del
+  // listado global, para no obligar a un segundo clic ya dentro de la pagina.
+  useEffect(() => {
+    if (cargando || remisiones.length === 0) return;
+    let pedido: string | null = null;
+    try { pedido = new URLSearchParams(window.location.search).get("editar"); } catch { pedido = null; }
+    if (!pedido) return;
+    if (!remisiones.some((r) => r.id === pedido)) return;
+    void abrirEdicion(pedido);
+    // Se limpia el parametro para que recargar no vuelva a abrir el modal.
+    try { window.history.replaceState({}, "", window.location.pathname); } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cargando, remisiones]);
+
   const hayPendiente = useMemo(() => (resumen?.lineas ?? []).some((l) => l.pendiente > 0), [resumen]);
 
   async function crearEntrega() {

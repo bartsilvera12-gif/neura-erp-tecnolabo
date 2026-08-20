@@ -240,7 +240,13 @@ export default function NotasRemisionListClient() {
                     : r.factura_numero
                       ? { txt: r.factura_numero, sub: null }
                       : { txt: r.venta_numero ?? "—", sub: "sin factura emitida" };
-                  const destino = r.venta_id ? `/ventas/${r.venta_id}/remisiones` : r.factura_id ? `/facturas/${r.factura_id}/remisiones` : null;
+                  // Se pasa ?editar=<remision> para abrir la edicion de una: sin esto
+                  // el lapiz solo dejaba en la pagina y habia que buscar la fila.
+                  const destino = r.venta_id
+                    ? `/ventas/${r.venta_id}/remisiones?editar=${r.id}`
+                    : r.factura_id
+                      ? `/facturas/${r.factura_id}/remisiones?editar=${r.id}`
+                      : null;
                   const pdf = r.venta_id ? `/api/ventas/remisiones/${r.id}/pdf?auto=1` : `/api/remisiones/${r.id}/pdf?auto=1`;
                   return (
                     <tr key={r.id} className="border-b border-slate-100 hover:bg-slate-50/60">
@@ -289,7 +295,7 @@ export default function NotasRemisionListClient() {
                             <Printer className="h-4 w-4" />
                           </a>
                           {destino && r.estado !== "anulada" && (
-                            <Link href={destino} title="Editar cantidades y fecha" className="rounded p-1.5 text-slate-500 hover:bg-slate-100">
+                            <Link href={destino} title="Editar destinatario, cantidades y fecha" className="rounded p-1.5 text-slate-500 hover:bg-slate-100">
                               <Pencil className="h-4 w-4" />
                             </Link>
                           )}
