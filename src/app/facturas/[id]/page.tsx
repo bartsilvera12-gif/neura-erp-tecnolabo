@@ -331,6 +331,17 @@ function FacturaDetalleInner() {
         </dl>
       </div>
 
+      {/*
+        La OC viaja al KuDE dentro del XML (gOpeDE/dInfoEmi). Una vez firmado el
+        DE, el KuDE se dibuja desde ese XML: cargarla despues ya no la hace
+        aparecer en el impreso. Por eso el aviso va ANTES de emitir.
+      */}
+      {!factura.numero_orden_compra && (
+        <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+          Esta factura no tiene N.º de Orden de Compra. Si el cliente la necesita impresa, cargala arriba ANTES de generar el documento electrónico: el KuDE se dibuja desde el XML firmado, así que agregarla después no la muestra en el impreso.
+        </div>
+      )}
+
       <FacturaElectronicaPanel
         facturaId={id}
         clienteId={factura.cliente_id}
