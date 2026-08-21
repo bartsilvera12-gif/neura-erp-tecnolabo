@@ -108,3 +108,62 @@ if (fallos > 0) {
   process.exit(1);
 }
 console.log("RESULTADO: todo OK");
+
+// ─────────────────────────────────────────────────────────────────────────────
+// El tramo que fallaba en produccion: la fila de `facturas` -> payload -> XML.
+// La prueba de arriba armaba el payload a mano y por eso no detecto que el
+// mapeo intermedio descartaba `numero_orden_compra`.
+// ─────────────────────────────────────────────────────────────────────────────
+import { validateAndBuildSifenPayload, type BuildSifenPayloadInput } from "@/lib/sifen/build-payload";
+
+console.log("");
+console.log("-- fila de facturas -> payload (mapeo intermedio) --");
+
+const filaFactura = {
+  id: "00000000-0000-0000-0000-000000000001",
+  cliente_id: "00000000-0000-0000-0000-000000000002",
+  numero_factura: "FAC-000015",
+  fecha: "2026-08-20T10:56:11.000Z",
+  tipo: "contado",
+  moneda: "GS",
+  monto: 3150000,
+  saldo: 0,
+  numero_orden_compra: "OC- 348",
+};
+
+const construido = validateAndBuildSifenPayload({
+  factura: filaFactura,
+  items: [{ descripcion: "MOLDE CONICO", cantidad: 7, precio_unitario: 450000, iva: 286364, total: 3150000 }],
+  cliente: {
+    id: filaFactura.cliente_id, empresa: "PARGOS TECH S.A.", nombre_contacto: null, nombre: null,
+    ruc: "80088565-1", documento: null, direccion: "Avda. Medicos del Chaco", telefono: "0952133841",
+    email: null, pais: "PRY",
+  },
+  config: {
+    activo: true, ruc: "80167938-9", razon_social: "TECNOLABO EAS UNIPERSONAL",
+    timbrado_numero: "19058619", timbrado_fecha_inicio_vigencia: "2026-08-17",
+    establecimiento: "001", punto_expedicion: "002", ambiente: "test",
+    direccion_fiscal: "Jacinto Herrera C/ Amambay",
+    actividad_economica_codigo: "46102", actividad_economica_descripcion: "VENTA AL POR MAYOR",
+  },
+  facturaElectronica: { id: "00000000-0000-0000-0000-000000000003", estado_sifen: "borrador" },
+} as unknown as BuildSifenPayloadInput);
+
+if (!construido.ok) {
+  console.log("  FALLA  no se pudo construir el payload: " + construido.error);
+  fallos++;
+} else {
+  const oc = construido.payload.documento.numero_orden_compra;
+  check(oc === "OC- 348", "el payload conserva la OC de la fila (" + JSON.stringify(oc) + ")");
+
+  const xmlReal = buildOfficialRdeFacturaElectronicaXml(construido.payload, opts);
+  check(xmlReal.includes("<dInfoEmi>"), "el XML armado desde la fila lleva dInfoEmi");
+  check(xmlReal.includes("Orden de Compra: OC- 348"), "dInfoEmi lleva el numero correcto");
+}
+
+console.log("");
+if (fallos > 0) {
+  console.log("RESULTADO FINAL: " + fallos + " comprobacion(es) fallaron");
+  process.exit(1);
+}
+console.log("RESULTADO FINAL: todo OK");

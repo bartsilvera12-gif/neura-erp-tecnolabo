@@ -98,6 +98,10 @@ export async function loadValidatedSifenPayload(
       moneda: factura.moneda as string,
       monto: factura.monto,
       saldo: factura.saldo,
+      // Sin esto la OC se perdia aca: el SELECT la traia, pero el objeto que
+      // se le pasa al constructor del payload se arma campo por campo y no la
+      // incluia, asi que el XML salia sin dInfoEmi.
+      numero_orden_compra: (factura.numero_orden_compra as string | null) ?? null,
     },
     items: (itemsRes.data ?? []) as BuildSifenPayloadInput["items"],
     cliente: clienteRes.data as BuildSifenPayloadInput["cliente"],
