@@ -103,6 +103,8 @@ export function renderRemisionVentaHTML(data: RemisionHtmlData, logoSrc: string 
   :root {
     --marca: ${CLIENTE_COLORES.primario};
     --marca-fill: ${CLIENTE_COLORES.primarioFill};
+    /* Interior: franjas de sección y cabecera de tabla. */
+    --marca-int: ${CLIENTE_COLORES.interior};
     --gris: ${CLIENTE_COLORES.secundario};
   }
   * { box-sizing: border-box; }
@@ -119,14 +121,14 @@ export function renderRemisionVentaHTML(data: RemisionHtmlData, logoSrc: string 
   .badge { display: inline-block; margin-top: 6px; border-radius: 999px; padding: 2px 10px; font-size: 10px; font-weight: 700; background: #fff; border: 1px solid var(--marca); color: var(--marca); }
   .badge.anulada { border-color: #b91c1c; color: #b91c1c; background: #fef2f2; }
 
-  .sec { margin: 16px 0 6px; background: var(--marca-fill); border-left: 4px solid var(--marca); padding: 5px 9px; font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--marca); }
+  .sec { margin: 16px 0 6px; background: var(--marca-fill); border-left: 4px solid var(--marca-int); padding: 5px 9px; font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--marca-int); }
   .caja { border: 1px solid #d1d5db; border-radius: 5px; padding: 10px 12px; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 26px; }
   .kv { display: flex; gap: 6px; line-height: 1.6; }
   .kv b { color: #4b5563; font-weight: 600; min-width: 108px; }
 
   table { width: 100%; border-collapse: collapse; }
-  thead th { background: var(--marca); color: #fff; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; padding: 7px 8px; text-align: left; }
+  thead th { background: var(--marca-int); color: #fff; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; padding: 7px 8px; text-align: left; }
   tbody td { padding: 7px 8px; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
   tbody tr:nth-child(even) td { background: #fafafa; }
   .c { text-align: center; } .r { text-align: right; }
@@ -134,7 +136,7 @@ export function renderRemisionVentaHTML(data: RemisionHtmlData, logoSrc: string 
   .muted { color: #6b7280; }
   .sku { display: block; color: var(--gris); font-size: 10px; }
   .total-linea { margin-top: 8px; text-align: right; font-size: 12px; }
-  .total-linea b { color: var(--marca); font-size: 14px; }
+  .total-linea b { color: var(--marca-int); font-size: 14px; }
 
   .pend { border: 1px solid #fbbf24; background: #fffbeb; border-radius: 5px; padding: 10px 12px; margin-top: 6px; }
   .pend table thead th { background: #b45309; }

@@ -284,6 +284,13 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
   // como ultimo recurso si el hex de la marca fuese invalido.
   const primaryMarca = parseHexColorToRgb(CLIENTE_COLORES.primario);
   const primary: RGB = primaryConfig ?? primaryMarca ?? NEURA_BLUE;
+  /**
+   * Color de lo que va DENTRO del marco: titulos de seccion, etiquetas y
+   * cabecera de la tabla. Se separa del primario para que el borde mande y el
+   * interior acompañe sin competir. Si la empresa cargo un color propio, se
+   * respeta ese en todo (no se le impone el gris de la marca).
+   */
+  const interior: RGB = primaryConfig ?? parseHexColorToRgb(CLIENTE_COLORES.interior) ?? primary;
   const primaryFillConfig = parseHexColorToRgb(branding?.colorPrimarioFill ?? null);
   const primaryFill: RGB =
     primaryFillConfig ??
@@ -436,7 +443,7 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
       y: baselineFromTop(page, cursorTop + 9),
       size: 9,
       font: fontBold,
-      color: primary,
+      color: interior,
     });
     cursorTop += 13;
   };
@@ -449,7 +456,7 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
   const col2X = margin + innerW * 0.48;
   const labSz = 7.5;
   let yOp = cursorTop + 10;
-  drawLabelValue(page, col1X, yOp, "Fecha de emisión: ", parsed.dFeEmiDE, fontBold, font, labSz, primary);
+  drawLabelValue(page, col1X, yOp, "Fecha de emisión: ", parsed.dFeEmiDE, fontBold, font, labSz, interior);
   yOp += 11;
   drawLabelValue(
     page,
@@ -475,9 +482,9 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
     primary
   );
   yOp += 11;
-  drawLabelValue(page, col1X, yOp, "Tipo de cambio: ", tipoCambio, fontBold, font, labSz, primary);
+  drawLabelValue(page, col1X, yOp, "Tipo de cambio: ", tipoCambio, fontBold, font, labSz, interior);
   yOp += 11;
-  drawLabelValue(page, col1X, yOp, "Tipo de operación: ", parsed.operacion.tipoOperacion, fontBold, font, labSz, primary);
+  drawLabelValue(page, col1X, yOp, "Tipo de operación: ", parsed.operacion.tipoOperacion, fontBold, font, labSz, interior);
 
   // gOpeDE/dInfoEmi. Los DE emitidos antes de incorporar el campo no lo traen,
   // así que la línea solo aparece cuando el XML realmente lo tiene.
@@ -512,7 +519,7 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
   );
   yRec += 11;
   const nomLines = wrapByChars(parsed.receptor.nombre, 34);
-  drawLabelValue(page, col2X, yRec, "Razón social: ", nomLines[0] ?? "—", fontBold, font, labSz, primary);
+  drawLabelValue(page, col2X, yRec, "Razón social: ", nomLines[0] ?? "—", fontBold, font, labSz, interior);
   yRec += 11;
   const indent = fontBold.widthOfTextAtSize("Razón social: ", labSz) + col2X + 1.5;
   for (let i = 1; i < nomLines.length; i++) {
@@ -537,7 +544,7 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
     primary
   );
   yRec += 11;
-  drawLabelValue(page, col2X, yRec, "Tel.: ", parsed.receptor.telefono || "—", fontBold, font, labSz, primary);
+  drawLabelValue(page, col2X, yRec, "Tel.: ", parsed.receptor.telefono || "—", fontBold, font, labSz, interior);
 
   cursorTop += opCliH + 10;
 
@@ -562,7 +569,8 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
       cursorTop = margin;
       continue;
     }
-    cursorTop = drawTableChunk(page, slice, parsed, margin, innerW, cursorTop, font, fontBold, primary, primaryFill);
+        // A la tabla se le pasa el color INTERIOR como "primary": ahi dentro manda el gris.
+    cursorTop = drawTableChunk(page, slice, parsed, margin, innerW, cursorTop, font, fontBold, interior, primaryFill);
     idx += slice.length;
     if (idx < items.length) {
       page = pdfDoc.addPage([A4_W, A4_H]);

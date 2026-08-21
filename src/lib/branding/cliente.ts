@@ -81,10 +81,18 @@ export const CLIENTE_DATOS_FISCALES = {
  * Formato `#RRGGBB` porque es lo que ya parsea `kude-pdf.ts`.
  */
 export const CLIENTE_COLORES = {
-  /** Rojo del logo. */
-  primario: "#C7202A",
-  /** Tono claro del primario para rellenos de encabezado de sección. */
-  primarioFill: "#FBEDEE",
-  /** Gris del logo, para textos secundarios y bordes suaves. */
+  /**
+   * Estructural: marcos, bordes y el encabezado del documento. En negro, que
+   * imprime nítido y no compite con el logo.
+   */
+  primario: "#111827",
+  /** Relleno suave de los bloques de encabezado de sección. */
+  primarioFill: "#F3F4F6",
+  /**
+   * Interior: títulos de sección y cabecera de la tabla de ítems. En gris para
+   * que la jerarquía sea borde (negro) > interior (gris) > dato (negro).
+   */
+  interior: "#4B5563",
+  /** Gris claro del logo, para textos secundarios (SKU, pies de página). */
   secundario: "#8C9196",
 } as const;
