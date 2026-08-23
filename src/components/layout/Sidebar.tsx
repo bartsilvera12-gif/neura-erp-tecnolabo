@@ -173,8 +173,9 @@ const MENU_STRUCTURE: MenuItem[] = [
   //   key: "notas_credito", slug: "notas_credito", label: "Notas de crédito",
   //   href: "/notas-credito", icon: ScrollText,
   // },
-  // Usuarios oculto del sidebar (codigo conservado, ruta accesible por URL).
-  // { key: "usuarios", slug: "usuarios", label: "Usuarios", href: "/usuarios", icon: UserCog },
+  // Visible: el admin necesita entrar a gestionar usuarios y contrasenas.
+  // Gated por el modulo 'usuarios', que solo tiene el administrador.
+  { key: "usuarios", slug: "usuarios", label: "Usuarios", href: "/usuarios", icon: UserCog },
   // Configuracion: reactivado a pedido. Da acceso al panel de facturacion
   // (modo / autoimpresor) y demas subpaginas de configuracion.
   {
