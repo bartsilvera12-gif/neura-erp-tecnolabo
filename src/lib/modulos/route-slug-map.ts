@@ -19,6 +19,10 @@ const SIDEBAR_SLUG_HREF_ORDER: { slug: string; href: string }[] = [
   { slug: "gastos", href: "/gastos" },
   { slug: "reportes", href: "/reportes" },
   { slug: "pagos", href: "/pagos" },
+  { slug: "cobranzas", href: "/cobranzas" },
+  { slug: "recibos", href: "/recibos" },
+  { slug: "otros_ingresos", href: "/otros-ingresos" },
+  { slug: "entidades_bancarias", href: "/configuracion/entidades-bancarias" },
   { slug: "comisiones", href: "/comisiones" },
   { slug: "notas_credito", href: "/notas-credito" },
   { slug: "usuarios", href: "/usuarios" },
@@ -135,6 +139,18 @@ export function pathRequiresModuleSlug(pathname: string): string | null {
     return "conversaciones";
   }
   if (p.startsWith("/notas-credito")) return "notas_credito";
+  // Entidades bancarias vive bajo /configuracion pero es un modulo aparte:
+  // se evalua ANTES para no exigir acceso a toda la configuracion.
+  if (p.startsWith("/configuracion/entidades-bancarias")) return "entidades_bancarias";
+  if (p.startsWith("/cobranzas")) return "cobranzas";
+  if (p.startsWith("/recibos")) return "recibos";
+  if (p.startsWith("/otros-ingresos")) return "otros_ingresos";
+  // Comercial: documentos que colgaban de la venta y no tenian gate propio.
+  if (p.startsWith("/presupuestos")) return "presupuestos";
+  if (p.startsWith("/notas-remision")) return "ventas";
+  if (p.startsWith("/facturas")) return "ventas";
+  // Notas de salida es un submodulo de Inventario.
+  if (p.startsWith("/notas-salida")) return "inventario";
   if (p.startsWith("/ventas")) return "ventas";
   if (p.startsWith("/inventario")) return "inventario";
   if (p.startsWith("/clientes")) return "clientes";

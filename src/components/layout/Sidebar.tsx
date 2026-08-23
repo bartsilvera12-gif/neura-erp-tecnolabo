@@ -151,20 +151,20 @@ const MENU_STRUCTURE: MenuItem[] = [
       { label: "Cuentas por pagar", href: "/compras/cuentas-por-pagar" },
     ],
   },
-  { key: "cobranzas", slug: "pagos", label: "Cobranzas", href: "/cobranzas", icon: Banknote },
+  { key: "cobranzas", slug: "cobranzas", label: "Cobranzas", href: "/cobranzas", icon: Banknote },
   { key: "pagos", slug: "pagos", label: "Pagos", href: "/pagos", icon: Banknote },
   // Recibos: registro global de los recibos de dinero emitidos al cobrar.
   // Slug 'pagos': el recibo nace de un cobro, hereda ese permiso.
-  { key: "recibos", slug: "pagos", label: "Recibos", href: "/recibos", icon: Receipt },
+  { key: "recibos", slug: "recibos", label: "Recibos", href: "/recibos", icon: Receipt },
   { key: "gastos", slug: "gastos", label: "Gastos", href: "/gastos", icon: Receipt },
   // Otros ingresos: ingresos manuales que NO son ventas de productos (cartones,
   // servicios, alquileres). Suman a caja, no tocan inventario. Slug 'ventas'
   // para heredar acceso (mismo permiso que Caja).
-  { key: "otros_ingresos", slug: "ventas", label: "Otros ingresos", href: "/otros-ingresos", icon: Wallet },
+  { key: "otros_ingresos", slug: "otros_ingresos", label: "Otros ingresos", href: "/otros-ingresos", icon: Wallet },
   // Entidades bancarias: cajas, bancos, tarjetas, billeteras usadas para
   // conciliacion de transferencias y tarjetas en cobros/ventas. Era submenu
   // de Configuracion; ahora modulo standalone para mejor accesibilidad.
-  { key: "entidades_bancarias", slug: "ventas", label: "Entidades bancarias", href: "/configuracion/entidades-bancarias", icon: Building2 },
+  { key: "entidades_bancarias", slug: "entidades_bancarias", label: "Entidades bancarias", href: "/configuracion/entidades-bancarias", icon: Building2 },
   { key: "reportes", slug: "reportes", label: "Reportes", href: "/reportes", icon: BarChart3 },
   // Pagos oculto en instancia En lo de Mari (no usa este módulo).
   // Comisiones y Notas de credito ocultos por ahora:

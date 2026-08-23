@@ -5,6 +5,7 @@ import { API_ERRORS } from "@/lib/api/errors";
 import { crearOReusarRecibo, ReciboError, type OrigenRecibo } from "@/lib/recibos/server/recibos-pg";
 import { fetchDataSchemaForEmpresaId } from "@/lib/supabase/empresa-data-schema";
 import { listarRecibosGlobal } from "@/lib/recibos/server/recibos-listado-pg";
+import { assertModulo, ModuloError } from "@/lib/auth/modulo-guard";
 
 /** GET /api/recibos-dinero — listado global con filtros (auditoria). */
 export async function GET(request: NextRequest) {
@@ -12,6 +13,9 @@ export async function GET(request: NextRequest) {
     const ctx = await getTenantSupabaseFromAuthWithRol(request);
     if (!ctx) return NextResponse.json(errorResponse(API_ERRORS.UNAUTHORIZED), { status: 401 });
     const schema = await fetchDataSchemaForEmpresaId(ctx.auth.empresa_id);
+    // El gate de modulo tambien en el server: ocultar el item del menu no
+    // impide llamar al endpoint a mano.
+    await assertModulo(schema, ctx.auth.empresa_id, ctx.auth.user?.id, "recibos", ctx.auth.rol);
 
     const sp = new URL(request.url).searchParams;
     const str = (k: string) => { const v = sp.get(k); return v && v.trim() ? v.trim() : null; };
@@ -29,6 +33,7 @@ export async function GET(request: NextRequest) {
     });
     return NextResponse.json(successResponse(out));
   } catch (err) {
+    if (err instanceof ModuloError) return NextResponse.json(errorResponse(err.message), { status: 403 });
     console.error("[/api/recibos-dinero GET]", err instanceof Error ? err.message : err);
     return NextResponse.json(errorResponse("No se pudieron cargar los recibos."), { status: 500 });
   }
