@@ -129,11 +129,30 @@ function AuthGuardInner({ children }: { children: React.ReactNode }) {
     }
 
     const slug = pathRequiresModuleSlug(pathname);
-    if (
+    const denegado =
       slug &&
       !access.superAdmin &&
-      !isModuleSlugGranted(slug, access.slugs, access.inactiveSlugs, { strict: access.strict })
-    ) {
+      !isModuleSlugGranted(slug, access.slugs, access.inactiveSlugs, { strict: access.strict });
+
+    /*
+      La raiz es el aterrizaje por defecto: si el usuario no tiene `dashboard`,
+      corresponde MANDARLO a su primera pantalla, no mostrarle un cartel de
+      modulo no habilitado. Antes, quien no tenia dashboard entraba a la app y
+      lo primero que veia era un error.
+    */
+    if (denegado && slug === "dashboard") {
+      router.replace(
+        firstAccessibleHref(access.slugs, {
+          superAdmin: false,
+          inactiveSlugs: access.inactiveSlugs,
+          strict: access.strict,
+        })
+      );
+      setBlockedSlug(null);
+      return;
+    }
+
+    if (denegado && slug) {
       setBlockedSlug(slug);
       return;
     }
