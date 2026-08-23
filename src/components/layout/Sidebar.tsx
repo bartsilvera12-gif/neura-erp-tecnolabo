@@ -53,7 +53,7 @@ type MenuItem = {
   label: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
-  children?: { label: string; href: string; exactMatch?: boolean }[];
+  children?: { label: string; href: string; exactMatch?: boolean; slug?: string }[];
   showWhen?: string;
 };
 
@@ -130,10 +130,10 @@ const MENU_STRUCTURE: MenuItem[] = [
   // { key: "recetas", slug: "recetas", label: "Recetas", href: "/dashboard/recetas", icon: ChefHat },
   { key: "inventario", slug: "inventario", label: "Inventario", href: "/inventario", icon: Package, children: [
     { label: "Productos", href: "/inventario" },
-    { label: "Movimientos", href: "/inventario/movimientos" },
+    { label: "Movimientos", href: "/inventario/movimientos", slug: "inventario_movimientos" },
     { label: "Categorías", href: "/inventario/categorias" },
-    { label: "Notas de salida", href: "/notas-salida" },
-    { label: "Alertas de stock", href: "/inventario/alertas" },
+    { label: "Notas de salida", href: "/notas-salida", slug: "notas_salida" },
+    { label: "Alertas de stock", href: "/inventario/alertas", slug: "inventario_alertas" },
     // Depósitos / Ubicaciones oculto en esta instancia (no aplica).
     // { label: "Depósitos / Ubicaciones", href: "/inventario/ubicaciones" },
   ]},
@@ -581,6 +581,17 @@ export default function Sidebar() {
       strict: strictAllowlist,
     });
 
+  /**
+   * Un submenu puede exigir su propio modulo (p. ej. Inventario → Movimientos).
+   * Se filtran los hijos sin acceso para no mostrar enlaces que terminarian en
+   * un bloqueo. Sin `slug` el hijo hereda el permiso del padre.
+   */
+  const conHijosVisibles = (item: MenuItem): MenuItem => {
+    if (!item.children) return item;
+    const visibles = item.children.filter((c) => !c.slug || hasAccess(c.slug));
+    return visibles.length === item.children.length ? item : { ...item, children: visibles };
+  };
+
   const isActive = (slug: string, href: string) => {
     const p = pathname ?? "";
     if (slug === "dashboard") return p === "/";
@@ -786,7 +797,7 @@ export default function Sidebar() {
               {favoritosItemsFiltered.map((item) => (
                 <NavItem
                   key={item.key}
-                  item={item}
+                  item={conHijosVisibles(item)}
                   itemId={slugToId(item.slug)}
                   isActive={isActive(item.slug, item.href)}
                   isFavorito={true}
@@ -810,7 +821,7 @@ export default function Sidebar() {
             {mainItemsFiltered.map((item) => (
               <NavItem
                 key={item.key}
-                item={item}
+                item={conHijosVisibles(item)}
                 itemId={slugToId(item.slug)}
                 isActive={isActive(item.slug, item.href)}
                 isFavorito={favoritos.includes(slugToId(item.slug))}
@@ -840,7 +851,7 @@ export default function Sidebar() {
                     {seccion.items.map((item) => (
                       <NavItem
                         key={item.key}
-                        item={item}
+                        item={conHijosVisibles(item)}
                         itemId={slugToId(item.slug)}
                         isActive={isActive(item.slug, item.href)}
                         isFavorito={favoritos.includes(slugToId(item.slug))}

@@ -14,6 +14,9 @@ const SIDEBAR_SLUG_HREF_ORDER: { slug: string; href: string }[] = [
   { slug: "presupuestos", href: "/presupuestos" },
   { slug: "recetas", href: "/dashboard/recetas" },
   { slug: "inventario", href: "/inventario" },
+  { slug: "inventario_movimientos", href: "/inventario/movimientos" },
+  { slug: "inventario_alertas", href: "/inventario/alertas" },
+  { slug: "notas_salida", href: "/notas-salida" },
   { slug: "clientes", href: "/clientes" },
   { slug: "compras", href: "/compras" },
   { slug: "gastos", href: "/gastos" },
@@ -149,8 +152,11 @@ export function pathRequiresModuleSlug(pathname: string): string | null {
   if (p.startsWith("/presupuestos")) return "presupuestos";
   if (p.startsWith("/notas-remision")) return "ventas";
   if (p.startsWith("/facturas")) return "ventas";
-  // Notas de salida es un submodulo de Inventario.
-  if (p.startsWith("/notas-salida")) return "inventario";
+  // Submodulos de Inventario: se evaluan ANTES del generico /inventario, si no
+  // el prefijo mas corto se los come y quedarian abiertos a todo el modulo.
+  if (p.startsWith("/inventario/movimientos")) return "inventario_movimientos";
+  if (p.startsWith("/inventario/alertas")) return "inventario_alertas";
+  if (p.startsWith("/notas-salida")) return "notas_salida";
   if (p.startsWith("/ventas")) return "ventas";
   if (p.startsWith("/inventario")) return "inventario";
   if (p.startsWith("/clientes")) return "clientes";
