@@ -42,7 +42,7 @@ const MATRIZ_VENDEDOR: Caso[] = [
   { area: "Finanzas · Pagos", ruta: "/pagos", debe: false },
   { area: "Finanzas · Gastos", ruta: "/gastos", debe: false },
   { area: "Finanzas · Cuentas bancarias", ruta: "/configuracion/entidades-bancarias", debe: false },
-  { area: "Finanzas · Recibos", ruta: "/recibos", debe: true },
+  { area: "Finanzas · Recibos", ruta: "/recibos", debe: false },
   { area: "Finanzas · Cobranzas", ruta: "/cobranzas", debe: false },
   { area: "Compras · Órdenes", ruta: "/compras", debe: false },
   { area: "Compras · Proveedores", ruta: "/proveedores", debe: false },
