@@ -38,6 +38,17 @@ function num(v: number | string): number {
   return typeof v === "number" ? v : Number(v);
 }
 
+/**
+ * Número legal a partir del CDC: posiciones 12-14 establecimiento,
+ * 15-17 punto de expedición, 18-24 número. Devuelve null si el CDC no está
+ * completo (venta sin DE aprobado todavía).
+ */
+function numeroLegalDesdeCdc(cdc: string | null | undefined): string | null {
+  const s = String(cdc ?? "").trim();
+  if (s.length < 24) return null;
+  return s.slice(11, 14) + "-" + s.slice(14, 17) + "-" + s.slice(17, 24);
+}
+
 function mapItems(rows: VentaItemRow[]): LineaVenta[] {
   return rows.map((r) => ({
     producto_id: r.producto_id,
@@ -79,6 +90,39 @@ export async function GET(request: NextRequest) {
       .eq("empresa_id", empresaId);
     if (itemsQ.error) throw new Error(itemsQ.error.message);
 
+    /*
+      Numeración fiscal: la pantalla debe mostrar el número de la factura
+      electrónica, no el correlativo interno de caja. Se resuelve acá y no en
+      el cliente para que la lista, la búsqueda y el detalle usen el mismo dato.
+    */
+    const facturasQ = await ctx.supabase
+      .from("facturas")
+      .select("id, venta_id, numero_factura")
+      .eq("empresa_id", empresaId)
+      .not("venta_id", "is", null);
+    if (facturasQ.error) throw new Error(facturasQ.error.message);
+
+    // El CDC es un lujo: si la tabla no responde se cae al número FAC-xxxxxx,
+    // que igual es el correlativo fiscal. No vale romper el listado por esto.
+    const deQ = await ctx.supabase
+      .from("factura_electronica")
+      .select("factura_id, cdc")
+      .eq("empresa_id", empresaId);
+    if (deQ.error) console.warn("[/api/ventas GET] sin CDC:", deQ.error.message);
+
+    const cdcPorFactura = new Map<string, string>();
+    for (const d of (deQ.data ?? []) as { factura_id: string; cdc: string | null }[]) {
+      if (d.cdc) cdcPorFactura.set(String(d.factura_id), String(d.cdc));
+    }
+    const fiscalPorVenta = new Map<string, { numero_factura: string | null; numero_legal: string | null }>();
+    for (const f of (facturasQ.data ?? []) as { id: string; venta_id: string | null; numero_factura: string | null }[]) {
+      if (!f.venta_id) continue;
+      fiscalPorVenta.set(String(f.venta_id), {
+        numero_factura: f.numero_factura ?? null,
+        numero_legal: numeroLegalDesdeCdc(cdcPorFactura.get(String(f.id))),
+      });
+    }
+
     const ventasRows = (ventasQ.data ?? []) as VentaRow[];
     const itemsRows = (itemsQ.data ?? []) as VentaItemRow[];
 
@@ -113,6 +157,8 @@ export async function GET(request: NextRequest) {
           : undefined,
         genera_nota_remision: (r as unknown as { genera_nota_remision?: boolean }).genera_nota_remision === true,
         nota_remision_numero: (r as unknown as { nota_remision_numero?: string | null }).nota_remision_numero ?? null,
+        numero_factura: fiscalPorVenta.get(r.id)?.numero_factura ?? null,
+        numero_legal: fiscalPorVenta.get(r.id)?.numero_legal ?? null,
         fecha: r.fecha,
         usuario_nombre: r.usuario_nombre ?? null,
         estado: ((): "activa" | "anulada" | "parcialmente_devuelta" | "devuelta_total" => {

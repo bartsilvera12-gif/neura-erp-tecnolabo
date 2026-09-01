@@ -61,9 +61,15 @@ export async function getEstadoCuenta(
   const tGastos = quoteSchemaTable(schema, "gastos");
   const p = pool();
 
+  /*
+    Las ventas anuladas NO son ingreso: se excluyen igual que en el reporte de
+    ventas. Sin este filtro el estado de cuenta sumaba tambien las pruebas
+    anuladas y quedaba muy por encima del resto de los reportes.
+  */
   const ventasQ = p.query<{ total: number }>(
     `SELECT COALESCE(SUM(total),0)::float8 AS total FROM ${tVentas}
-      WHERE empresa_id=$1::uuid AND fecha>=$2::timestamptz AND fecha<=$3::timestamptz`,
+      WHERE empresa_id=$1::uuid AND fecha>=$2::timestamptz AND fecha<=$3::timestamptz
+        AND COALESCE(estado,'') <> 'anulada'`,
     [empresaId, b.start, b.end]
   );
   const comprasQ = p.query<{ total: number }>(
@@ -78,7 +84,8 @@ export async function getEstadoCuenta(
   );
   const porCobrarQ = p.query<{ total: number }>(
     `SELECT COALESCE(SUM(total),0)::float8 AS total FROM ${tVentas}
-      WHERE empresa_id=$1::uuid AND tipo_venta='CREDITO' AND fecha>=$2::timestamptz AND fecha<=$3::timestamptz`,
+      WHERE empresa_id=$1::uuid AND tipo_venta='CREDITO' AND fecha>=$2::timestamptz AND fecha<=$3::timestamptz
+        AND COALESCE(estado,'') <> 'anulada'`,
     [empresaId, b.start, b.end]
   );
   const porPagarQ = p.query<{ total: number }>(
@@ -93,6 +100,7 @@ export async function getEstadoCuenta(
                'Venta a cliente'::text AS descripcion, total::float8 AS entrada, 0::float8 AS salida
           FROM ${tVentas}
          WHERE empresa_id=$1::uuid AND fecha>=$2::timestamptz AND fecha<=$3::timestamptz
+           AND COALESCE(estado,'') <> 'anulada'
         UNION ALL
         SELECT MIN(fecha) AS fecha, 'Compra'::text, numero_control,
                MIN(proveedor_nombre), 0::float8, SUM(total)::float8

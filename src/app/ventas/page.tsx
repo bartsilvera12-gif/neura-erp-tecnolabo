@@ -220,6 +220,15 @@ export default function VentasPage() {
     };
   }, [reloadKey]);
 
+  /*
+    Numeración visible. `numero_control` (VTA-xxxxxx) es la secuencia interna
+    de caja: adelantada respecto de la legal porque las ventas de prueba
+    anuladas antes del timbrado consumieron correlativo sin emitir factura.
+    En pantalla manda el número de la factura electrónica; el VTA queda como
+    referencia interna (es lo que citan las notas de remisión y la auditoría).
+  */
+  const numeroFiscal = (v: Venta): string | null => v.numero_legal ?? v.numero_factura ?? null;
+
   const filtradas = todas.filter((v) => {
     // Anuladas ocultas por defecto (toggle "Ver anuladas" las muestra).
     if (!mostrarAnuladas && v.estado === "anulada") return false;
@@ -227,6 +236,8 @@ export default function VentasPage() {
     if (busqueda.trim() !== "" && !productoMatchesQuery(
       busqueda,
       v.numero_control,
+      v.numero_factura ?? "",
+      v.numero_legal ?? "",
       ...v.items.map((i) => i.producto_nombre),
       ...v.items.map((i) => i.sku),
     )) return false;
@@ -392,7 +403,14 @@ export default function VentasPage() {
                     >
                       <td className="py-4 pr-4 font-mono text-xs text-gray-500 align-middle">
                         <div className="flex items-center gap-1.5">
-                          <span>{v.numero_control}</span>
+                          {numeroFiscal(v) ? (
+                            <span className="flex flex-col leading-tight">
+                              <span className="font-semibold text-slate-700">{numeroFiscal(v)}</span>
+                              <span className="text-[10px] text-slate-400">{v.numero_control}</span>
+                            </span>
+                          ) : (
+                            <span>{v.numero_control}</span>
+                          )}
                           {isAnulada && (
                             <span className="rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-700 no-underline">
                               Anulada
@@ -663,8 +681,13 @@ function VentaDetalleModal({ venta, onClose }: { venta: Venta; onClose: () => vo
         {/* Header */}
         <div className="flex items-start justify-between gap-3 border-b border-slate-100 bg-gradient-to-r from-[#1E2125]/5 to-transparent px-5 py-4">
           <div>
-            <h3 className="font-mono text-sm font-bold text-[#17191C]">{venta.numero_control}</h3>
-            <p className="mt-0.5 text-xs text-slate-500">Detalle de la venta</p>
+            <h3 className="font-mono text-sm font-bold text-[#17191C]">
+              {venta.numero_legal ?? venta.numero_factura ?? venta.numero_control}
+            </h3>
+            <p className="mt-0.5 text-xs text-slate-500">
+              Detalle de la venta
+              {(venta.numero_legal ?? venta.numero_factura) ? " · control interno " + venta.numero_control : ""}
+            </p>
           </div>
           <button
             onClick={onClose}

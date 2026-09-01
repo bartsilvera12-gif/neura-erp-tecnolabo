@@ -59,6 +59,15 @@ export interface Venta {
   /** Número de nota de remisión (NR-XXXXXX) si genera_nota_remision. */
   nota_remision_numero?: string | null;
 
+  /**
+   * Numeración fiscal de la venta. `numero_control` (VTA-xxxxxx) es la
+   * secuencia interna de caja y NO coincide con la legal: las ventas de
+   * prueba anuladas antes del timbrado consumieron correlativo sin emitir
+   * factura. Lo que el cliente y la SET reconocen es esto:
+   */
+  numero_factura?: string | null;      // FAC-000043
+  numero_legal?: string | null;        // 001-002-0000043 (derivado del CDC)
+
   fecha: string;             // ISO string, generado automáticamente
 
   /** Nombre del usuario que registró la venta (auditoría). */
