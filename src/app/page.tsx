@@ -1033,7 +1033,7 @@ function FinMontoGs({
   if (kpi) {
     return (
       <p
-        className={`min-w-0 w-full text-left font-bold leading-none tabular-nums whitespace-nowrap [font-size:clamp(0.65rem,5.5cqi+0.15rem,1.45rem)] ${className}`}
+        className={`min-w-0 w-full text-left font-bold leading-none tabular-nums whitespace-nowrap [font-size:clamp(0.95rem,8.5cqi+0.1rem,2rem)] ${className}`}
         title={texto}
       >
         {texto}
@@ -1323,8 +1323,14 @@ const DashFinanciero = memo(function DashFinanciero({
     "min-w-0 overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm shadow-slate-200/50 transition-shadow hover:shadow-md sm:p-7";
   /** Caja de consulta (inline-size) para `cqi`; alinea al fondo y estira con la card. */
   const finKpiValueWrap =
-    "flex min-h-0 w-full min-w-0 flex-1 [container-type:inline-size] items-end";
-  const finKpiCard = `${finCard} flex h-full min-h-[9.5rem] flex-col`;
+    "mt-3 flex min-h-0 w-full min-w-0 flex-1 [container-type:inline-size] items-end";
+  /*
+    min-h bajo: con 9.5rem el monto quedaba colgado al fondo con un hueco
+    vacio enorme arriba. El alto real lo fija ahora el contenido (etiqueta +
+    monto + leyenda) y las cuatro cards igual se emparejan por items-stretch.
+  */
+  const finKpiCard = `${finCard} flex h-full min-h-[7.5rem] flex-col`;
+  const finKpiNota = "mt-2.5 shrink-0 text-[11px] leading-snug text-slate-400";
   const finAccent = "#17191C";
 
   return (
@@ -1335,12 +1341,14 @@ const DashFinanciero = memo(function DashFinanciero({
           <div className={finKpiValueWrap}>
             <FinMontoGs kpi monto={facturadoCohortPeriodo} />
           </div>
+          <p className={finKpiNota}>Facturas emitidas en el período, sin las anuladas.</p>
         </motion.div>
         <motion.div whileHover={{ y: -2 }} className={finKpiCard}>
           <p className="shrink-0 text-[11px] font-semibold uppercase tracking-wide text-slate-500">Cobrado del período</p>
           <div className={finKpiValueWrap}>
             <FinMontoGs kpi monto={recaudadoCohortPeriodo} className="text-[#17191C]" />
           </div>
+          <p className={finKpiNota}>Parte ya cobrada de esas mismas facturas.</p>
         </motion.div>
         <motion.div whileHover={{ y: -2 }} className={finKpiCard}>
           <p className="shrink-0 text-[11px] font-semibold uppercase tracking-wide text-slate-500">Pendiente del período</p>
@@ -1358,17 +1366,19 @@ const DashFinanciero = memo(function DashFinanciero({
               }
             />
           </div>
+          <p className={finKpiNota}>Saldo que todavía queda por cobrar.</p>
         </motion.div>
         <motion.div whileHover={{ y: -2 }} className={finKpiCard}>
           <p className="shrink-0 text-[11px] font-semibold uppercase tracking-wide text-slate-500">% de cobranza</p>
           <div className={finKpiValueWrap}>
             <p
-              className="min-w-0 w-full text-left font-bold tabular-nums leading-none text-slate-900 whitespace-nowrap [font-size:clamp(0.7rem,5.5cqi+0.15rem,1.5rem)]"
+              className="min-w-0 w-full text-left font-bold tabular-nums leading-none text-slate-900 whitespace-nowrap [font-size:clamp(0.95rem,8.5cqi+0.1rem,2rem)]"
               title={pctCobranzaCohort == null ? "—" : `${pctCobranzaCohort.toFixed(1)}%`}
             >
               {pctCobranzaCohort == null ? "—" : `${pctCobranzaCohort.toFixed(1)}%`}
             </p>
           </div>
+          <p className={finKpiNota}>Cobrado sobre facturado del período.</p>
         </motion.div>
       </div>
 
