@@ -18,7 +18,7 @@ import { ModalHistorialClienteGestion } from "@/components/gestion-clientes/Moda
 import { RegistrarPagoModal } from "@/components/pagos/RegistrarPagoModal";
 import { EstadoCuentaClienteBlock } from "@/components/cobros/EstadoCuentaClienteBlock";
 import { SifenEstadoBadge } from "@/components/sifen/SifenEstadoBadge";
-import { useFacturaSifenEstados } from "@/hooks/useFacturaSifenEstados";
+import { useFacturaSifenEstadosState } from "@/hooks/useFacturaSifenEstados";
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
 import { getClientes, clienteNombre } from "@/lib/clientes/storage";
 import { etiquetaVisibleTipoServicio } from "@/lib/clientes/tipo-servicio-catalogo";
@@ -794,7 +794,28 @@ function GestionClientesPageInner() {
   const cntPagadas      = facturasOrdenadas.filter((f) => f._estadoEfectivo === "Pagado").length;
   const cntCorregidaNc  = facturasOrdenadas.filter((f) => f._estadoEfectivo === "Corregida NC").length;
 
-  const sifenPorFactura = useFacturaSifenEstados(facturasOrdenadas.map((f) => f.id));
+  const { estados: sifenPorFactura, loading: sifenLoading } = useFacturaSifenEstadosState(
+    facturasOrdenadas.map((f) => f.id),
+  );
+
+  // Filtro VISUAL (no comercial): por defecto se muestran solo los documentos
+  // fiscales en estado final (aprobado/cancelado). Los "no aprobados"
+  // (borrador/generado/rechazado o sin factura_electronica) se ocultan salvo que
+  // se active el toggle. IMPORTANTE: los totales (totalMonto/totalSaldo) y los
+  // cobros se calculan sobre `facturasOrdenadas` (TODAS), así que este toggle NO
+  // cambia saldos ni montos ni la cobrabilidad. No usa es_prueba.
+  const [verNoAprobadas, setVerNoAprobadas] = useState(false);
+  const esDocFinal = (id: string) => {
+    const st = sifenPorFactura[id]?.estado_sifen;
+    return st === "aprobado" || st === "cancelado";
+  };
+  // Se usa el flag `loading` del hook (no `Object.keys(...).length`), para
+  // distinguir "todavía cargando" de "ya cargó y no hay DE" (una factura sin
+  // factura_electronica llega como estado_sifen=null y debe ocultarse). Mientras
+  // carga no se oculta nada, para evitar parpadeos.
+  const facturasVisibles =
+    !verNoAprobadas && !sifenLoading ? facturasOrdenadas.filter((f) => esDocFinal(f.id)) : facturasOrdenadas;
+  const noAprobadasCount = !sifenLoading ? facturasOrdenadas.filter((f) => !esDocFinal(f.id)).length : 0;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-2">
@@ -1067,6 +1088,24 @@ function GestionClientesPageInner() {
                       </div>
                     ) : null}
 
+                    {noAprobadasCount > 0 && (
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 bg-slate-50/60 px-4 py-2">
+                        <span className="text-xs text-slate-500">
+                          {noAprobadasCount} documento{noAprobadasCount === 1 ? "" : "s"} no aprobado{noAprobadasCount === 1 ? "" : "s"}
+                          <span className="text-slate-400"> · borrador / generado / rechazado / sin factura electrónica (no se eliminan)</span>
+                        </span>
+                        <label className="flex cursor-pointer select-none items-center gap-2 text-xs font-medium text-slate-700">
+                          <input
+                            type="checkbox"
+                            checked={verNoAprobadas}
+                            onChange={(e) => setVerNoAprobadas(e.target.checked)}
+                            className="h-4 w-4 rounded border-slate-300"
+                          />
+                          Ver documentos no aprobados
+                        </label>
+                      </div>
+                    )}
+
                     {facturasOrdenadas.length === 0 ? (
                       <div className="space-y-2 px-4 py-10 text-center text-sm text-slate-400">
                         <p>No hay facturas para los filtros seleccionados.</p>
@@ -1104,7 +1143,13 @@ function GestionClientesPageInner() {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-50">
-                            {facturasOrdenadas.map((f) => (
+                            {facturasVisibles.length === 0 ? (
+                              <tr>
+                                <td colSpan={11} className="px-4 py-8 text-center text-sm text-slate-400">
+                                  Este cliente solo tiene documentos no aprobados. Activá «Ver documentos no aprobados» para consultarlos.
+                                </td>
+                              </tr>
+                            ) : facturasVisibles.map((f) => (
                               <tr
                                 key={f.id}
                                 className={`transition-colors ${
