@@ -81,6 +81,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
       .select("id, cuenta_por_cobrar_id, venta_id, fecha_pago, monto, metodo_pago, referencia")
       .eq("empresa_id", empresaId)
       .eq("cliente_id", id)
+      .is("anulado_at", null)
       .order("fecha_pago", { ascending: false })
       .limit(500);
     if (cobQ.error) throw new Error(cobQ.error.message);

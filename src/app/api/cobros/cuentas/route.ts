@@ -84,6 +84,7 @@ export async function GET(request: NextRequest) {
       .from("cobros_clientes")
       .select("monto, fecha_pago")
       .eq("empresa_id", empresaId)
+      .is("anulado_at", null)
       .gte("fecha_pago", inicioMes);
     let cobradoMes = 0;
     for (const r of (cobMesQ.data ?? []) as Record<string, unknown>[]) cobradoMes += Number(r.monto) || 0;
@@ -97,6 +98,7 @@ export async function GET(request: NextRequest) {
       .from("cobros_clientes")
       .select("id, cliente_id, venta_id, cuenta_por_cobrar_id, fecha_pago, monto, metodo_pago, referencia, usuario_nombre")
       .eq("empresa_id", empresaId)
+      .is("anulado_at", null)
       .order("fecha_pago", { ascending: false })
       .limit(500);
     const histRows = (histQ.data ?? []) as Record<string, unknown>[];

@@ -40,6 +40,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
 
   const moneda = String(r.moneda ?? "PYG");
   const metodo = METODO_LBL[String(r.metodo_pago ?? "")] ?? (r.metodo_pago ?? "—");
+  const anulado = r.anulado === true || r.anulado_at != null;
 
   const html = `<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -66,6 +67,10 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   .toolbar{position:sticky;top:0;background:#111827;padding:10px;text-align:center}
   .toolbar button{background:#1E2125;color:#fff;border:0;padding:8px 16px;border-radius:6px;font-size:14px;cursor:pointer}
   .corte{display:none}
+  .anulado-wm{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:5}
+  .anulado-wm span{font-size:120px;font-weight:800;color:rgba(220,38,38,.14);border:8px solid rgba(220,38,38,.14);border-radius:16px;padding:10px 40px;transform:rotate(-24deg);letter-spacing:.1em}
+  .anulado-pill{display:inline-block;margin-top:6px;margin-left:8px;background:#dc2626;color:#fff;font-size:12px;font-weight:800;letter-spacing:.08em;padding:3px 10px;border-radius:6px;vertical-align:middle}
+  .anulado-nota{margin-top:10px;border:1px solid #fecaca;background:#fef2f2;color:#b91c1c;border-radius:8px;padding:8px 12px;font-size:12px}
   @media print{
     body{background:#fff}.toolbar{display:none}
     .page{width:auto;min-height:auto;margin:0;padding:10mm}
@@ -76,14 +81,20 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
 </style></head><body>
 <div class="toolbar"><button onclick="window.print()">Imprimir / Guardar PDF</button></div>
 <div class="page">
+  ${anulado ? '<div class="anulado-wm"><span>ANULADO</span></div>' : ""}
   ${membreteA4()}
   <div class="head">
-    <div><div class="tag">RECIBO DE DINERO</div></div>
+    <div><div class="tag">RECIBO DE DINERO</div>${anulado ? '<span class="anulado-pill">ANULADO</span>' : ""}</div>
     <div class="meta">
       <div class="num">${esc(r.numero_recibo)}</div>
       <div>Fecha: ${fmtFecha(r.fecha)}</div>
     </div>
   </div>
+  ${
+    anulado
+      ? `<div class="anulado-nota"><strong>Recibo anulado</strong>${r.anulado_at ? ` el ${fmtFecha(r.anulado_at)}` : ""}${r.anulado_motivo ? ` — Motivo: ${esc(r.anulado_motivo)}` : ""}. No representa un cobro válido.</div>`
+      : ""
+  }
 
   <div class="row">
     <div style="flex:1"><div class="l">Recibí de</div><div><strong>${esc(r.cliente_nombre)}</strong>${r.cliente_documento ? ` · ${esc(r.cliente_documento)}` : ""}</div></div>

@@ -441,6 +441,7 @@ export async function getReporteConciliacion(
         LEFT JOIN ${tEnt} eb ON eb.id=cc.entidad_bancaria_id AND eb.empresa_id=cc.empresa_id
        WHERE cc.empresa_id=$1::uuid AND cc.fecha_pago>=$2::timestamptz AND cc.fecha_pago<=$3::timestamptz
          AND cc.metodo_pago IS NOT NULL AND cc.metodo_pago <> 'efectivo'
+         AND cc.anulado_at IS NULL
     )`;
 
   const movsQ = p.query<ConciliacionMovRow>(

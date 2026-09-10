@@ -19,6 +19,9 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const clienteId = searchParams.get("cliente_id");
+    // Documentos de PRUEBA (SIFEN test) quedan fuera de la vista operativa por
+    // defecto. Se pueden consultar con ?incluir_prueba=1.
+    const incluirPrueba = searchParams.get("incluir_prueba") === "1";
 
     let query = supabase
       .from("facturas")
@@ -28,6 +31,9 @@ export async function GET(request: NextRequest) {
 
     if (clienteId) {
       query = query.eq("cliente_id", clienteId);
+    }
+    if (!incluirPrueba) {
+      query = query.neq("es_prueba", true);
     }
 
     const { data, error } = await query;

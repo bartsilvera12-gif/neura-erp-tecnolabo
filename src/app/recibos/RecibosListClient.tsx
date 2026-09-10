@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Filter, Loader2, Printer, Receipt } from "lucide-react";
+import { Ban, Filter, Loader2, Printer, Receipt, X } from "lucide-react";
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
 
 type Row = {
@@ -70,6 +70,12 @@ export default function RecibosListClient() {
   const [form, setForm] = useState(VACIO);
   const [aplicados, setAplicados] = useState(VACIO);
 
+  // Anulación de recibo (confirmación + motivo).
+  const [aAnular, setAAnular] = useState<Row | null>(null);
+  const [motivo, setMotivo] = useState("");
+  const [anulando, setAnulando] = useState(false);
+  const [anularError, setAnularError] = useState<string | null>(null);
+
   const cargar = useCallback(async () => {
     setCargando(true);
     setError(null);
@@ -114,6 +120,34 @@ export default function RecibosListClient() {
       }
     })();
   }, []);
+
+  function abrirAnular(r: Row) {
+    setAAnular(r);
+    setMotivo("");
+    setAnularError(null);
+  }
+
+  async function confirmarAnular() {
+    if (!aAnular) return;
+    setAnulando(true);
+    setAnularError(null);
+    try {
+      const res = await fetchWithSupabaseSession(`/api/recibos-dinero/${aAnular.id}/anular`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ motivo: motivo.trim() || null }),
+      });
+      const j = await res.json();
+      if (!res.ok || !j.success) throw new Error(j.error ?? "No se pudo anular el recibo.");
+      setAAnular(null);
+      setMotivo("");
+      await cargar();
+    } catch (e) {
+      setAnularError(e instanceof Error ? e.message : "No se pudo anular el recibo.");
+    } finally {
+      setAnulando(false);
+    }
+  }
 
   const inputCls =
     "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-slate-400 focus:outline-none";
@@ -296,7 +330,7 @@ export default function RecibosListClient() {
                     </td>
                     <td className="px-4 py-3 text-slate-500">{r.usuario_nombre ?? "—"}</td>
                     <td className="px-4 py-3">
-                      <div className="flex justify-end">
+                      <div className="flex justify-end gap-1">
                         <a
                           href={`/api/recibos-dinero/${r.id}/pdf?auto=1`}
                           target="_blank"
@@ -306,6 +340,16 @@ export default function RecibosListClient() {
                         >
                           <Printer className="h-4 w-4" />
                         </a>
+                        {!r.anulado && (
+                          <button
+                            type="button"
+                            onClick={() => abrirAnular(r)}
+                            title="Anular recibo"
+                            className="rounded p-1.5 text-red-600 hover:bg-red-50"
+                          >
+                            <Ban className="h-4 w-4" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -315,6 +359,76 @@ export default function RecibosListClient() {
           </table>
         </div>
       </div>
+
+      {/* Modal de anulación */}
+      {aAnular && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white shadow-xl">
+            <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+              <h2 className="text-base font-semibold text-slate-800">Anular recibo</h2>
+              <button
+                type="button"
+                onClick={() => (anulando ? null : setAAnular(null))}
+                className="rounded p-1 text-slate-400 hover:bg-slate-100"
+                aria-label="Cerrar"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="space-y-4 px-5 py-4">
+              <p className="text-sm text-slate-700">
+                ¿Está seguro de que desea anular este recibo?
+              </p>
+              <div className="rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-600">
+                <div>
+                  <span className="font-mono font-medium text-slate-800">{aAnular.numero_recibo}</span> ·{" "}
+                  {aAnular.cliente_nombre ?? "—"}
+                </div>
+                <div className="text-[13px]">
+                  {fmtMonto(aAnular.monto, aAnular.moneda)} · {ORIGEN_LABEL[aAnular.origen] ?? aAnular.origen}
+                </div>
+              </div>
+              <p className="text-xs text-slate-500">
+                Para un cobro a crédito se restaura el saldo de la cuenta/factura. El recibo no se elimina:
+                queda registrado como <span className="font-semibold text-red-700">Anulado</span>.
+              </p>
+              <div>
+                <label className={labelCls}>Motivo de anulación</label>
+                <textarea
+                  value={motivo}
+                  onChange={(e) => setMotivo(e.target.value)}
+                  rows={3}
+                  maxLength={500}
+                  placeholder="Motivo (opcional)"
+                  className="w-full resize-none rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 focus:border-slate-400 focus:outline-none"
+                />
+              </div>
+              {anularError && (
+                <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{anularError}</div>
+              )}
+            </div>
+            <div className="flex justify-end gap-2 border-t border-slate-200 px-5 py-4">
+              <button
+                type="button"
+                onClick={() => setAAnular(null)}
+                disabled={anulando}
+                className="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={confirmarAnular}
+                disabled={anulando}
+                className="inline-flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-60"
+              >
+                {anulando ? <Loader2 className="h-4 w-4 animate-spin" /> : <Ban className="h-4 w-4" />}
+                Anular recibo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

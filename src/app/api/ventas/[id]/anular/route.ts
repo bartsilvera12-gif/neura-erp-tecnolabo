@@ -183,6 +183,27 @@ export async function POST(
       .neq("estado", "anulado");
     if (eCxc) throw new Error(eCxc.message);
 
+    // 5c) Marcar el recibo de VENTA CONTADO asociado como anulado. Es solo el
+    // documento: los efectos de caja/stock ya se revirtieron en los pasos
+    // anteriores. Se hace ANTES de marcar la venta como anulada para que, dado
+    // que la venta='anulada' es el marcador final del flujo, nunca quede
+    // "venta anulada + recibo vigente". Idempotente: solo afecta recibos
+    // vigentes (`anulado=false`), así un reintento no anula dos veces.
+    const { error: eRec } = await sb
+      .from("recibos_dinero")
+      .update({
+        anulado: true,
+        anulado_at: nowIso,
+        anulado_por: usuarioId,
+        anulado_motivo: motivo ?? `Anulación de venta ${venta.numero_control}`,
+        updated_at: nowIso,
+      })
+      .eq("empresa_id", empresaId)
+      .eq("venta_id", ventaId)
+      .eq("origen", "venta_contado")
+      .eq("anulado", false);
+    if (eRec) throw new Error(eRec.message);
+
     // 6) Marcar la venta como ANULADA
     const { error: eV2 } = await sb
       .from("ventas")

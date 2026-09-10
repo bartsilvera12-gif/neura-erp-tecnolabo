@@ -43,7 +43,7 @@ export async function POST(
 
     const { data: sifenConfig, error: errConfig } = await supabase
       .from("empresa_sifen_config")
-      .select("id, activo")
+      .select("id, activo, ambiente")
       .eq("empresa_id", auth.empresa_id)
       .maybeSingle();
 
@@ -67,6 +67,23 @@ export async function POST(
       );
     }
 
+    // Marca de PRUEBA desde el punto más temprano y confiable: al generar el
+    // borrador el documento entra al pipeline SIFEN con la config activa y el
+    // ambiente ya se conoce. Se denormaliza a `facturas` para que dashboard,
+    // listados, CxC y caja ya la excluyan ANTES de firmar. La firma reconfirma
+    // y sincroniza el valor por si el ambiente cambió entre borrador y firma.
+    const esPrueba = String(sifenConfig.ambiente) === "test";
+    {
+      const { error: errPrueba } = await supabase
+        .from("facturas")
+        .update({ es_prueba: esPrueba })
+        .eq("id", fid)
+        .eq("empresa_id", auth.empresa_id);
+      if (errPrueba) {
+        console.error("[sifen/borrador] no se pudo sincronizar facturas.es_prueba:", errPrueba.message);
+      }
+    }
+
     const { data: existente, error: errExistente } = await supabase
       .from("factura_electronica")
       .select("*")
@@ -87,6 +104,7 @@ export async function POST(
         empresa_id: auth.empresa_id,
         factura_id: fid,
         estado_sifen: "borrador",
+        es_prueba: esPrueba,
       })
       .select()
       .single();

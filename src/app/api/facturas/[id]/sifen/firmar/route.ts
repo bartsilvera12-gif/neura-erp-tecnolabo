@@ -227,6 +227,9 @@ export async function POST(
         xml_firmado_path: signedPath,
         estado_sifen: "firmado",
         xml_path: canonicalXmlPath,
+        // Marca de prueba por documento: se congela el ambiente vigente al firmar.
+        // Un documento de test lleva el literal "SIN VALOR COMERCIAL NI FISCAL".
+        es_prueba: ambiente === "test",
       })
       .eq("id", feRow.id)
       .eq("empresa_id", auth.empresa_id)
@@ -244,6 +247,22 @@ export async function POST(
         ),
         { status: 500 }
       );
+    }
+
+    // Sincronizar la marca de prueba en la factura (denormalización para que las
+    // vistas/totales operativos la excluyan sin joins). Se confirma el valor por
+    // el ambiente vigente al firmar, en AMBOS sentidos: si el borrador se generó
+    // en test pero se firma en producción, deja de ser prueba (y viceversa).
+    // Best-effort: no debe tumbar la firma si falla.
+    if (feRow.factura_id != null) {
+      const { error: errPrueba } = await supabase
+        .from("facturas")
+        .update({ es_prueba: ambiente === "test" })
+        .eq("id", feRow.factura_id)
+        .eq("empresa_id", auth.empresa_id);
+      if (errPrueba) {
+        console.error("[sifen/firmar] no se pudo sincronizar facturas.es_prueba:", errPrueba.message);
+      }
     }
 
     const detalle: SifenApiFirmarDetalle = {
