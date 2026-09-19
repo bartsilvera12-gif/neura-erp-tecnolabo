@@ -44,13 +44,22 @@ async function main() {
   console.log("Ejecutando", MIGRATION, "...");
   await client.query(sql);
 
+  // La tabla vive en el schema del cliente (no en `public`), así que se verifica
+  // en todos los schemas donde exista.
   const after = await client.query(
-    `SELECT column_name FROM information_schema.columns
-     WHERE table_schema = 'public' AND table_name = 'empresa_sifen_config'
-       AND column_name IN ('csc', 'id_csc')
-     ORDER BY column_name`
+    `SELECT table_schema, column_name
+       FROM information_schema.columns
+      WHERE table_name = 'empresa_sifen_config'
+        AND column_name = 'id_csc'
+        AND table_schema NOT IN ('public', 'pg_catalog', 'information_schema')
+      ORDER BY table_schema`
   );
-  console.log("Columnas:", after.rows.map((r) => r.column_name).join(", ") || "(ninguna)");
+  if (after.rows.length === 0) {
+    throw new Error("La columna id_csc no quedó creada en ningún schema de cliente.");
+  }
+  for (const r of after.rows) {
+    console.log(`OK ${r.table_schema}.empresa_sifen_config.id_csc`);
+  }
 
   await client.end();
   console.log("OK: migración aplicada.");
