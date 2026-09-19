@@ -31,12 +31,61 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { config } from "dotenv";
+import pg from "pg";
 import { createClient } from "@supabase/supabase-js";
 import { buildSifenDcarQrParts } from "@/lib/sifen/sifen-dcar-qr";
 
 config({ path: resolve(process.cwd(), ".env.local") });
 
 const SIFEN_BUCKET = "sifen";
+
+/**
+ * Variantes del mismo CSC a probar. El `cHashQR` se calcula sobre los bytes
+ * exactos: si el CSC se pegó con otra caja (el SET lo muestra en mayúsculas)
+ * el hash da distinto aunque el valor sea "el mismo" a la vista.
+ */
+function variantesDeCsc(csc: string): { etiqueta: string; valor: string }[] {
+  const out = [{ etiqueta: "tal cual", valor: csc }];
+  if (csc.toUpperCase() !== csc) out.push({ etiqueta: "MAYÚSCULAS", valor: csc.toUpperCase() });
+  if (csc.toLowerCase() !== csc) out.push({ etiqueta: "minúsculas", valor: csc.toLowerCase() });
+  return out;
+}
+
+/** Cita un identificador de schema para interpolarlo en SQL. */
+function citarIdent(ident: string): string {
+  return `"${ident.replace(/"/g, '""')}"`;
+}
+
+/** Lee el CSC configurado para el RUC emisor del XML, sin imprimirlo. */
+async function cscDesdeBd(rucEmisor: string): Promise<string[]> {
+  const dbUrl = process.env.SUPABASE_DB_URL?.trim();
+  if (!dbUrl) throw new Error("Falta SUPABASE_DB_URL en .env.local para leer el CSC de la base.");
+  const client = new pg.Client({
+    connectionString: dbUrl,
+    ssl: dbUrl.includes("supabase") ? { rejectUnauthorized: false } : undefined,
+  });
+  await client.connect();
+  try {
+    const schemas = await client.query(
+      `SELECT n.nspname FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+        WHERE c.relname = 'empresa_sifen_config' AND c.relkind = 'r'
+          AND n.nspname NOT IN ('public','pg_catalog','information_schema')
+        ORDER BY 1`
+    );
+    const out: string[] = [];
+    for (const { nspname } of schemas.rows as { nspname: string }[]) {
+      const r = await client.query(
+        `SELECT csc FROM ${citarIdent(nspname)}.empresa_sifen_config
+          WHERE replace(ruc, '-', '') LIKE $1 || '%' AND csc IS NOT NULL AND btrim(csc) <> ''`,
+        [rucEmisor]
+      );
+      for (const row of r.rows as { csc: string }[]) out.push(String(row.csc).trim());
+    }
+    return out;
+  } finally {
+    await client.end();
+  }
+}
 
 const ID_CSC_CANDIDATOS = ["0001", "0002"] as const;
 
@@ -98,9 +147,13 @@ function sha256(s: string): string {
 }
 
 async function main(): Promise<void> {
-  const [rutaArg, ...cscs] = process.argv.slice(2);
+  const args = process.argv.slice(2);
+  const desdeBd = args.includes("--desde-bd");
+  const [rutaArg, ...cscs] = args.filter((a) => !a.startsWith("--"));
   if (!rutaArg) {
-    console.error("Uso: npm run sifen:diagnosticar-qr -- <ruta-xml-firmado> [CSC ...]");
+    console.error(
+      "Uso: npm run sifen:diagnosticar-qr -- <ruta-xml-firmado> [CSC ...] [--desde-bd]"
+    );
     process.exit(1);
   }
 
@@ -130,26 +183,43 @@ async function main(): Promise<void> {
   }
   console.log();
 
-  if (cscs.length === 0) {
-    console.log("Pasá uno o más CSC como argumentos para probar cuál reproduce el cHashQR.");
+  const candidatos = cscs.map((c) => c.trim()).filter((c) => c !== "");
+  if (desdeBd) {
+    const ruc = /<dRucEm>([^<]+)<\/dRucEm>/.exec(xml)?.[1]?.trim();
+    if (!ruc) throw new Error("No se pudo leer <dRucEm> del XML para buscar el CSC en la base.");
+    const deBd = await cscDesdeBd(ruc);
+    if (deBd.length === 0) {
+      console.log(`No hay CSC configurado para el RUC ${ruc} en la base.`);
+    }
+    candidatos.push(...deBd);
+  }
+
+  if (candidatos.length === 0) {
+    console.log(
+      "Pasá uno o más CSC como argumentos, o --desde-bd para leer el configurado,\n" +
+        "y se prueba cuál reproduce el cHashQR."
+    );
     return;
   }
 
   console.log("== Prueba de CSC × IdCSC ==");
+  console.log("(el CSC nunca se imprime completo: solo 4 caracteres y su longitud)");
+  console.log();
   let algunaCoincidencia = false;
-  for (const cscRaw of cscs) {
-    const csc = cscRaw.trim();
-    if (csc !== cscRaw) {
-      console.log(`aviso: el CSC "${cscRaw}" tenía espacios alrededor (se usa recortado).`);
-    }
-    for (const idCsc of ID_CSC_CANDIDATOS) {
-      const params = enXml.params.replace(/IdCSC=\d{4}/, `IdCSC=${idCsc}`);
-      const hash = sha256(params + csc);
-      const ok = hash === enXml.cHashQR;
-      if (ok) algunaCoincidencia = true;
-      console.log(
-        `${ok ? "COINCIDE " : "no coincide"}  CSC=${csc.slice(0, 4)}…(${csc.length} car.)  IdCSC=${idCsc}`
-      );
+  const vistos = new Set<string>();
+  for (const csc of candidatos) {
+    for (const { etiqueta, valor } of variantesDeCsc(csc)) {
+      for (const idCsc of ID_CSC_CANDIDATOS) {
+        const clave = `${valor}|${idCsc}`;
+        if (vistos.has(clave)) continue;
+        vistos.add(clave);
+        const params = enXml.params.replace(/IdCSC=\d{4}/, `IdCSC=${idCsc}`);
+        const ok = sha256(params + valor) === enXml.cHashQR;
+        if (ok) algunaCoincidencia = true;
+        console.log(
+          `${ok ? "COINCIDE " : "no coincide"}  CSC=${valor.slice(0, 4)}…(${valor.length} car., ${etiqueta})  IdCSC=${idCsc}`
+        );
+      }
     }
   }
   console.log();
