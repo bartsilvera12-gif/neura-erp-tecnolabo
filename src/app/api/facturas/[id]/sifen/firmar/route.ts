@@ -15,6 +15,7 @@ import {
 import { downloadSifenCertificadoObject } from "@/lib/sifen/sifen-certificados-storage";
 import { extractKeyAndCertFromP12, signSifenDocumentoXml } from "@/lib/sifen/sign-xml";
 import { SIFEN_TEST_CSC_GENERICO } from "@/lib/sifen/sifen-ambiente-test";
+import { resolverIdCsc } from "@/lib/sifen/sifen-id-csc";
 import { parseAmbiente } from "@/lib/sifen/config-validation";
 import type {
   FacturaElectronicaDTO,
@@ -87,7 +88,7 @@ export async function POST(
 
     const { data: cfg, error: errCfg } = await supabase
       .from("empresa_sifen_config")
-      .select("certificado_path, certificado_password_encrypted, ambiente, csc")
+      .select("certificado_path, certificado_password_encrypted, ambiente, csc, id_csc")
       .eq("empresa_id", auth.empresa_id)
       .maybeSingle();
 
@@ -183,6 +184,7 @@ export async function POST(
       signedXml = signSifenDocumentoXml(xmlDl.data.toString("utf8"), material, {
         ambiente,
         csc: cscParaQr,
+        idCsc: resolverIdCsc(cfg.id_csc),
       });
     } catch (e) {
       const m = e instanceof Error ? e.message : "Error al firmar el XML";
