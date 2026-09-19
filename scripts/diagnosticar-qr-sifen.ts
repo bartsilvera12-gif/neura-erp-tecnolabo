@@ -14,16 +14,29 @@
  *      (por ejemplo un `DigestValue` viejo tras regenerar el documento).
  *
  * Uso:
- *   npm run sifen:diagnosticar-qr -- <ruta-xml-firmado> [CSC ...]
+ *   npm run sifen:diagnosticar-qr -- <archivo.xml | ruta-en-bucket> [CSC ...]
+ *
+ * El primer argumento puede ser un archivo local o directamente el
+ * `factura_electronica.xml_firmado_path` (p. ej.
+ * `{empresa_id}/{factura_id}/documento-firmado.xml`): en ese caso se descarga
+ * del bucket `sifen` usando NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY
+ * de .env.local.
  *
  * Sin CSC candidatos solo verifica la coherencia interna del QR (punto 3).
  * Con uno o varios CSC prueba cada combinación CSC × IdCSC (0001/0002) y dice
- * cuál reproduce el `cHashQR` que está dentro del XML.
+ * cuál reproduce el `cHashQR` que está dentro del XML. Los CSC NO se imprimen
+ * completos (solo los primeros 4 caracteres y la longitud).
  */
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { config } from "dotenv";
+import { createClient } from "@supabase/supabase-js";
 import { buildSifenDcarQrParts } from "@/lib/sifen/sifen-dcar-qr";
+
+config({ path: resolve(process.cwd(), ".env.local") });
+
+const SIFEN_BUCKET = "sifen";
 
 const ID_CSC_CANDIDATOS = ["0001", "0002"] as const;
 
@@ -36,6 +49,32 @@ function desescaparXml(s: string): string {
     .replace(/&apos;/g, "'")
     .replace(/&#(\d+);/g, (_, n: string) => String.fromCharCode(parseInt(n, 10)))
     .replace(/&amp;/g, "&");
+}
+
+/**
+ * Devuelve el XML: archivo local si existe, si no lo baja del bucket `sifen`
+ * tratando el argumento como `xml_firmado_path`.
+ */
+async function leerXml(arg: string): Promise<string> {
+  const local = resolve(process.cwd(), arg);
+  if (existsSync(local)) return readFileSync(local, "utf8");
+
+  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if (!sbUrl || !sbKey) {
+    throw new Error(
+      `No existe el archivo "${arg}" y falta NEXT_PUBLIC_SUPABASE_URL / ` +
+        "SUPABASE_SERVICE_ROLE_KEY en .env.local para bajarlo del bucket."
+    );
+  }
+  const objectPath = arg.replace(/^sifen\//, "");
+  console.log(`Descargando ${SIFEN_BUCKET}/${objectPath} ...`);
+  const storage = createClient(sbUrl, sbKey);
+  const { data, error } = await storage.storage.from(SIFEN_BUCKET).download(objectPath);
+  if (error || !data) {
+    throw new Error(`No se pudo descargar del bucket: ${error?.message ?? "objeto no encontrado"}`);
+  }
+  return Buffer.from(await data.arrayBuffer()).toString("utf8");
 }
 
 function leerDCarQr(xml: string): string {
@@ -58,14 +97,14 @@ function sha256(s: string): string {
   return createHash("sha256").update(s, "utf8").digest("hex");
 }
 
-function main(): void {
+async function main(): Promise<void> {
   const [rutaArg, ...cscs] = process.argv.slice(2);
   if (!rutaArg) {
     console.error("Uso: npm run sifen:diagnosticar-qr -- <ruta-xml-firmado> [CSC ...]");
     process.exit(1);
   }
 
-  const xml = readFileSync(resolve(process.cwd(), rutaArg), "utf8");
+  const xml = await leerXml(rutaArg);
   const enXml = partirQr(leerDCarQr(xml));
   const ambiente = enXml.params.includes("consultas-test") ? "test" : "produccion";
 
@@ -128,4 +167,7 @@ function main(): void {
   }
 }
 
-main();
+main().catch((e) => {
+  console.error(e instanceof Error ? e.message : e);
+  process.exit(1);
+});
