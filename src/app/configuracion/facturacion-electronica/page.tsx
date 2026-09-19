@@ -75,7 +75,7 @@ export default function FacturacionElectronicaSifenPage() {
   const [establecimiento, setEstablecimiento] = useState("");
   const [puntoExpedicion, setPuntoExpedicion] = useState("");
   const [csc, setCsc] = useState("");
-  const [idCsc, setIdCsc] = useState("0001");
+  const [idCsc, setIdCsc] = useState("");
   const [activo, setActivo] = useState(true);
   /** Horas desde aprobación SET para permitir cancelación del DE en ERP (config por empresa). */
   const [plazoCancelacionHoras, setPlazoCancelacionHoras] = useState(48);
@@ -129,7 +129,7 @@ export default function FacturacionElectronicaSifenPage() {
         setEstablecimiento(d.establecimiento);
         setPuntoExpedicion(d.punto_expedicion);
         setCsc(d.csc ?? "");
-        setIdCsc(d.id_csc ?? "0001");
+        setIdCsc(d.id_csc ?? "");
         setActivo(d.activo);
         setPlazoCancelacionHoras(
           typeof d.sifen_plazo_cancelacion_horas === "number" && Number.isFinite(d.sifen_plazo_cancelacion_horas)
@@ -210,7 +210,7 @@ export default function FacturacionElectronicaSifenPage() {
           establecimiento: establecimiento.trim(),
           punto_expedicion: puntoExpedicion.trim(),
           csc: csc.trim() || null,
-          id_csc: idCsc.trim() || "0001",
+          id_csc: idCsc.trim() || null,
           activo,
           sifen_plazo_cancelacion_horas: Math.min(8760, Math.max(1, Math.floor(Number(plazoCancelacionHoras)) || 48)),
         };
@@ -244,7 +244,7 @@ export default function FacturacionElectronicaSifenPage() {
           establecimiento: establecimiento.trim(),
           punto_expedicion: puntoExpedicion.trim(),
           csc: csc.trim() || null,
-          id_csc: idCsc.trim() || "0001",
+          id_csc: idCsc.trim() || null,
           activo,
           certificado_vencimiento: venc,
           sifen_plazo_cancelacion_horas: Math.min(8760, Math.max(1, Math.floor(Number(plazoCancelacionHoras)) || 48)),
@@ -709,6 +709,7 @@ export default function FacturacionElectronicaSifenPage() {
             <div>
               <label className={fLabel}>ID del CSC</label>
               <select className={fInput} value={idCsc} onChange={(e) => setIdCsc(e.target.value)}>
+                <option value="">Sin configurar</option>
                 <option value="0001">0001 (CSC1)</option>
                 <option value="0002">0002 (CSC2)</option>
               </select>
@@ -957,7 +958,7 @@ export default function FacturacionElectronicaSifenPage() {
                   setEstablecimiento(cfg.establecimiento);
                   setPuntoExpedicion(cfg.punto_expedicion);
                   setCsc(cfg.csc ?? "");
-                  setIdCsc(cfg.id_csc ?? "0001");
+                  setIdCsc(cfg.id_csc ?? "");
                   setActivo(cfg.activo);
                   setCertVenc(isoToDateInput(cfg.certificado_vencimiento));
                 }

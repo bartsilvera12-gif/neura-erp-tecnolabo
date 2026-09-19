@@ -8,9 +8,13 @@
 -- el de la cadena de caracteres es inválido». Por eso el IdCSC debe ser
 -- configurable por empresa y no una constante global.
 --
--- Aditiva, idempotente y NO destructiva (solo agrega una columna con default
--- '0001', que es el valor que el código ya venía enviando). Respeta
--- `neura.solo_schema`. No toca `public`.
+-- La columna es NULLABLE a propósito: `null` significa «no configurado», y el
+-- código cae al fallback de entorno (SIFEN_ID_CSC) y luego a '0001'. Con un
+-- DEFAULT '0001' la columna pisaría esa variable en instalaciones que hoy
+-- dependen de ella, rompiendo la firma justo al deployar.
+--
+-- Aditiva, idempotente y NO destructiva. Respeta `neura.solo_schema`. No toca
+-- `public`.
 -- =============================================================================
 
 BEGIN;
@@ -31,7 +35,7 @@ BEGIN
     ORDER BY 1
   LOOP
     EXECUTE format(
-      'ALTER TABLE %I.empresa_sifen_config ADD COLUMN IF NOT EXISTS id_csc text NOT NULL DEFAULT ''0001''', sch);
+      'ALTER TABLE %I.empresa_sifen_config ADD COLUMN IF NOT EXISTS id_csc text', sch);
 
     IF NOT EXISTS (
       SELECT 1 FROM pg_constraint
@@ -40,12 +44,13 @@ BEGIN
     ) THEN
       EXECUTE format(
         'ALTER TABLE %I.empresa_sifen_config
-           ADD CONSTRAINT empresa_sifen_config_id_csc_chk CHECK (id_csc ~ ''^[0-9]{4}$'')', sch);
+           ADD CONSTRAINT empresa_sifen_config_id_csc_chk
+             CHECK (id_csc IS NULL OR id_csc ~ ''^[0-9]{4}$'')', sch);
     END IF;
 
     EXECUTE format(
       'COMMENT ON COLUMN %I.empresa_sifen_config.id_csc IS %L', sch,
-      'Identificador del CSC asignado por el SET (0001 = CSC1, 0002 = CSC2). Se envía como IdCSC en la URL del QR y debe coincidir con el CSC cargado.');
+      'Identificador del CSC asignado por el SET (0001 = CSC1, 0002 = CSC2). Se envía como IdCSC en la URL del QR y debe coincidir con el CSC cargado. NULL = usar el fallback SIFEN_ID_CSC del entorno.');
     EXECUTE format(
       'COMMENT ON COLUMN %I.empresa_sifen_config.csc IS %L', sch,
       'Código de Seguridad del Contribuyente correspondiente al id_csc cargado (32 caracteres en producción).');

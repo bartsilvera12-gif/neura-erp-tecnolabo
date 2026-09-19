@@ -26,8 +26,8 @@ export interface EmpresaSifenConfigDTO {
   establecimiento: string;
   punto_expedicion: string;
   csc: string | null;
-  /** Id del CSC en el SET: `0001` = CSC1, `0002` = CSC2. Se envía como `IdCSC` en el QR. */
-  id_csc: string;
+  /** Id del CSC en el SET: `0001` = CSC1, `0002` = CSC2. `null` = usar el fallback de entorno. */
+  id_csc: string | null;
   certificado_path: string | null;
   certificado_vencimiento: string | null;
   activo: boolean;
