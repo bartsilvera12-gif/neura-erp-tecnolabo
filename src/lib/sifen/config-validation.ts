@@ -6,7 +6,7 @@ import type {
   SifenCertificadoPasswordPatchAction,
 } from "./types";
 import { normalizePlazoCancelacionHoras } from "./sifen-cancelacion-rules";
-import { normalizarIdCsc, SIFEN_ID_CSC_DEFAULT } from "./sifen-id-csc";
+import { normalizarIdCsc } from "./sifen-id-csc";
 
 function trimStr(v: unknown): string {
   if (v == null) return "";
@@ -180,7 +180,7 @@ export function validateCreateBody(raw: unknown): EmpresaSifenConfigCreateResult
     punto_expedicion,
     ambiente,
     csc: optionalNullableString(b.csc),
-    id_csc: SIFEN_ID_CSC_DEFAULT,
+    id_csc: null,
     certificado_path: optionalNullableString(b.certificado_path),
     certificado_password,
     certificado_vencimiento,
@@ -299,7 +299,7 @@ export function buildPatchUpdate(raw: unknown): EmpresaSifenConfigPatchResult {
   if ("csc" in b) patch.csc = b.csc === null ? null : trimStr(b.csc) || null;
   if ("id_csc" in b) {
     if (b.id_csc === null || trimStr(b.id_csc) === "") {
-      patch.id_csc = SIFEN_ID_CSC_DEFAULT;
+      patch.id_csc = null;
     } else {
       const idCsc = normalizarIdCsc(b.id_csc);
       if (!idCsc) {
@@ -379,7 +379,7 @@ export function rowFromCreateBody(empresaId: string, body: EmpresaSifenConfigCre
     establecimiento: body.establecimiento,
     punto_expedicion: body.punto_expedicion,
     csc: body.csc ?? null,
-    id_csc: normalizarIdCsc(body.id_csc) ?? SIFEN_ID_CSC_DEFAULT,
+    id_csc: normalizarIdCsc(body.id_csc),
     certificado_path: body.certificado_path ?? null,
     activo: body.activo ?? true,
   };
