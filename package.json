@@ -26,6 +26,8 @@
     "db:migrate-sifen-cert-password": "tsx scripts/migrate-sifen-certificado-password-to-encrypted.ts",
     "db:apply-sifen-timbrado-fecha": "tsx scripts/apply-sifen-timbrado-fecha-inicio-migration.ts",
     "db:apply-sifen-actividad-economica": "tsx scripts/apply-sifen-actividad-economica-migration.ts",
+    "db:apply-sifen-id-csc": "tsx scripts/apply-sifen-id-csc-migration.ts",
+    "sifen:diagnosticar-qr": "tsx scripts/diagnosticar-qr-sifen.ts",
     "test:comprobante-tech": "tsx scripts/technical-tests-comprobante-full.ts",
     "db:rewrite-migrations-zentra": "tsx scripts/rewrite-migrations-public-to-zentra.ts",
     "db:verify-zentra-install": "tsx scripts/verify-zentra-erp-db-install.ts",

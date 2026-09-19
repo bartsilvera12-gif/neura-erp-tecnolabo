@@ -6,6 +6,7 @@ import type {
   SifenCertificadoPasswordPatchAction,
 } from "./types";
 import { normalizePlazoCancelacionHoras } from "./sifen-cancelacion-rules";
+import { normalizarIdCsc, SIFEN_ID_CSC_DEFAULT } from "./sifen-id-csc";
 
 function trimStr(v: unknown): string {
   if (v == null) return "";
@@ -179,11 +180,20 @@ export function validateCreateBody(raw: unknown): EmpresaSifenConfigCreateResult
     punto_expedicion,
     ambiente,
     csc: optionalNullableString(b.csc),
+    id_csc: SIFEN_ID_CSC_DEFAULT,
     certificado_path: optionalNullableString(b.certificado_path),
     certificado_password,
     certificado_vencimiento,
     activo: typeof b.activo === "boolean" ? b.activo : undefined,
   };
+
+  if ("id_csc" in b && b.id_csc !== null && b.id_csc !== "") {
+    const idCsc = normalizarIdCsc(b.id_csc);
+    if (!idCsc) {
+      return { ok: false, error: "id_csc debe ser el identificador del CSC en el SET: 4 dígitos (0001 = CSC1, 0002 = CSC2)" };
+    }
+    data.id_csc = idCsc;
+  }
 
   if ("sifen_plazo_cancelacion_horas" in b) {
     if (b.sifen_plazo_cancelacion_horas === null) {
@@ -287,6 +297,17 @@ export function buildPatchUpdate(raw: unknown): EmpresaSifenConfigPatchResult {
     patch.ambiente = a;
   }
   if ("csc" in b) patch.csc = b.csc === null ? null : trimStr(b.csc) || null;
+  if ("id_csc" in b) {
+    if (b.id_csc === null || trimStr(b.id_csc) === "") {
+      patch.id_csc = SIFEN_ID_CSC_DEFAULT;
+    } else {
+      const idCsc = normalizarIdCsc(b.id_csc);
+      if (!idCsc) {
+        return { ok: false, error: "id_csc debe ser el identificador del CSC en el SET: 4 dígitos (0001 = CSC1, 0002 = CSC2)" };
+      }
+      patch.id_csc = idCsc;
+    }
+  }
   if ("certificado_path" in b) {
     patch.certificado_path = b.certificado_path === null ? null : trimStr(b.certificado_path) || null;
   }
@@ -358,6 +379,7 @@ export function rowFromCreateBody(empresaId: string, body: EmpresaSifenConfigCre
     establecimiento: body.establecimiento,
     punto_expedicion: body.punto_expedicion,
     csc: body.csc ?? null,
+    id_csc: normalizarIdCsc(body.id_csc) ?? SIFEN_ID_CSC_DEFAULT,
     certificado_path: body.certificado_path ?? null,
     activo: body.activo ?? true,
   };

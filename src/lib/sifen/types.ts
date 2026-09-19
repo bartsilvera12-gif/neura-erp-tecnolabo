@@ -26,6 +26,8 @@ export interface EmpresaSifenConfigDTO {
   establecimiento: string;
   punto_expedicion: string;
   csc: string | null;
+  /** Id del CSC en el SET: `0001` = CSC1, `0002` = CSC2. Se envía como `IdCSC` en el QR. */
+  id_csc: string;
   certificado_path: string | null;
   certificado_vencimiento: string | null;
   activo: boolean;
@@ -62,6 +64,8 @@ export interface EmpresaSifenConfigCreateBody {
   punto_expedicion: string;
   ambiente: AmbienteSifen;
   csc?: string | null;
+  /** `0001` (CSC1) o `0002` (CSC2); debe corresponder al CSC cargado. Por defecto `0001`. */
+  id_csc?: string | null;
   certificado_path?: string | null;
   certificado_password?: string | null;
   certificado_vencimiento?: string | null;
@@ -85,6 +89,8 @@ export interface EmpresaSifenConfigPatchBody {
   punto_expedicion?: string;
   ambiente?: AmbienteSifen;
   csc?: string | null;
+  /** `0001` (CSC1) o `0002` (CSC2); debe corresponder al CSC cargado. */
+  id_csc?: string | null;
   certificado_path?: string | null;
   certificado_password?: string | null;
   certificado_vencimiento?: string | null;
