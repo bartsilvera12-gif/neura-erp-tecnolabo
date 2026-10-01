@@ -57,7 +57,11 @@ export async function handleNcSifenXmlPost(opts: {
   if (estadoErp === "anulada_borrador") {
     return NextResponse.json(errorResponse("La nota de crédito está anulada."), { status: 409 });
   }
-  if (estadoErp !== "borrador" && estadoErp !== "pendiente_envio_sifen") {
+  // `rechazada` también habilita regenerar XML: tras corregir el motivo del
+  // rechazo de SET (p. ej. faltaba dNumCasRec) se vuelve a firmar y enviar la
+  // MISMA NC, sin crear otra. Coherente con el comentario de ESTADOS_BLOQUEADOS_XML
+  // (y con el circuito de la FE). Los demás estados siguen bloqueados.
+  if (estadoErp !== "borrador" && estadoErp !== "pendiente_envio_sifen" && estadoErp !== "rechazada") {
     return NextResponse.json(
       errorResponse(`No se puede generar XML en estado ERP "${estadoErp}".`),
       { status: 409 }
@@ -261,12 +265,16 @@ export async function handleNcSifenXmlPost(opts: {
     await removeSifenObject(supabase, previousSignedPath);
   }
 
+  // Al regenerar el XML la NC queda lista para firmar/enviar. Se acepta la
+  // transición tanto desde `borrador` (primera vez) como desde `rechazada`
+  // (reproceso tras un rechazo de SET ya corregido), evitando que el estado
+  // quede colgado en `rechazada` durante el reenvío.
   await supabase
     .from("nota_credito")
     .update({ estado_erp: "pendiente_envio_sifen" })
     .eq("id", nid)
     .eq("empresa_id", auth.empresa_id)
-    .eq("estado_erp", "borrador");
+    .in("estado_erp", ["borrador", "rechazada"]);
 
   const data: Record<string, unknown> = {
     nota_credito_electronica: updatedNe,
