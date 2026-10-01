@@ -167,12 +167,14 @@ const MENU_STRUCTURE: MenuItem[] = [
   { key: "entidades_bancarias", slug: "entidades_bancarias", label: "Entidades bancarias", href: "/configuracion/entidades-bancarias", icon: Building2 },
   { key: "reportes", slug: "reportes", label: "Reportes", href: "/reportes", icon: BarChart3 },
   // Pagos oculto en instancia En lo de Mari (no usa este módulo).
-  // Comisiones y Notas de credito ocultos por ahora:
   { key: "comisiones", slug: "comisiones", label: "Comisiones", href: "/comisiones", icon: Percent },
-  // {
-  //   key: "notas_credito", slug: "notas_credito", label: "Notas de crédito",
-  //   href: "/notas-credito", icon: ScrollText,
-  // },
+  // Visible: ya se emiten NC contra facturas electronicas y no habia desde
+  // donde consultarlas; el listado y el detalle ya existian sin entrada de menu.
+  // Gated por el modulo 'notas_credito' (activo en la empresa).
+  {
+    key: "notas_credito", slug: "notas_credito", label: "Notas de crédito",
+    href: "/notas-credito", icon: ScrollText,
+  },
   // Visible: el admin necesita entrar a gestionar usuarios y contrasenas.
   // Gated por el modulo 'usuarios', que solo tiene el administrador.
   { key: "usuarios", slug: "usuarios", label: "Usuarios", href: "/usuarios", icon: UserCog },
