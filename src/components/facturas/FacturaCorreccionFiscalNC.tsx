@@ -76,7 +76,11 @@ function nextNcSifenPasoReal(
   label: string;
 } | null {
   if (!opts.deAprobado || opts.puedeCancelarDe) return null;
-  if (nc.estado_erp === "anulada_borrador" || nc.estado_erp === "aprobada" || nc.estado_erp === "rechazada") {
+  // `rechazada` ya NO corta acá: tras un rechazo de SET la NC debe poder
+  // reprocesarse ("Corregir y reenviar" → /procesar) sobre la MISMA NC. El
+  // paso concreto lo resuelve la lógica por `estado_sifen` más abajo. Siguen
+  // sin acción `aprobada` (ya emitida) y `anulada_borrador`.
+  if (nc.estado_erp === "anulada_borrador" || nc.estado_erp === "aprobada") {
     return null;
   }
   const st = nc.estado_sifen ?? "sin_envio";
@@ -110,7 +114,11 @@ function nextNcSifenPasoTestOverride(
   label: string;
 } | null {
   if (!opts.deAprobado || opts.puedeCancelarDe) return null;
-  if (nc.estado_erp === "anulada_borrador" || nc.estado_erp === "aprobada" || nc.estado_erp === "rechazada") {
+  // `rechazada` ya NO corta acá: tras un rechazo de SET la NC debe poder
+  // reprocesarse ("Corregir y reenviar" → /procesar) sobre la MISMA NC. El
+  // paso concreto lo resuelve la lógica por `estado_sifen` más abajo. Siguen
+  // sin acción `aprobada` (ya emitida) y `anulada_borrador`.
+  if (nc.estado_erp === "anulada_borrador" || nc.estado_erp === "aprobada") {
     return null;
   }
   const st = nc.estado_sifen ?? "sin_envio";
