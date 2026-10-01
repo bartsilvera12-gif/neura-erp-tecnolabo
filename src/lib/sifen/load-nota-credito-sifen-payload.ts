@@ -152,7 +152,7 @@ export async function loadValidatedNotaCreditoSifenPayload(
   const [clienteRes, configRes] = await Promise.all([
     supabase
       .from("clientes")
-      .select("id, empresa, nombre_contacto, nombre, ruc, documento, direccion, telefono, email")
+      .select("id, empresa, nombre_contacto, nombre, ruc, documento, direccion, telefono, email, sifen_num_casa_de")
       .eq("id", clienteId)
       .eq("empresa_id", empresaId)
       .maybeSingle(),
@@ -216,6 +216,14 @@ export async function loadValidatedNotaCreditoSifenPayload(
       ruc: cli.ruc == null || String(cli.ruc).trim() === "" ? null : String(cli.ruc).trim(),
       documento: cli.documento == null || String(cli.documento).trim() === "" ? null : String(cli.documento).trim(),
       direccion: cli.direccion == null ? null : String(cli.direccion).trim(),
+      // dNumCasRec: SET lo exige cuando se informa dDirRec. Se toma de la ficha
+      // del cliente (sifen_num_casa_de); el builder completa 0 si viene null.
+      sifen_d_num_cas_rec:
+        cli.sifen_num_casa_de == null || cli.sifen_num_casa_de === ""
+          ? null
+          : Number.isFinite(Number(cli.sifen_num_casa_de))
+            ? Math.max(0, Math.floor(Number(cli.sifen_num_casa_de)))
+            : null,
       telefono: cli.telefono == null ? null : String(cli.telefono).trim(),
       email: cli.email == null ? null : String(cli.email).trim(),
     },

@@ -263,7 +263,15 @@ export function buildOfficialRdeNotaCreditoElectronicaXml(
     recParts.push(textEl("dRucRec", formatoCuerpoRucTipoTruc(dRucRec)));
     recParts.push(textEl("dDVRec", dDVRec));
     recParts.push(textEl("dNomRec", receptor.nombre.trim()));
-    if (receptor.direccion?.trim()) recParts.push(textEl("dDirRec", receptor.direccion.trim()));
+    if (receptor.direccion?.trim()) {
+      recParts.push(textEl("dDirRec", receptor.direccion.trim()));
+      // SET exige dNumCasRec cuando se informa dDirRec. Se completa con el número
+      // de casa del cliente (sifen_d_num_cas_rec) o 0 por defecto, igual que la
+      // factura (rde-xml.ts). Evita el rechazo "número de casa del receptor".
+      recParts.push(
+        textEl("dNumCasRec", String(Math.max(0, Math.floor(Number(receptor.sifen_d_num_cas_rec) || 0)))),
+      );
+    }
     if (receptor.telefono?.trim()) {
       const tr = receptor.telefono.replace(/\D/g, "");
       if (tr.length >= 8) recParts.push(textEl("dTelRec", tr.slice(0, 15)));
@@ -280,7 +288,15 @@ export function buildOfficialRdeNotaCreditoElectronicaXml(
     recParts.push(textEl("dDTipIDRec", XSD_DES_DOC_CI_PY));
     recParts.push(textEl("dNumIDRec", doc.slice(0, 20)));
     recParts.push(textEl("dNomRec", receptor.nombre.trim()));
-    if (receptor.direccion?.trim()) recParts.push(textEl("dDirRec", receptor.direccion.trim()));
+    if (receptor.direccion?.trim()) {
+      recParts.push(textEl("dDirRec", receptor.direccion.trim()));
+      // SET exige dNumCasRec cuando se informa dDirRec. Se completa con el número
+      // de casa del cliente (sifen_d_num_cas_rec) o 0 por defecto, igual que la
+      // factura (rde-xml.ts). Evita el rechazo "número de casa del receptor".
+      recParts.push(
+        textEl("dNumCasRec", String(Math.max(0, Math.floor(Number(receptor.sifen_d_num_cas_rec) || 0)))),
+      );
+    }
     if (receptor.telefono?.trim()) {
       const tr = receptor.telefono.replace(/\D/g, "");
       if (tr.length >= 8) recParts.push(textEl("dTelRec", tr.slice(0, 15)));
