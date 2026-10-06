@@ -10,6 +10,7 @@ import { downloadSifenCertificadoObject } from "@/lib/sifen/sifen-certificados-s
 import { toFacturaElectronicaDto } from "@/lib/sifen/to-factura-electronica-dto";
 import type { AmbienteSifen, SifenApiEnviarTestDetalle, SifenEnviarTestResponseData } from "@/lib/sifen/types";
 import { isExplicitSifenTestOverrideEnabled } from "@/lib/env/allow-test-mode";
+import { evaluarRetrasoEmisionSifen, mensajeRetrasoEmisionSifen } from "@/lib/sifen/retraso-emision-guard";
 
 function parseAmbiente(raw: string): AmbienteSifen | null {
   if (raw === "test" || raw === "produccion") return raw;
@@ -98,6 +99,26 @@ export async function handleSifenEnviarPost(
       errorResponse("No hay XML firmado (xml_firmado_path vacío). Ejecute primero POST .../sifen/firmar."),
       { status: 400 }
     );
+  }
+
+  // Guard de "retraso de emisión": el dFeEmiDE usa la fecha de la factura. Si quedó
+  // fuera de la ventana de transmisión del SET, se corta acá con un mensaje claro
+  // en vez de provocar el rechazo "La fecha y hora de emisión del DE informada es
+  // inválida por retraso". `?ignorarRetraso=1` permite forzar el envío (p. ej. para
+  // reproducir el rechazo en diagnóstico).
+  const ignorarRetraso = request.nextUrl.searchParams.get("ignorarRetraso") === "1";
+  if (!ignorarRetraso) {
+    const { data: facturaFechaRow } = await supabase
+      .from("facturas")
+      .select("fecha")
+      .eq("id", fid)
+      .eq("empresa_id", auth.empresa_id)
+      .maybeSingle();
+    const fechaFactura = facturaFechaRow?.fecha == null ? "" : String(facturaFechaRow.fecha);
+    const retraso = evaluarRetrasoEmisionSifen(fechaFactura);
+    if (retraso?.fueraDeVentana) {
+      return NextResponse.json(errorResponse(mensajeRetrasoEmisionSifen(retraso)), { status: 409 });
+    }
   }
 
   const { data: cfg, error: errCfg } = await supabase

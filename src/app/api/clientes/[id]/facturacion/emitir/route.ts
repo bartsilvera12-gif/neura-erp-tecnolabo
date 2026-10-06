@@ -7,6 +7,7 @@ import { montosFacturaItemParaInsert } from "@/lib/facturacion/factura-item-mont
 import { obtenerSiguienteNumeroFacturaEmpresa } from "@/lib/facturacion/factura-suscripcion-servidor";
 import { aplicarPlanPendienteSiVencido } from "@/lib/facturacion/suscripcion-plan-pendiente";
 import { fechaVencimientoSuscripcion } from "@/lib/fechas/calendario";
+import { hoyYmdSifen } from "@/lib/sifen/retraso-emision-guard";
 
 
 /**
@@ -80,8 +81,24 @@ export async function POST(
     const diaFact = Math.min(susUso.dia_facturacion ?? 1, 28);
     const diaVencCfg = Math.min(Math.max(1, susUso.dia_vencimiento ?? 10), 31);
 
-    const fecha = `${year}-${String(month).padStart(2, "0")}-${String(diaFact).padStart(2, "0")}`;
-    const fechaVenc = fechaVencimientoSuscripcion(fecha, diaVencCfg);
+    // Fecha "teórica" de facturación: día de facturación del mes facturado.
+    const fechaDiaFacturacion = `${year}-${String(month).padStart(2, "0")}-${String(diaFact).padStart(2, "0")}`;
+
+    // El vencimiento se ancla al día de facturación del mes facturado: no debe
+    // moverse por emitir unos días tarde dentro del mes.
+    const fechaVenc = fechaVencimientoSuscripcion(fechaDiaFacturacion, diaVencCfg);
+
+    // Fecha de emisión (dFeEmiDE del DE): no puede quedar en el pasado al facturar
+    // el mes corriente, o el SET rechaza por retraso ("La fecha y hora de emisión
+    // del DE informada es inválida por retraso"). Si el día de facturación ya pasó
+    // dentro del mes en curso, se emite con fecha de hoy (sigue dentro del mes, así
+    // el dedup "una por mes" y el vencimiento se mantienen coherentes).
+    // Meses pasados (back-billing) se dejan como están: los atrapa el guard de
+    // preflight al enviar, con un mensaje claro.
+    const hoyPy = hoyYmdSifen();
+    const mesCorriente = mes === hoyPy.slice(0, 7);
+    const fecha =
+      mesCorriente && fechaDiaFacturacion < hoyPy ? hoyPy : fechaDiaFacturacion;
 
     const nextMonth = month === 12 ? 1 : month + 1;
     const nextYear = month === 12 ? year + 1 : year;

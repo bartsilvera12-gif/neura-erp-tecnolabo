@@ -231,7 +231,12 @@ export async function loadValidatedNotaCreditoSifenPayload(
       id: String((nc as { id: string }).id),
       monto: Number((nc as { monto: unknown }).monto),
       motivo: String((nc as { motivo: string }).motivo ?? "").trim(),
-      fecha_emision: String((factura as { fecha: string }).fecha).trim(),
+      // La NC es un DE propio que se emite AHORA; su dFeEmiDE/CDC deben llevar la fecha
+      // de emisión actual (hora civil de Paraguay), no la fecha de la factura origen.
+      // Usar la fecha de la factura (antigua) provoca el rechazo SET "La fecha y hora de
+      // emisión del DE informada es inválida por retraso". La factura origen ya queda
+      // referenciada por su CDC en gCamDEAsoc, no por esta fecha.
+      fecha_emision: new Date().toLocaleDateString("en-CA", { timeZone: "America/Asuncion" }),
     },
     facturaOrigen: {
       numero_factura: String((factura as { numero_factura: string }).numero_factura),
