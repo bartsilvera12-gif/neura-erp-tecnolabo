@@ -26,6 +26,11 @@ function ymdEnTz(d: Date, tz: string): string {
   return d.toLocaleDateString("en-CA", { timeZone: tz });
 }
 
+/** Hoy (YYYY-MM-DD) en hora civil de Paraguay, la zona que el SET usa para el dFeEmiDE. */
+export function hoyYmdSifen(ahora: Date = new Date()): string {
+  return ymdEnTz(ahora, SIFEN_TZ);
+}
+
 function parseYmd(ymd: string): { y: number; mo: number; d: number } | null {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(ymd.trim());
   if (!m) return null;
@@ -71,7 +76,7 @@ export function evaluarRetrasoEmisionSifen(
 ): RetrasoEmisionResult | null {
   const fechaYmd = toCalendarDateStr(fechaEmisionIso);
   if (!fechaYmd) return null;
-  const hoyYmd = ymdEnTz(ahora, SIFEN_TZ);
+  const hoyYmd = hoyYmdSifen(ahora);
   const dias = diasEntreYmd(fechaYmd, hoyYmd);
   if (dias == null) return null;
   const horasAtraso = dias * 24;
