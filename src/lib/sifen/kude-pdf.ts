@@ -29,6 +29,12 @@ export type BuildKudePdfInput = {
   qrUrl: string;
   /** Branding opcional. Si no viene o es inválido, se usa el diseño Neura. */
   branding?: KudeBranding | null;
+  /**
+   * Etiqueta "Tipo de documento" del KuDE. Default "Factura electrónica".
+   * Para notas de crédito se pasa "Nota de crédito electrónica" (el layout y
+   * los datos salen del mismo rDE firmado; solo cambia el rótulo).
+   */
+  tipoDocumentoLabel?: string;
 };
 
 const A4_W = 595.28;
@@ -273,6 +279,7 @@ function drawTableChunk(
 
 export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buffer> {
   const { parsed, numeroFactura, dProtAut, qrUrl, branding } = input;
+  const tipoDocLabel = input.tipoDocumentoLabel?.trim() || "Factura electrónica";
 
   /**
    * Branding resolution: si la empresa configuró color/logo válidos, los usamos;
@@ -307,7 +314,7 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
   });
 
   const pdfDoc = await PDFDocument.create();
-  pdfDoc.setTitle(`KuDE — Factura ${numeroFactura}`);
+  pdfDoc.setTitle(`KuDE — ${tipoDocLabel} ${numeroFactura}`);
   pdfDoc.setAuthor("Neura ERP");
 
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -429,7 +436,7 @@ export async function buildKudePdfBuffer(input: BuildKudePdfInput): Promise<Buff
   rightBaseline += rightLineLead;
   drawTextRight(page, `Vigencia: ${parsed.timbrado.dFeIniT}`, rightEdge, rightBaseline, 8, font, BLACK);
   rightBaseline += rightLineLead;
-  drawTextRight(page, "Tipo de documento: Factura electrónica", rightEdge, rightBaseline, 8, font, BLACK);
+  drawTextRight(page, `Tipo de documento: ${tipoDocLabel}`, rightEdge, rightBaseline, 8, font, BLACK);
   rightBaseline += rightLineLead;
   drawTextRight(page, `Nº: ${nroTimbrado}`, rightEdge, rightBaseline, 9, fontBold, BLACK);
   rightBaseline += rightLineLead;

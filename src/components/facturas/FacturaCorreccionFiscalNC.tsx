@@ -501,6 +501,17 @@ export function FacturaCorreccionFiscalNC({
                         ) : null}
                       </div>
                       <div className="flex flex-col gap-1.5 shrink-0 w-full sm:w-auto sm:min-w-[11rem]">
+                        {nc.estado_sifen === "aprobado" ? (
+                          <a
+                            href={`/api/notas-credito/${nc.id}/sifen/kude`}
+                            target="_blank"
+                            rel="noopener"
+                            className="w-full sm:w-auto text-center px-3 py-2 rounded-lg bg-[#C7202A] text-white text-xs font-semibold hover:bg-[#A81B23]"
+                            title="Abrir el comprobante (KuDE) de la nota de crédito para imprimir o guardar"
+                          >
+                            Imprimir NC (KuDE)
+                          </a>
+                        ) : null}
                         {pasoReal ? (
                           <button
                             type="button"
@@ -530,7 +541,7 @@ export function FacturaCorreccionFiscalNC({
                             Anular borrador
                           </button>
                         ) : null}
-                        {!pasoReal && !pasoTestOv && nc.estado_erp !== "borrador" ? (
+                        {!pasoReal && !pasoTestOv && nc.estado_erp !== "borrador" && nc.estado_sifen !== "aprobado" ? (
                           <span className="text-slate-400 text-[11px]">Sin acción SIFEN disponible</span>
                         ) : null}
                       </div>
