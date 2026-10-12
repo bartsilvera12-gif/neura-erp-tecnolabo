@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
+import { numeroLegalDesdeCdc } from "@/lib/sifen/numero-legal-cdc";
 import type { NotaCreditoGlobalDetailDTO, NotaCreditoEventoAuditoriaDTO } from "@/lib/nota-credito/types";
 
 function labelTipoEvento(t: string) {
@@ -151,6 +152,12 @@ export default function NotaCreditoDetalleClient() {
             <dt className="text-slate-400 text-xs">Creador</dt>
             <dd className="text-xs">
               {String(nc.created_by_nombre_snapshot ?? nc.created_by_email_snapshot ?? nc.created_by_user_id ?? "—")}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-slate-400 text-xs">N.º de nota de crédito</dt>
+            <dd className="font-mono font-semibold">
+              {numeroLegalDesdeCdc(ne?.cdc != null ? String(ne.cdc) : null) ?? "—"}
             </dd>
           </div>
           <div>

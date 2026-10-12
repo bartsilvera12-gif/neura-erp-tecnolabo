@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
+import { numeroLegalDesdeCdc } from "@/lib/sifen/numero-legal-cdc";
 import type { NotaCreditoListItemDTO, SifenPrevueloFacturaNcDTO } from "@/lib/nota-credito/types";
 
 const MSG_BLOQUEO_TIMBRADO_ORIGEN =
@@ -554,7 +555,13 @@ export function FacturaCorreccionFiscalNC({
                   </div>
                   {!debugUi ? (
                     nc.cdc ? (
-                      <div className="px-3 sm:px-4 py-2 border-b border-slate-50">
+                      <div className="px-3 sm:px-4 py-2 border-b border-slate-50 space-y-0.5">
+                        {numeroLegalDesdeCdc(nc.cdc) ? (
+                          <p className="text-[11px] text-slate-700">
+                            N.º NC{" "}
+                            <span className="font-mono font-semibold text-slate-800">{numeroLegalDesdeCdc(nc.cdc)}</span>
+                          </p>
+                        ) : null}
                         <p className="text-[10px] text-slate-500">
                           CDC <span className="font-mono text-slate-700 break-all">{nc.cdc}</span>
                         </p>

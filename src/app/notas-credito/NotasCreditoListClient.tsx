@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { fetchWithSupabaseSession } from "@/lib/api/fetch-with-supabase-session";
 import { getClientes } from "@/lib/clientes/storage";
+import { numeroLegalDesdeCdc } from "@/lib/sifen/numero-legal-cdc";
 import type { NotaCreditoGlobalListItemDTO } from "@/lib/nota-credito/types";
 
 const inputClass =
@@ -272,7 +273,7 @@ export default function NotasCreditoListClient() {
                 <th className="px-3 py-2.5 text-right">Monto</th>
                 <th className="px-3 py-2.5">ERP</th>
                 <th className="px-3 py-2.5">SIFEN</th>
-                <th className="px-3 py-2.5">CDC</th>
+                <th className="px-3 py-2.5">N.º / CDC</th>
                 <th className="px-3 py-2.5">Usuario</th>
                 <th className="px-3 py-2.5">Motivo</th>
                 <th className="px-3 py-2.5">Error</th>
@@ -315,8 +316,15 @@ export default function NotasCreditoListClient() {
                       <span className={badgeErp(nc.estado_erp)}>{nc.estado_erp}</span>
                     </td>
                     <td className="px-3 py-2">{badgeSifen(nc.estado_sifen)}</td>
-                    <td className="px-3 py-2 font-mono text-[10px] text-slate-600 max-w-[120px] truncate" title={nc.cdc ?? ""}>
-                      {nc.cdc ?? "—"}
+                    <td className="px-3 py-2 max-w-[150px]">
+                      {numeroLegalDesdeCdc(nc.cdc) ? (
+                        <span className="block font-mono text-[11px] font-semibold text-slate-800">
+                          {numeroLegalDesdeCdc(nc.cdc)}
+                        </span>
+                      ) : null}
+                      <span className="block font-mono text-[9px] text-slate-400 truncate" title={nc.cdc ?? ""}>
+                        {nc.cdc ?? "—"}
+                      </span>
                     </td>
                     <td className="px-3 py-2 text-xs max-w-[140px] truncate" title={nc.created_by_email_snapshot ?? ""}>
                       {nc.created_by_nombre_snapshot ?? nc.created_by_email_snapshot ?? "—"}
