@@ -328,9 +328,22 @@ export default function NotasCreditoListClient() {
                       {nc.last_error_resumido ?? "—"}
                     </td>
                     <td className="px-3 py-2">
-                      <Link href={`/notas-credito/${nc.id}`} className="text-[#1E2125] font-semibold text-xs hover:underline">
-                        Ver detalle
-                      </Link>
+                      <div className="flex flex-col gap-1">
+                        <Link href={`/notas-credito/${nc.id}`} className="text-[#1E2125] font-semibold text-xs hover:underline">
+                          Ver detalle
+                        </Link>
+                        {nc.estado_sifen === "aprobado" ? (
+                          <a
+                            href={`/api/notas-credito/${nc.id}/sifen/kude`}
+                            target="_blank"
+                            rel="noopener"
+                            className="text-[#C7202A] font-semibold text-xs hover:underline"
+                            title="Abrir el comprobante (KuDE) de la nota de crédito"
+                          >
+                            Imprimir
+                          </a>
+                        ) : null}
+                      </div>
                     </td>
                   </tr>
                 ))
