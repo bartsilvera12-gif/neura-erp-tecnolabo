@@ -8,6 +8,7 @@ import { RegistrarCobroModalCxc, type CxcRef } from "@/components/cobros/Registr
 type Mov = {
   id: string;
   numero_venta: string | null;
+  numero_factura: string | null;
   fecha_emision: string | null;
   fecha_vencimiento: string | null;
   total: number;
@@ -162,7 +163,7 @@ export function EstadoCuentaClienteBlock({
                 <thead className="bg-slate-50 text-xs uppercase tracking-wide text-gray-500">
                   <tr>
                     <th className="py-2.5 px-3 font-medium sm:px-4">Tipo</th>
-                    <th className="py-2.5 px-3 font-medium">Venta</th>
+                    <th className="py-2.5 px-3 font-medium">Factura</th>
                     <th className="py-2.5 px-3 font-medium">F. emisión</th>
                     <th className="py-2.5 px-3 font-medium">F. vencimiento</th>
                     <th className="py-2.5 px-3 font-medium text-right">Monto</th>
@@ -182,7 +183,7 @@ export function EstadoCuentaClienteBlock({
                         <td className="py-2.5 px-3 sm:px-4">
                           <span className="inline-flex items-center gap-1.5 text-xs text-slate-600"><span className="h-1.5 w-1.5 rounded-full bg-[#1E2125]" /> Crédito</span>
                         </td>
-                        <td className="py-2.5 px-3 font-mono font-medium text-gray-800">{x.numero_venta ?? "—"}</td>
+                        <td className="py-2.5 px-3 font-mono font-medium text-gray-800">{x.numero_factura ?? x.numero_venta ?? "—"}</td>
                         <td className="py-2.5 px-3 text-gray-600">{fmtFecha(x.fecha_emision)}</td>
                         <td className={`py-2.5 px-3 ${x.vencida ? "font-semibold text-red-600" : "text-gray-600"}`}>{fmtFecha(x.fecha_vencimiento)}</td>
                         <td className="py-2.5 px-3 text-right tabular-nums">{fmtGs(x.total)}</td>

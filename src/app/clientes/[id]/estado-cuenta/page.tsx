@@ -11,6 +11,7 @@ import { RegistrarCobroModalCxc } from "@/components/cobros/RegistrarCobroModalC
 type Mov = {
   id: string;
   numero_venta: string | null;
+  numero_factura: string | null;
   fecha_emision: string | null;
   fecha_vencimiento: string | null;
   total: number;
@@ -157,7 +158,7 @@ export default function EstadoCuentaPage() {
             <table className="w-full min-w-[760px] text-left text-sm">
               <thead className="bg-slate-50 text-xs uppercase text-gray-500">
                 <tr>
-                  <th className="py-2.5 px-4 font-medium">Venta</th>
+                  <th className="py-2.5 px-4 font-medium">Factura</th>
                   <th className="py-2.5 px-4 font-medium">Emisión</th>
                   <th className="py-2.5 px-4 font-medium">Vencimiento</th>
                   <th className="py-2.5 px-4 font-medium text-right">Total</th>
@@ -170,7 +171,7 @@ export default function EstadoCuentaPage() {
               <tbody className="divide-y divide-slate-100">
                 {movs.map((m) => (
                   <tr key={m.id}>
-                    <td className="py-2.5 px-4 font-mono font-medium text-gray-800">{m.numero_venta ?? "—"}</td>
+                    <td className="py-2.5 px-4 font-mono font-medium text-gray-800">{m.numero_factura ?? m.numero_venta ?? "—"}</td>
                     <td className="py-2.5 px-4 text-gray-600">{fmtFecha(m.fecha_emision)}</td>
                     <td className={`py-2.5 px-4 ${m.vencida ? "font-semibold text-red-600" : "text-gray-600"}`}>{fmtFecha(m.fecha_vencimiento)}</td>
                     <td className="py-2.5 px-4 text-right tabular-nums">{fmtGs(m.total)}</td>

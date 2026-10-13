@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getTenantSupabaseFromAuth } from "@/lib/supabase/tenant-api";
 import { successResponse, errorResponse } from "@/lib/api/response";
 import { API_ERRORS } from "@/lib/api/errors";
+import { numeroFacturaPorVenta } from "@/lib/cobros/numero-factura-por-venta";
 
 /**
  * GET /api/clientes/[id]/estado-cuenta — resumen + cuentas por cobrar + cobros del cliente.
@@ -51,9 +52,19 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
       .eq("cliente_id", id)
       .order("fecha_emision", { ascending: false });
     if (cxcQ.error) throw new Error(cxcQ.error.message);
+    const cxcRows = (cxcQ.data ?? []) as Record<string, unknown>[];
+
+    // Número de factura (FAC-xxxxxx) por venta, para mostrarlo en lugar del
+    // correlativo interno VTA-. Una venta puede no tener factura todavía.
+    const facturaPorVenta = await numeroFacturaPorVenta(
+      ctx.supabase,
+      empresaId,
+      cxcRows.map((r) => (r.venta_id ? String(r.venta_id) : null))
+    );
+
     let saldoPendiente = 0;
     let vencido = 0;
-    const movimientos = ((cxcQ.data ?? []) as Record<string, unknown>[]).map((r) => {
+    const movimientos = cxcRows.map((r) => {
       const total = Number(r.total) || 0;
       const saldo = Number(r.saldo) || 0;
       const venc = r.fecha_vencimiento ? String(r.fecha_vencimiento).slice(0, 10) : null;
@@ -61,10 +72,12 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
       if (r.estado !== "anulado") saldoPendiente += saldo;
       const vencida = vigentePendiente && venc != null && venc < hoy;
       if (vencida) vencido += saldo;
+      const ventaId = r.venta_id ? String(r.venta_id) : null;
       return {
         id: String(r.id),
-        venta_id: r.venta_id ? String(r.venta_id) : null,
+        venta_id: ventaId,
         numero_venta: r.numero_venta ?? null,
+        numero_factura: ventaId ? facturaPorVenta.get(ventaId) ?? null : null,
         fecha_emision: r.fecha_emision ?? null,
         fecha_vencimiento: venc,
         total,

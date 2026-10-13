@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTenantSupabaseFromAuth } from "@/lib/supabase/tenant-api";
 import { membreteA4 } from "@/lib/documentos/membrete";
+import { numeroFacturaPorVenta } from "@/lib/cobros/numero-factura-por-venta";
 
 /**
  * GET /api/clientes/[id]/estado-cuenta/pdf?auto=1
@@ -57,17 +58,26 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
 
   const cxcQ = await ctx.supabase
     .from("cuentas_por_cobrar")
-    .select("numero_venta, fecha_emision, fecha_vencimiento, total, saldo, estado")
+    .select("venta_id, numero_venta, fecha_emision, fecha_vencimiento, total, saldo, estado")
     .eq("empresa_id", empresaId).eq("cliente_id", id).order("fecha_emision", { ascending: false });
+  const cxcRows = (cxcQ.data ?? []) as Record<string, unknown>[];
+  // Preferir el número de factura (FAC-xxxxxx) sobre el correlativo interno VTA-.
+  const facturaPorVenta = await numeroFacturaPorVenta(
+    ctx.supabase,
+    empresaId,
+    cxcRows.map((r) => (r.venta_id ? String(r.venta_id) : null))
+  );
   let saldoPendiente = 0, vencido = 0;
-  const movs = ((cxcQ.data ?? []) as Record<string, unknown>[]).map((r) => {
+  const movs = cxcRows.map((r) => {
     const total = Number(r.total) || 0, saldo = Number(r.saldo) || 0;
     const venc = r.fecha_vencimiento ? String(r.fecha_vencimiento).slice(0, 10) : null;
     const vig = r.estado === "pendiente" || r.estado === "parcial";
     if (r.estado !== "anulado") saldoPendiente += saldo;
     const vencida = vig && venc != null && venc < hoy;
     if (vencida) vencido += saldo;
-    return { numero: r.numero_venta, emision: r.fecha_emision, venc, total, cobrado: total - saldo, saldo, estado: r.estado, vencida };
+    const ventaId = r.venta_id ? String(r.venta_id) : null;
+    const numero = (ventaId && facturaPorVenta.get(ventaId)) || r.numero_venta;
+    return { numero, emision: r.fecha_emision, venc, total, cobrado: total - saldo, saldo, estado: r.estado, vencida };
   });
 
   const cobQ = await ctx.supabase
@@ -157,7 +167,7 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
 
   <h2 class="sec">Cuentas a crédito</h2>
   <table>
-    <thead><tr><th>Venta</th><th>Emisión</th><th>Vencimiento</th><th class="r">Total</th><th class="r">Cobrado</th><th class="r">Saldo</th><th>Estado</th></tr></thead>
+    <thead><tr><th>Factura</th><th>Emisión</th><th>Vencimiento</th><th class="r">Total</th><th class="r">Cobrado</th><th class="r">Saldo</th><th>Estado</th></tr></thead>
     <tbody>${filasMov || `<tr><td colspan="7" style="text-align:center">Sin cuentas a crédito</td></tr>`}</tbody>
   </table>
 
