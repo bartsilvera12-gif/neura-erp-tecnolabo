@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTenantSupabaseFromAuth } from "@/lib/supabase/tenant-api";
 import { membreteA4 } from "@/lib/documentos/membrete";
-import { numeroFacturaPorVenta } from "@/lib/cobros/numero-factura-por-venta";
+import { facturaPorVenta, facturaSinEfectoCobro } from "@/lib/cobros/numero-factura-por-venta";
 
 /**
  * GET /api/clientes/[id]/estado-cuenta/pdf?auto=1
@@ -61,24 +61,30 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
     .select("venta_id, numero_venta, fecha_emision, fecha_vencimiento, total, saldo, estado")
     .eq("empresa_id", empresaId).eq("cliente_id", id).order("fecha_emision", { ascending: false });
   const cxcRows = (cxcQ.data ?? []) as Record<string, unknown>[];
-  // Preferir el número de factura (FAC-xxxxxx) sobre el correlativo interno VTA-.
-  const facturaPorVenta = await numeroFacturaPorVenta(
+  // Factura (número + estado) por venta: FAC- en lugar de VTA- y detección de
+  // corregidas por NC / anuladas (no suman ni se cobran).
+  const facMap = await facturaPorVenta(
     ctx.supabase,
     empresaId,
     cxcRows.map((r) => (r.venta_id ? String(r.venta_id) : null))
   );
-  let saldoPendiente = 0, vencido = 0;
+  let saldoPendiente = 0, vencido = 0, corregidaTotal = 0;
   const movs = cxcRows.map((r) => {
     const total = Number(r.total) || 0, saldo = Number(r.saldo) || 0;
     const venc = r.fecha_vencimiento ? String(r.fecha_vencimiento).slice(0, 10) : null;
     const vig = r.estado === "pendiente" || r.estado === "parcial";
-    if (r.estado !== "anulado") saldoPendiente += saldo;
-    const vencida = vig && venc != null && venc < hoy;
-    if (vencida) vencido += saldo;
     const ventaId = r.venta_id ? String(r.venta_id) : null;
-    const numero = (ventaId && facturaPorVenta.get(ventaId)) || r.numero_venta;
-    return { numero, emision: r.fecha_emision, venc, total, cobrado: total - saldo, saldo, estado: r.estado, vencida };
+    const fac = ventaId ? facMap.get(ventaId) ?? null : null;
+    const corregida = facturaSinEfectoCobro(fac?.estado);
+    const anuladoCxc = r.estado === "anulado";
+    if (!anuladoCxc && !corregida) saldoPendiente += saldo;
+    if (corregida && !anuladoCxc) corregidaTotal += total;
+    const vencida = vig && !corregida && venc != null && venc < hoy;
+    if (vencida) vencido += saldo;
+    const numero = (fac?.numero_factura) || r.numero_venta;
+    return { numero, emision: r.fecha_emision, venc, total, cobrado: total - saldo, saldo, estado: r.estado, vencida, corregida };
   });
+  const totalVendidoNeto = totalVendido - corregidaTotal;
 
   const cobQ = await ctx.supabase
     .from("cobros_clientes")
@@ -93,16 +99,22 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
   } catch { /* fallback */ }
   const negocio = resolveNegocio(nombreEmpresa);
 
-  const filasMov = movs.map((m) => `
-    <tr>
+  const filasMov = movs.map((m) => {
+    const estadoLbl = m.corregida
+      ? "Corregida (NC)"
+      : (m.vencida && m.estado !== "pagado" ? "Vencido" : (ESTADO_LBL[String(m.estado)] ?? m.estado));
+    const saldoShow = m.corregida ? 0 : m.saldo;
+    return `
+    <tr${m.corregida ? ' style="color:#0f766e"' : ""}>
       <td>${esc(m.numero ?? "—")}</td>
       <td>${fmtFecha(m.emision)}</td>
       <td class="${m.vencida ? "venc" : ""}">${fmtFecha(m.venc)}</td>
       <td class="r">${fmtGs(m.total)}</td>
       <td class="r">${fmtGs(m.cobrado)}</td>
-      <td class="r">${fmtGs(m.saldo)}</td>
-      <td>${esc(m.vencida && m.estado !== "pagado" ? "Vencido" : (ESTADO_LBL[String(m.estado)] ?? m.estado))}</td>
-    </tr>`).join("");
+      <td class="r">${fmtGs(saldoShow)}</td>
+      <td>${esc(estadoLbl)}</td>
+    </tr>`;
+  }).join("");
   const filasCob = cobros.map((r) => `
     <tr>
       <td>${fmtFecha(r.fecha_pago)}</td>
@@ -159,8 +171,8 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
     ${cliente.direccion ? `<p style="margin:2px 0;font-size:12px">${esc(cliente.direccion)}</p>` : ""}
   </div>
   <div class="cards">
-    <div class="card"><div class="l">Total vendido</div><div class="v">${fmtGs(totalVendido)}</div></div>
-    <div class="card"><div class="l">Cobrado</div><div class="v" style="color:#047857">${fmtGs(totalVendido - saldoPendiente)}</div></div>
+    <div class="card"><div class="l">Total vendido</div><div class="v">${fmtGs(totalVendidoNeto)}</div></div>
+    <div class="card"><div class="l">Cobrado</div><div class="v" style="color:#047857">${fmtGs(totalVendidoNeto - saldoPendiente)}</div></div>
     <div class="card"><div class="l">Saldo pendiente</div><div class="v" style="color:#b45309">${fmtGs(saldoPendiente)}</div></div>
     <div class="card"><div class="l">Vencido</div><div class="v" style="color:#dc2626">${fmtGs(vencido)}</div></div>
   </div>

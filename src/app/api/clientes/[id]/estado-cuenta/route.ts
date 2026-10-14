@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getTenantSupabaseFromAuth } from "@/lib/supabase/tenant-api";
 import { successResponse, errorResponse } from "@/lib/api/response";
 import { API_ERRORS } from "@/lib/api/errors";
-import { numeroFacturaPorVenta } from "@/lib/cobros/numero-factura-por-venta";
+import { facturaPorVenta, facturaSinEfectoCobro } from "@/lib/cobros/numero-factura-por-venta";
 
 /**
  * GET /api/clientes/[id]/estado-cuenta — resumen + cuentas por cobrar + cobros del cliente.
@@ -54,9 +54,9 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
     if (cxcQ.error) throw new Error(cxcQ.error.message);
     const cxcRows = (cxcQ.data ?? []) as Record<string, unknown>[];
 
-    // Número de factura (FAC-xxxxxx) por venta, para mostrarlo en lugar del
-    // correlativo interno VTA-. Una venta puede no tener factura todavía.
-    const facturaPorVenta = await numeroFacturaPorVenta(
+    // Factura (número + estado) por venta: para mostrar FAC- en lugar de VTA- y
+    // detectar las corregidas por NC / anuladas (no suman ni se cobran).
+    const facMap = await facturaPorVenta(
       ctx.supabase,
       empresaId,
       cxcRows.map((r) => (r.venta_id ? String(r.venta_id) : null))
@@ -64,20 +64,32 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
 
     let saldoPendiente = 0;
     let vencido = 0;
+    // Total de las cuentas corregidas por NC (factura en 0): se descuenta del
+    // total vendido para que "Cobrado" (= vendido − saldo) no se infle.
+    let corregidaTotal = 0;
     const movimientos = cxcRows.map((r) => {
       const total = Number(r.total) || 0;
       const saldo = Number(r.saldo) || 0;
       const venc = r.fecha_vencimiento ? String(r.fecha_vencimiento).slice(0, 10) : null;
       const vigentePendiente = r.estado === "pendiente" || r.estado === "parcial";
-      if (r.estado !== "anulado") saldoPendiente += saldo;
-      const vencida = vigentePendiente && venc != null && venc < hoy;
-      if (vencida) vencido += saldo;
       const ventaId = r.venta_id ? String(r.venta_id) : null;
+      const fac = ventaId ? facMap.get(ventaId) ?? null : null;
+      // Corregida por NC o factura anulada: la cuenta ya no se debe aunque el
+      // CxC siga "pendiente" (la NC no baja el saldo del CxC, solo el de la factura).
+      const corregida = facturaSinEfectoCobro(fac?.estado);
+      const anuladoCxc = r.estado === "anulado";
+
+      if (!anuladoCxc && !corregida) saldoPendiente += saldo;
+      if (corregida && !anuladoCxc) corregidaTotal += total;
+      const vencida = vigentePendiente && !corregida && venc != null && venc < hoy;
+      if (vencida) vencido += saldo;
+
       return {
         id: String(r.id),
         venta_id: ventaId,
         numero_venta: r.numero_venta ?? null,
-        numero_factura: ventaId ? facturaPorVenta.get(ventaId) ?? null : null,
+        numero_factura: fac?.numero_factura ?? null,
+        corregida,
         fecha_emision: r.fecha_emision ?? null,
         fecha_vencimiento: venc,
         total,
@@ -100,10 +112,12 @@ export async function GET(request: NextRequest, ctxParams: { params: Promise<{ i
     if (cobQ.error) throw new Error(cobQ.error.message);
     const cobros = (cobQ.data ?? []) as Record<string, unknown>[];
 
+    // El total vendido no computa lo revertido por NC (facturas corregidas).
+    const totalVendidoNeto = totalVendido - corregidaTotal;
     const resumen = {
-      total_vendido: Math.round(totalVendido),
+      total_vendido: Math.round(totalVendidoNeto),
       saldo_pendiente: Math.round(saldoPendiente),
-      total_cobrado: Math.round(totalVendido - saldoPendiente),
+      total_cobrado: Math.round(totalVendidoNeto - saldoPendiente),
       vencido: Math.round(vencido),
     };
 

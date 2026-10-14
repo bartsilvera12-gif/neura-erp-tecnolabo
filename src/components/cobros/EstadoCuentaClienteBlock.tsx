@@ -9,6 +9,8 @@ type Mov = {
   id: string;
   numero_venta: string | null;
   numero_factura: string | null;
+  /** Factura corregida por NC (o anulada): no se debe, no suma al saldo. */
+  corregida: boolean;
   fecha_emision: string | null;
   fecha_vencimiento: string | null;
   total: number;
@@ -25,6 +27,7 @@ const ESTADO_BADGE: Record<string, string> = {
   pagado: "bg-emerald-100 text-emerald-700",
   vencido: "bg-red-100 text-red-700",
   anulado: "bg-slate-100 text-slate-500",
+  corregida: "bg-teal-100 text-teal-800",
 };
 
 function fmtGs(n: number) {
@@ -89,7 +92,8 @@ export function EstadoCuentaClienteBlock({
 
   // Resumen por cantidades (cada cuenta cae en exactamente un grupo).
   const m = useMemo(() => {
-    const activas = movs.filter((x) => x.estado !== "anulado");
+    // Las corregidas por NC (o anuladas) no cuentan como cuenta pendiente ni suman al saldo.
+    const activas = movs.filter((x) => x.estado !== "anulado" && !x.corregida);
     const montoTotal = activas.reduce((a, x) => a + x.total, 0);
     const saldoPend = activas.reduce((a, x) => a + x.saldo, 0);
     const esPend = (x: Mov) => (x.estado === "pendiente" || x.estado === "parcial");
@@ -177,7 +181,9 @@ export function EstadoCuentaClienteBlock({
                 <tbody className="divide-y divide-slate-100">
                   {movs.map((x) => {
                     const mora = diasMora(x.fecha_vencimiento, x.vencida);
-                    const estadoVis = x.vencida && x.estado !== "pagado" && x.estado !== "anulado" ? "vencido" : x.estado;
+                    const estadoVis = x.corregida
+                      ? "corregida"
+                      : x.vencida && x.estado !== "pagado" && x.estado !== "anulado" ? "vencido" : x.estado;
                     return (
                       <tr key={x.id} className="hover:bg-slate-50">
                         <td className="py-2.5 px-3 sm:px-4">
@@ -188,15 +194,15 @@ export function EstadoCuentaClienteBlock({
                         <td className={`py-2.5 px-3 ${x.vencida ? "font-semibold text-red-600" : "text-gray-600"}`}>{fmtFecha(x.fecha_vencimiento)}</td>
                         <td className="py-2.5 px-3 text-right tabular-nums">{fmtGs(x.total)}</td>
                         <td className="py-2.5 px-3 text-right tabular-nums text-emerald-700">{fmtGs(x.cobrado)}</td>
-                        <td className="py-2.5 px-3 text-right tabular-nums font-semibold text-amber-600">{fmtGs(x.saldo)}</td>
+                        <td className="py-2.5 px-3 text-right tabular-nums font-semibold text-amber-600">{fmtGs(x.corregida ? 0 : x.saldo)}</td>
                         <td className={`py-2.5 px-3 text-center tabular-nums ${mora > 0 ? "font-semibold text-red-600" : "text-slate-400"}`}>{mora > 0 ? mora : "—"}</td>
                         <td className="py-2.5 px-3">
                           <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${ESTADO_BADGE[estadoVis] ?? ESTADO_BADGE.pendiente}`}>
-                            {estadoVis.charAt(0).toUpperCase() + estadoVis.slice(1)}
+                            {x.corregida ? "Corregida (NC)" : estadoVis.charAt(0).toUpperCase() + estadoVis.slice(1)}
                           </span>
                         </td>
                         <td className="py-2.5 px-3 text-right">
-                          {x.estado === "pagado" || x.estado === "anulado" ? (
+                          {x.corregida || x.estado === "pagado" || x.estado === "anulado" ? (
                             <span className="text-xs text-gray-400">—</span>
                           ) : (
                             <button

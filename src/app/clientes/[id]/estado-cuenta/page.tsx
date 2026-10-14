@@ -12,6 +12,8 @@ type Mov = {
   id: string;
   numero_venta: string | null;
   numero_factura: string | null;
+  /** Factura corregida por NC (o anulada): no se debe, no suma al saldo. */
+  corregida: boolean;
   fecha_emision: string | null;
   fecha_vencimiento: string | null;
   total: number;
@@ -30,6 +32,7 @@ const ESTADO_BADGE: Record<string, string> = {
   pagado: "bg-emerald-100 text-emerald-700",
   vencido: "bg-red-100 text-red-700",
   anulado: "bg-slate-100 text-slate-500",
+  corregida: "bg-teal-100 text-teal-800",
 };
 
 function fmtGs(n: number) {
@@ -176,14 +179,14 @@ export default function EstadoCuentaPage() {
                     <td className={`py-2.5 px-4 ${m.vencida ? "font-semibold text-red-600" : "text-gray-600"}`}>{fmtFecha(m.fecha_vencimiento)}</td>
                     <td className="py-2.5 px-4 text-right tabular-nums">{fmtGs(m.total)}</td>
                     <td className="py-2.5 px-4 text-right tabular-nums text-emerald-700">{fmtGs(m.cobrado)}</td>
-                    <td className="py-2.5 px-4 text-right tabular-nums font-semibold">{fmtGs(m.saldo)}</td>
+                    <td className="py-2.5 px-4 text-right tabular-nums font-semibold">{fmtGs(m.corregida ? 0 : m.saldo)}</td>
                     <td className="py-2.5 px-4">
-                      <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${ESTADO_BADGE[m.vencida && m.estado !== "pagado" ? "vencido" : m.estado] ?? ESTADO_BADGE.pendiente}`}>
-                        {m.vencida && m.estado !== "pagado" ? "Vencido" : m.estado.charAt(0).toUpperCase() + m.estado.slice(1)}
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${m.corregida ? ESTADO_BADGE.corregida : (ESTADO_BADGE[m.vencida && m.estado !== "pagado" ? "vencido" : m.estado] ?? ESTADO_BADGE.pendiente)}`}>
+                        {m.corregida ? "Corregida (NC)" : m.vencida && m.estado !== "pagado" ? "Vencido" : m.estado.charAt(0).toUpperCase() + m.estado.slice(1)}
                       </span>
                     </td>
                     <td className="py-2.5 px-4 text-right">
-                      {m.estado === "pagado" || m.estado === "anulado" ? (
+                      {m.corregida || m.estado === "pagado" || m.estado === "anulado" ? (
                         <span className="text-xs text-gray-400">—</span>
                       ) : (
                         <button onClick={() => abrirCobro(m)} className="rounded-lg bg-[#1E2125] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#17191C]">Registrar cobro</button>
