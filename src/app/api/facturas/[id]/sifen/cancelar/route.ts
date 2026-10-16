@@ -7,7 +7,13 @@ import {
   buildSifenCancelacionPreview,
   normalizePlazoCancelacionHoras,
 } from "@/lib/sifen/sifen-cancelacion-rules";
-import type { FacturaElectronicaDTO } from "@/lib/sifen/types";
+import { decryptSecret } from "@/lib/sifen/security";
+import { downloadSifenCertificadoObject } from "@/lib/sifen/sifen-certificados-storage";
+import {
+  enviarEventoCancelacionSifen,
+  type EventoCancelacionRespuestaParsed,
+} from "@/lib/sifen/evento-cancelacion-sifen";
+import type { AmbienteSifen, FacturaElectronicaDTO } from "@/lib/sifen/types";
 
 function trimMotivo(raw: unknown): string | null {
   if (raw == null) return null;
@@ -15,9 +21,43 @@ function trimMotivo(raw: unknown): string | null {
   return s.length > 0 ? s : null;
 }
 
+function parseAmbiente(raw: string): AmbienteSifen | null {
+  if (raw === "test" || raw === "produccion") return raw;
+  return null;
+}
+
+/** Resumen de la respuesta SET para persistir en el evento (traza). */
+function respuestaEventoJson(r: EventoCancelacionRespuestaParsed): Record<string, unknown> {
+  return {
+    eventoRegistrado: r.eventoRegistrado,
+    dCodRes: r.dCodRes,
+    dMsgRes: r.dMsgRes,
+    dFecProc: r.dFecProc,
+    httpStatus: r.httpStatus,
+    soapFault: r.soapFault,
+    faultString: r.faultString,
+  };
+}
+
+/** Mensaje de error legible a partir de la respuesta SET rechazada. */
+function mensajeEventoRechazado(r: EventoCancelacionRespuestaParsed): string {
+  if (r.soapFault) {
+    return `SET rechazó el evento de cancelación (SOAP Fault): ${r.faultString ?? "sin detalle"}.`;
+  }
+  const partes = [r.dMsgRes, r.dCodRes ? `Código ${r.dCodRes}` : null, `HTTP ${r.httpStatus}`]
+    .filter(Boolean)
+    .join(" — ");
+  return `La SET no registró la cancelación del DE. ${partes || "Respuesta inesperada de recibe-evento."}`;
+}
+
 /**
  * POST /api/facturas/[id]/sifen/cancelar
- * Cancelación lógica del DE (estado cancelado + trazas). No elimina la factura comercial.
+ *
+ * Envía el Evento de Cancelación a SIFEN/SET (siRecepEvento). Solo si la SET lo registra
+ * (dCodRes 0600) se aplica la cancelación lógica en el ERP (estado 'cancelado' + factura
+ * 'Anulado'). Si la SET rechaza o hay fallo de transmisión, NO se cambia el estado: el DE
+ * seguiría activo en la SET y marcarlo cancelado solo en el ERP reproduciría el desfase
+ * que este flujo corrige.
  */
 export async function POST(
   request: NextRequest,
@@ -50,8 +90,12 @@ export async function POST(
         { status: 400 }
       );
     }
-    if (motivo.length > 2000) {
-      return NextResponse.json(errorResponse("motivo no puede superar 2000 caracteres."), { status: 400 });
+    // mOtEve (XSD de eventos) admite hasta 500 caracteres; el evento a SET no acepta más.
+    if (motivo.length > 500) {
+      return NextResponse.json(
+        errorResponse("motivo no puede superar 500 caracteres (requerido por SET)."),
+        { status: 400 }
+      );
     }
 
     const { data: factura, error: errF } = await supabase
@@ -71,10 +115,17 @@ export async function POST(
     const [{ data: cfg }, { data: feRow }, pagosRes] = await Promise.all([
       supabase
         .from("empresa_sifen_config")
-        .select("sifen_plazo_cancelacion_horas")
+        .select(
+          "sifen_plazo_cancelacion_horas, ambiente, activo, certificado_path, certificado_password_encrypted"
+        )
         .eq("empresa_id", auth.empresa_id)
         .maybeSingle(),
-      supabase.from("factura_electronica").select("*").eq("factura_id", fid).eq("empresa_id", auth.empresa_id).maybeSingle(),
+      supabase
+        .from("factura_electronica")
+        .select("*")
+        .eq("factura_id", fid)
+        .eq("empresa_id", auth.empresa_id)
+        .maybeSingle(),
       supabase
         .from("pagos")
         .select("id", { count: "exact", head: true })
@@ -115,6 +166,125 @@ export async function POST(
       );
     }
 
+    // ── A partir de acá, el DE está aprobado y dentro de la ventana: corresponde el
+    //    Evento de Cancelación REAL a la SET (no la cancelación lógica suelta). ──
+
+    const cdc = feDto.cdc == null ? "" : String(feDto.cdc).trim();
+    if (!cdc) {
+      return NextResponse.json(
+        errorResponse("El documento electrónico no tiene CDC; no se puede enviar el evento de cancelación a la SET."),
+        { status: 409 }
+      );
+    }
+
+    if (!cfg) {
+      return NextResponse.json(errorResponse("No hay configuración SIFEN para esta empresa."), { status: 400 });
+    }
+    const cfgRow = cfg as {
+      ambiente?: unknown;
+      activo?: unknown;
+      certificado_path?: unknown;
+      certificado_password_encrypted?: unknown;
+    };
+    if (!cfgRow.activo) {
+      return NextResponse.json(
+        errorResponse("La configuración SIFEN está inactiva. Actívela antes de cancelar en la SET."),
+        { status: 400 }
+      );
+    }
+    const ambiente = parseAmbiente(String(cfgRow.ambiente ?? ""));
+    if (!ambiente) {
+      return NextResponse.json(
+        errorResponse('Ambiente SIFEN inválido en configuración (use "test" o "produccion").'),
+        { status: 400 }
+      );
+    }
+    const certPath = cfgRow.certificado_path == null ? "" : String(cfgRow.certificado_path).trim();
+    if (!certPath) {
+      return NextResponse.json(
+        errorResponse("No hay certificado en storage. Suba el .p12 en configuración SIFEN."),
+        { status: 400 }
+      );
+    }
+    const encPwd = cfgRow.certificado_password_encrypted;
+    if (encPwd == null || String(encPwd).trim() === "") {
+      return NextResponse.json(
+        errorResponse("Falta la contraseña del certificado cifrada en configuración SIFEN."),
+        { status: 400 }
+      );
+    }
+
+    let p12Password: string;
+    try {
+      p12Password = decryptSecret(String(encPwd));
+    } catch (e) {
+      const m = e instanceof Error ? e.message : "Error al descifrar la contraseña del certificado";
+      return NextResponse.json(errorResponse(m), { status: 500 });
+    }
+
+    const p12Dl = await downloadSifenCertificadoObject(supabase, certPath);
+    if (!p12Dl.ok) {
+      return NextResponse.json(
+        errorResponse(`No se pudo descargar el certificado .p12: ${p12Dl.message}`),
+        { status: 500 }
+      );
+    }
+
+    // ── Transmisión del evento a la SET ──
+    let evento: EventoCancelacionRespuestaParsed;
+    try {
+      evento = await enviarEventoCancelacionSifen({
+        cdc,
+        motivo,
+        empresaConfig: {
+          ambiente,
+          certificadoP12: p12Dl.data,
+          certificadoPassword: p12Password,
+        },
+        facturaElectronicaId: feDto.id,
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      // Fallo de transmisión: dejamos traza (best-effort) y NO cambiamos el estado.
+      await supabase.from("factura_electronica_evento").insert({
+        empresa_id: auth.empresa_id,
+        factura_electronica_id: feDto.id,
+        tipo: "cancelacion",
+        detalle: {
+          origen: "api_cancelar_set",
+          factura_id: fid,
+          cdc,
+          motivo,
+          ok: false,
+          error: msg,
+          intentado_en: new Date().toISOString(),
+        },
+      });
+      return NextResponse.json(errorResponse(`No se pudo transmitir el evento a la SET: ${msg}`), {
+        status: 502,
+      });
+    }
+
+    if (!evento.eventoRegistrado) {
+      // SET rechazó: traza del rechazo, sin tocar el estado (el DE sigue activo en la SET).
+      await supabase.from("factura_electronica_evento").insert({
+        empresa_id: auth.empresa_id,
+        factura_electronica_id: feDto.id,
+        tipo: "cancelacion",
+        detalle: {
+          origen: "api_cancelar_set",
+          factura_id: fid,
+          cdc,
+          motivo,
+          ok: false,
+          set: respuestaEventoJson(evento),
+          intentado_en: new Date().toISOString(),
+        },
+      });
+      return NextResponse.json(errorResponse(mensajeEventoRechazado(evento)), { status: 409 });
+    }
+
+    // ── SET registró el evento (0600): recién ahora se aplica la cancelación en el ERP. ──
     const canceladoEn = new Date().toISOString();
 
     const { data: updatedFe, error: errUp } = await supabase
@@ -143,9 +313,12 @@ export async function POST(
         factura_electronica_id: feDto.id,
         tipo: "cancelacion",
         detalle: {
-          origen: "api_cancelar",
+          origen: "api_cancelar_set",
           factura_id: fid,
+          cdc,
           motivo,
+          ok: true,
+          set: respuestaEventoJson(evento),
           cancelado_en: canceladoEn,
         },
       })
@@ -163,7 +336,9 @@ export async function POST(
         .eq("id", feDto.id)
         .eq("empresa_id", auth.empresa_id);
       return NextResponse.json(
-        errorResponse(`No se pudo registrar el evento; se revirtió el estado: ${errEv?.message ?? "error"}`),
+        errorResponse(
+          `La SET registró la cancelación pero no se pudo guardar la traza del evento; se revirtió el estado local: ${errEv?.message ?? "error"}. Reintente para sincronizar el ERP.`
+        ),
         { status: 500 }
       );
     }
@@ -187,15 +362,19 @@ export async function POST(
       await supabase.from("factura_electronica_evento").delete().eq("id", (evInsert as { id: string }).id);
       return NextResponse.json(
         errorResponse(
-          `No se pudo anular la factura comercial (${errFactura.message}); se revirtió la cancelación del DE.`
+          `La SET registró la cancelación pero no se pudo anular la factura comercial (${errFactura.message}); se revirtió el estado local. Reintente para sincronizar el ERP.`
         ),
         { status: 500 }
       );
     }
 
     const dto = toFacturaElectronicaDto(updatedFe as Record<string, unknown>);
-    const data: { factura_electronica: FacturaElectronicaDTO } = {
+    const data: {
+      factura_electronica: FacturaElectronicaDTO;
+      evento_set: ReturnType<typeof respuestaEventoJson>;
+    } = {
       factura_electronica: dto,
+      evento_set: respuestaEventoJson(evento),
     };
 
     return NextResponse.json(successResponse(data));

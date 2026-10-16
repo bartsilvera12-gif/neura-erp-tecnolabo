@@ -48,7 +48,7 @@ function subtituloSifenEjecutivo(resumen: Resumen, debugUi: boolean): string {
             : fe.error.trim()
           : "Falló el envío. Podés reintentar.";
       case "cancelado":
-        return "Cancelado en el ERP.";
+        return "Cancelado en la SET y en el ERP.";
       default:
         return "Revisá el estado del documento.";
     }
@@ -74,7 +74,7 @@ function subtituloSifenEjecutivo(resumen: Resumen, debugUi: boolean): string {
           : fe.error.trim()
         : "Falló el envío. Podés reintentar.";
     case "cancelado":
-      return "Documento anulado en el sistema.";
+      return "Documento cancelado en la SET y anulado en el sistema.";
     default:
       return "Revisá el estado del documento.";
   }
@@ -226,7 +226,7 @@ export function FacturaElectronicaPanel({
         setFlash({ kind: "err", text: j.error ?? `Error ${res.status}` });
         return;
       }
-      setFlash({ kind: "ok", text: "Documento electrónico cancelado en el ERP. La factura comercial quedó anulada." });
+      setFlash({ kind: "ok", text: "Cancelación registrada en la SET. El documento quedó cancelado y la factura comercial, anulada." });
       setCancelModal(null);
       setMotivoCancel("");
       await refresh();
@@ -928,7 +928,8 @@ export function FacturaElectronicaPanel({
                 : "Cancelar documento electrónico (ERP)"}
             </h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Se registrará la cancelación lógica del DE, la factura comercial pasará a{" "}
+              Se enviará el <span className="font-semibold">Evento de Cancelación</span> a la SET (SIFEN). Si la SET lo
+              registra, el DE quedará cancelado ante la SET, la factura comercial pasará a{" "}
               <span className="font-semibold">Anulado</span> y quedará trazabilidad. No se elimina ningún registro.
               {cancelModal === "reemitir" ? " Luego podés emitir una nueva factura desde la ficha del cliente." : ""}
             </p>
@@ -938,6 +939,7 @@ export function FacturaElectronicaPanel({
                 value={motivoCancel}
                 onChange={(e) => setMotivoCancel(e.target.value)}
                 rows={3}
+                maxLength={500}
                 className="mt-1 w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E2125]"
                 placeholder="Ej.: error en datos del cliente acordado verbalmente"
               />

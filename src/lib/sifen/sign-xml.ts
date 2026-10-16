@@ -194,3 +194,57 @@ export function signSifenDocumentoXml(
   const rawSigned = sig.getSignedXml();
   return anexarCamFuFdSiFalta(ensureRdeRootSchemaAttrs(rawSigned), qr);
 }
+
+/**
+ * XPath del nodo `rEve` (evento) a firmar. Igual criterio que `XPATH_DE`: insensible a prefijos.
+ */
+const XPATH_REVE = "//*[local-name(.)='rEve']";
+
+/**
+ * Firma XML-DSig del nodo `rEve` de un evento SIFEN (p. ej. Cancelación).
+ *
+ * Mismos algoritmos/transforms que el DE (RSA-SHA256, digest SHA-256, C14N exclusivo + enveloped),
+ * perfil exigido por SET. El `ds:Signature` se inserta como hermano posterior a `rEve`
+ * (bajo `rGesEve`), que es donde el XSD de eventos lo ubica. El `rEve` lleva `Id="1"`, por lo que
+ * la `Reference` queda `URI="#1"`.
+ *
+ * Recibe el documento `rEnviEventoDe` completo (con el namespace e-kuatia por defecto en la raíz),
+ * para que el contexto de namespaces en la firma coincida con el que valida la SET al recibir el evento.
+ */
+export function signSifenEventoCancelacionXml(
+  xmlUtf8: string,
+  material: P12KeyMaterial
+): string {
+  const trimmed = xmlUtf8.trim();
+  if (!/<\s*rEve\b/i.test(trimmed) || !/<\s*rGesEve\b/i.test(trimmed)) {
+    throw new Error("Se esperaba un XML de evento con nodos rGesEve y rEve para firmar.");
+  }
+
+  const privateKey = createPrivateKey({
+    key: material.privateKeyPem,
+    format: "pem",
+  });
+
+  const sig = new SignedXml({
+    privateKey,
+    publicCert: material.certificatePem,
+    signatureAlgorithm: SIG_ALG,
+    canonicalizationAlgorithm: "http://www.w3.org/2001/10/xml-exc-c14n#",
+  });
+
+  sig.addReference({
+    xpath: XPATH_REVE,
+    transforms: [...TRANSFORMS_DE],
+    digestAlgorithm: DIGEST,
+  });
+
+  sig.computeSignature(trimmed, {
+    location: {
+      reference: XPATH_REVE,
+      /** Hermano posterior a `rEve` (dentro de `rGesEve`), según el XSD de eventos. */
+      action: "after",
+    },
+  });
+
+  return sig.getSignedXml();
+}
