@@ -92,6 +92,15 @@ function formatDeDateTimeEnTzSifen(d: Date): string {
 }
 
 /**
+ * `dFecFirma` para EVENTOS (cancelación / inutilización): fecha y hora civil de Paraguay
+ * en el instante de firma, con el mismo margen de skew que el DE (evita "firma adelantada").
+ * A diferencia del DE, no se ancla a la fecha calendario de la factura: el evento se firma "ahora".
+ */
+export function sifenFechaFirmaEventoAhora(horaReferencia: Date = new Date()): string {
+  return formatDeDateTimeEnTzSifen(new Date(horaReferencia.getTime() - SIFEN_FIRMA_SKEW_MS));
+}
+
+/**
  * `dFeEmiDE` / `dFecFirma` deben usar la **misma fecha calendario** que entra en el CDC (`fechaEmisionCdc(documento.fecha)`).
  * Si se usa solo `new Date()` al generar el XML días después, el Id (CDC) y la fecha en el DE quedan desalineados y SET rechaza el documento.
  * La parte horaria debe ser **hora civil de Paraguay** en el instante de generación (no la zona del servidor).
