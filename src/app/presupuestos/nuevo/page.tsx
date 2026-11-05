@@ -16,11 +16,23 @@ type ProductoLite = {
   sku: string;
   precio_venta: number;
   unidad_medida: string;
+  /** Stock disponible (de la ficha maestra). Solo informativo en el presupuesto. */
+  stock_actual: number;
+  /** Si el producto controla stock; si es false se muestra "—". */
+  controla_stock: boolean;
   /** Descripción de la ficha maestra del producto (se copia como snapshot al ítem). */
   descripcion: string | null;
   /** Ruta en Storage (bucket privado). Se firma al generar el PDF. */
   imagen_path: string | null;
 };
+
+/** Etiqueta de stock disponible para mostrar al vendedor (solo informativa). */
+function stockLabel(p: { stock_actual: number; controla_stock: boolean; unidad_medida: string }): string {
+  if (p.controla_stock === false) return "Sin control de stock";
+  const n = Number(p.stock_actual) || 0;
+  const u = (p.unidad_medida || "UNIDAD").toLowerCase();
+  return `Stock: ${n.toLocaleString("es-PY", { maximumFractionDigits: 2 })} ${u}`;
+}
 type ClienteLite = {
   id: string;
   nombre: string;
@@ -123,6 +135,8 @@ export default function NuevoPresupuestoPage() {
                 sku: String(p.sku ?? ""),
                 precio_venta: Number(p.precio_venta) || 0,
                 unidad_medida: String(p.unidad_medida ?? "UNIDAD"),
+                stock_actual: Number(p.stock_actual) || 0,
+                controla_stock: p.controla_stock !== false,
                 descripcion: (p.descripcion as string | null) ?? null,
                 imagen_path: (p.imagen_path as string | null) ?? null,
               }))
@@ -354,8 +368,29 @@ export default function NuevoPresupuestoPage() {
               placeholder="— Buscá un producto por nombre o SKU —"
               options={productos
                 .filter((p) => !items.some((it) => it.producto_id === p.id))
-                .map((p) => ({ id: p.id, label: p.nombre, sublabel: p.sku || undefined }))}
+                .map((p) => ({
+                  id: p.id,
+                  label: p.nombre,
+                  sublabel: [p.sku || null, stockLabel(p)].filter(Boolean).join(" · "),
+                }))}
             />
+            {selProd &&
+              (() => {
+                const p = productos.find((x) => x.id === selProd);
+                if (!p) return null;
+                const sinControl = p.controla_stock === false;
+                const sinStock = !sinControl && (Number(p.stock_actual) || 0) <= 0;
+                return (
+                  <p
+                    className={`mt-1 text-xs font-medium ${
+                      sinControl ? "text-slate-400" : sinStock ? "text-[#E23B3B]" : "text-emerald-600"
+                    }`}
+                  >
+                    {stockLabel(p)}
+                    {sinStock ? " — sin stock disponible" : ""}
+                  </p>
+                );
+              })()}
           </div>
           <button type="button" onClick={agregarProducto} disabled={!selProd} className="inline-flex items-center gap-1 rounded-md bg-[#1E2125] px-3 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50">
             <Plus className="h-4 w-4" /> Agregar

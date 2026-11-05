@@ -10,7 +10,15 @@ import SelectFromList from "@/components/inventario/SelectFromList";
 import ClienteBuscador, { type ClienteBuscadorItem } from "@/components/clientes/ClienteBuscador";
 import { calcMontoIvaIncluido, type IvaTipoPresupuesto } from "@/lib/presupuestos/types";
 
-type ProductoLite = { id: string; nombre: string; sku: string; precio_venta: number; unidad_medida: string; descripcion: string | null; imagen_path: string | null; };
+type ProductoLite = { id: string; nombre: string; sku: string; precio_venta: number; unidad_medida: string; stock_actual: number; controla_stock: boolean; descripcion: string | null; imagen_path: string | null; };
+
+/** Etiqueta de stock disponible para mostrar al vendedor (solo informativa). */
+function stockLabel(p: { stock_actual: number; controla_stock: boolean; unidad_medida: string }): string {
+  if (p.controla_stock === false) return "Sin control de stock";
+  const n = Number(p.stock_actual) || 0;
+  const u = (p.unidad_medida || "UNIDAD").toLowerCase();
+  return `Stock: ${n.toLocaleString("es-PY", { maximumFractionDigits: 2 })} ${u}`;
+}
 type ClienteLite = { id: string; nombre: string; ruc: string | null; telefono: string | null; direccion: string | null; };
 type Item = {
   producto_id: string | null;
@@ -102,6 +110,7 @@ export default function EditarPresupuestoPage() {
           setProductos(list.filter((p) => p.es_vendible !== false).map((p) => ({
             id: String(p.id), nombre: String(p.nombre), sku: String(p.sku ?? ""),
             precio_venta: Number(p.precio_venta) || 0, unidad_medida: String(p.unidad_medida ?? "UNIDAD"),
+            stock_actual: Number(p.stock_actual) || 0, controla_stock: p.controla_stock !== false,
             descripcion: (p.descripcion as string | null) ?? null, imagen_path: (p.imagen_path as string | null) ?? null,
           })));
         }
@@ -353,8 +362,20 @@ export default function EditarPresupuestoPage() {
               onChange={(v) => setSelProd(v ?? "")}
               placeholder="— Buscá un producto por nombre o SKU —"
               options={productos.filter((p) => !items.some((it) => it.producto_id === p.id))
-                .map((p) => ({ id: p.id, label: p.nombre, sublabel: p.sku || undefined }))}
+                .map((p) => ({ id: p.id, label: p.nombre, sublabel: [p.sku || null, stockLabel(p)].filter(Boolean).join(" · ") }))}
             />
+            {selProd &&
+              (() => {
+                const p = productos.find((x) => x.id === selProd);
+                if (!p) return null;
+                const sinControl = p.controla_stock === false;
+                const sinStock = !sinControl && (Number(p.stock_actual) || 0) <= 0;
+                return (
+                  <p className={`mt-1 text-xs font-medium ${sinControl ? "text-slate-400" : sinStock ? "text-[#E23B3B]" : "text-emerald-600"}`}>
+                    {stockLabel(p)}{sinStock ? " — sin stock disponible" : ""}
+                  </p>
+                );
+              })()}
           </div>
           <button type="button" onClick={agregarProducto} disabled={!selProd} className="inline-flex items-center gap-1 rounded-md bg-[#1E2125] px-3 py-2 text-sm font-medium text-white hover:bg-[#17191C] disabled:opacity-50">
             <Plus className="h-4 w-4" /> Agregar
