@@ -226,7 +226,7 @@ export function FacturaElectronicaPanel({
         setFlash({ kind: "err", text: j.error ?? `Error ${res.status}` });
         return;
       }
-      setFlash({ kind: "ok", text: "Documento electrónico cancelado en el ERP. La factura comercial quedó anulada." });
+      setFlash({ kind: "ok", text: "Cancelación aceptada por el SET: el documento quedó CANCELADO en SIFEN y la factura fue anulada." });
       setCancelModal(null);
       setMotivoCancel("");
       await refresh();

@@ -194,3 +194,44 @@ export function signSifenDocumentoXml(
   const rawSigned = sig.getSignedXml();
   return anexarCamFuFdSiFalta(ensureRdeRootSchemaAttrs(rawSigned), qr);
 }
+
+/** Evento SIFEN (p. ej. cancelación): se firma el nodo `rEve` (referenciado por su `Id`). */
+const XPATH_REVE = "//*[local-name(.)='rEve']";
+
+/**
+ * Firma un XML de evento SIFEN (gGroupGesEve → rGesEve → rEve). Mismo perfil de firma
+ * que el DE (RSA-SHA256, digest SHA-256, enveloped + C14N exclusivo), pero referenciando
+ * `rEve` por su atributo `Id` y colocando la `Signature` como hermano posterior a `rEve`
+ * (último hijo de `rGesEve`), según `SignXMLEvento` de la referencia oficial.
+ */
+export function signSifenEventoXml(xmlUtf8: string, material: P12KeyMaterial): string {
+  const trimmed = xmlUtf8.trim();
+  if (!/<\s*rEve\b/i.test(trimmed) || !/<\s*rGesEve\b/i.test(trimmed)) {
+    throw new Error("Se esperaba un XML de evento con rGesEve que contenga rEve para firmar.");
+  }
+
+  const privateKey = createPrivateKey({ key: material.privateKeyPem, format: "pem" });
+
+  const sig = new SignedXml({
+    privateKey,
+    publicCert: material.certificatePem,
+    signatureAlgorithm: SIG_ALG,
+    canonicalizationAlgorithm: "http://www.w3.org/2001/10/xml-exc-c14n#",
+  });
+
+  sig.addReference({
+    xpath: XPATH_REVE,
+    transforms: [...TRANSFORMS_DE],
+    digestAlgorithm: DIGEST,
+  });
+
+  sig.computeSignature(trimmed, {
+    location: {
+      reference: XPATH_REVE,
+      /** Hermano posterior a `rEve`, dentro de `rGesEve` (la firma NO va dentro de rEve). */
+      action: "after",
+    },
+  });
+
+  return sig.getSignedXml();
+}

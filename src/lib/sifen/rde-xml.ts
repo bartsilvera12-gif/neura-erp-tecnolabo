@@ -779,3 +779,12 @@ export {
   dCodSegNueveDigitos as sifenDCodSegNueveDigitos,
   iTipContCodigo as sifenEmisorITipContCodigo,
 };
+
+/**
+ * `dFecFirma` para EVENTOS (p. ej. cancelación): instante actual en hora civil de
+ * Paraguay, con el mismo skew anti-"fecha futura" que usa la firma del DE. Formato
+ * "AAAA-MM-DDThh:mm:ss". No lleva fecha de factura: el evento se firma ahora.
+ */
+export function sifenFechaFirmaEvento(ahora: Date = new Date()): string {
+  return formatDeDateTimeEnTzSifen(new Date(ahora.getTime() - SIFEN_FIRMA_SKEW_MS));
+}

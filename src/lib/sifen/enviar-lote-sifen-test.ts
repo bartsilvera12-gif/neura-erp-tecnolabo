@@ -228,7 +228,8 @@ function parsearRespuestaRecibeLote(xml: string): Omit<
   };
 }
 
-function postHttpsMtls(
+/** POST HTTPS con TLS mutuo (cert/clave en PEM del .p12). Reutilizable por otros WS del SET (p. ej. eventos). */
+export function postHttpsMtls(
   urlStr: string,
   body: string,
   certPem: string,
